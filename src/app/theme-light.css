@@ -1,0 +1,11 @@
+.topbar {
+
+  height: 70px;
+  padding: 20px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+.page-title{
+  font-size:14px;
+}
+

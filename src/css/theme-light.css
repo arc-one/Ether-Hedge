@@ -1,0 +1,48 @@
+.topbar {
+
+  height: 70px;
+  padding: 0px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+.page-title{
+  font-size:14px;
+}
+.left_side{
+	border-right: 1px solid #ddd;
+}
+.loader {
+  border: 3px solid #ddd; 
+  border-top: 3px solid #3a71ff; 
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #CDCDCD; 
+    border: 1px solid #fdfdfd;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #CDCDCD; 
+    border: 1px solid #fdfdfd;
+}
