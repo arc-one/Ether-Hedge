@@ -1,0 +1,1 @@
+export const WEB3_POLL_INTERVAL = 100000;

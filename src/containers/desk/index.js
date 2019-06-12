@@ -31,7 +31,6 @@ class Desk extends Component {
             sss
           </Col>
           <Col className="right_side" lg={10} md={9} sm={9} xs={8}>
-           dsd
           </Col>
         </Row>
       </Container>

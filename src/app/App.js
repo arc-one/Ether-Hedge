@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../css/theme-light.css'
 import Router from './Router'
-
+import Web3Provider from './web3Provider/web3Provider'
 
 class App extends Component {
 
@@ -31,6 +31,7 @@ class App extends Component {
         </div>}
         {loaded ?<div>
           <Router/>
+          <Web3Provider/>
         </div>:null}
       </div>
     )
