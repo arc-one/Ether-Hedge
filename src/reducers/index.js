@@ -4,6 +4,8 @@ import getWindowHeightReducer from './getWindowHeightReducer'
 import fetchAccountsReducer from './fetchAccountsReducer'
 import fetchNetworkReducer from './fetchNetworkReducer'
 import enableMetamaskReducer from './enableMetamaskReducer'
+import orderFormReducer from './orderFormReducer'
+import initSmartContractsReducer from './initSmartContractsReducer'
 
 
 
@@ -12,7 +14,10 @@ const rootReducer = combineReducers({
   height: getWindowHeightReducer,
   accounts: fetchAccountsReducer,
   network: fetchNetworkReducer,
-  enabledMetamask: enableMetamaskReducer
+  enabledMetamask: enableMetamaskReducer,
+  orderForm: orderFormReducer,
+  smartContracts: initSmartContractsReducer,
+  userData:{}
 })
 
 export default rootReducer

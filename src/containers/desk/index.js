@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { connect } from 'react-redux'
 import { getWindowHeight } from '../../actions'
+import OrderDesk from './orderDesk'
+
 
 class Desk extends Component {
   
@@ -28,7 +30,7 @@ class Desk extends Component {
       <Container className="page" >
         <Row style={this.props.height}>
           <Col className="left_side" lg={2} md={3} sm={3} xs={4}>
-            sss
+            <OrderDesk/>
           </Col>
           <Col className="right_side" lg={10} md={9} sm={9} xs={8}>
           </Col>

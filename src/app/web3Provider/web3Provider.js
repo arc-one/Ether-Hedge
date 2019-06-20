@@ -1,55 +1,75 @@
-import { isEmpty, isNull }  from 'lodash';
+import { isEmpty }  from 'lodash';
 import { Component } from 'react'
 import { connect } from 'react-redux'
 //import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import { fetchNetwork, fetchAccounts } from '../../actions/web3Actions'
+import { fetchNetwork, fetchAccounts, initSmartContracts } from '../../actions/web3Actions'
 import {WEB3_POLL_INTERVAL} from '../../config'
 
 class Web3Provider extends Component {
   constructor(props) {
     super(props);
-    this.interval = null
-    this.networkInterval = null
-    this.dataLoaded = false
+
+    this.dataLoaded = false;
 
   }
 
   componentDidMount() {
-    this.props.fetchAccounts()
-    this.props.fetchNetwork()
-    this.initPoll()
-    this.initNetworkPoll()
-    //this.initUserDataPoll()
+
+    var _this = this;
+    this.loadData()
+
+    window.ethereum.on('accountsChanged', function (accounts) {
+      this.dataLoaded = false;
+      _this.loadData();
+    })
+
+    window.ethereum.on('networkChanged', function (netId) {
+      this.dataLoaded = false;
+      _this.loadData();
+    })
+
+
   }
 
-  initPoll() {
-    if (!this.interval) {
-      this.interval = setInterval(() => {
-        this.props.fetchAccounts()
-/*        if(!this.dataLoaded) {
+  loadData() {
 
-        }*/
-      }, WEB3_POLL_INTERVAL);
-    }
+    let interval = setInterval(() => {
+      if(this.props.enabledMetamask) {
+        this.props.fetchAccounts();
+        this.props.fetchNetwork();
+
+        if(this.props.accounts.length>0 && this.props.network) {
+          
+          if(isEmpty(this.props.smartContracts)){
+            this.props.initSmartContracts();
+
+
+           // this.fetchUserData();
+
+            this.dataLoaded = true;
+
+          }
+
+
+          if(this.dataLoaded){
+            clearInterval(interval);
+          }
+        }
+      }
+
+    }, 1000);
   }
 
-  initNetworkPoll() {
-    if (!this.networkInterval) {
-      this.networkInterval = setInterval(() =>this.props.fetchNetwork(), WEB3_POLL_INTERVAL);
-    }
+
+
+  fetchUserData() {
+
   }
 
-/*  initUserDataPoll() {
-    if (!this.dataInterval && localStorage.connectionDenied!=='true' && !isEmpty(this.props.accounts)  && !isNull(this.props.network)) {
-      //this.dataInterval = setInterval(() =>this.props.fetchUserData(), WEB3_POLL_INTERVAL);
-    } else {
-       //localStorage.setItem('isConnected', 'false')
-      //this.dataInterval = setInterval(() =>this.props.fetchDataInfura(), WEB3_POLL_INTERVAL);
-    }
-  }
-*/
+  initSmartContracts() {
 
+  }
 
 
   render() {
@@ -60,11 +80,13 @@ class Web3Provider extends Component {
 const mapStateToProps = (state) => ({
   accounts:state.accounts,
   network:state.network,
-  isConnected:state.isConnected
+  enabledMetamask:state.enabledMetamask,
+  smartContracts:state.smartContracts,
+  userData: state.userdata
 })
 
 const mapDispatchToProps = dispatch => (
-  bindActionCreators({ fetchAccounts, fetchNetwork }, dispatch)
+  bindActionCreators({ fetchAccounts, fetchNetwork, initSmartContracts }, dispatch)
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Web3Provider)
