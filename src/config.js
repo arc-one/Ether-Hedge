@@ -4,7 +4,7 @@ import tokenABI  from './contracts/Token.json'
 //import metaABI  from './contracts/Meta.json'
 import futureContractABI_01  from './contracts/FutureContract.json'
 
-export const WEB3_POLL_INTERVAL = 3000;
+export const WEB3_POLL_INTERVAL = 300;
 export const ETH_DECIMALS = 1000000000000000000;
 export const DECIMALS = 1000000000;
 
@@ -32,8 +32,8 @@ export const smartContracts = {
 	},
 	futures:[
 		{
-			address: '0x758782d154e832952cdf6a64d410bd5abfac4680',
-			inst: futureContractABI_01
+			address: '0x5b002b84226fe2788ee4ba10554d4bdc0f20c0a3',
+			abi: futureContractABI_01
 		},
 	]
 

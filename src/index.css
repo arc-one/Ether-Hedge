@@ -44,7 +44,7 @@ label {
 	font-size: 14px;
 	border-radius: 0;
 }
-.nav-item{
+.limit_market .nav-item{
 	width: 50%;
 	text-align: center;
 }
