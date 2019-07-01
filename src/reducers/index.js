@@ -5,14 +5,17 @@ import fetchAccountsReducer from './fetchAccountsReducer'
 import fetchNetworkReducer from './fetchNetworkReducer'
 import enableMetamaskReducer from './enableMetamaskReducer'
 import orderFormReducer from './orderFormReducer'
-import initSmartContractsReducer from './initSmartContractsReducer'
+import smartContractsReducer from './smartContractsReducer'
 import getBalanceReducer from './getBalanceReducer'
 import getWalletBalanceReducer from './getWalletBalanceReducer'
 import getStakedFundsReducer from './getStakedFundsReducer'
 import getAvailableBalanceReducer from './getAvailableBalanceReducer'
 import getLastPriceReducer from './getLastPriceReducer'
 import getSpotPriceReducer from './getSpotPriceReducer'
-
+import ordersReducer from './ordersReducer'
+import trustedFutureReducer from './trustedFutureReducer'
+import tradesReducer from './tradesReducer'
+import orderFillsReducer from './orderFillsReducer'
 
 
 
@@ -24,13 +27,17 @@ const rootReducer = combineReducers({
   network: fetchNetworkReducer,
   enabledMetamask: enableMetamaskReducer,
   orderForm: orderFormReducer,
-  smartContracts: initSmartContractsReducer,
+  smartContracts: smartContractsReducer,
   userBalance: getBalanceReducer,
   userWalletBalance: getWalletBalanceReducer,
   stakedFunds: getStakedFundsReducer,
   availableBalance: getAvailableBalanceReducer,
   lastPrice: getLastPriceReducer,
-  spotPrice: getSpotPriceReducer
+  spotPrice: getSpotPriceReducer,
+  orders: ordersReducer,
+  isTrustedActiveFuture: trustedFutureReducer,
+  trades: tradesReducer,
+  orderFills: orderFillsReducer
 
 })
 

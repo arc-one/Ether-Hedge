@@ -59,6 +59,9 @@ label {
     border: 1px solid transparent;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+
 }
 .nav-link {
     display: block;
@@ -67,3 +70,8 @@ label {
 .nav-link.active{
 	font-weight: bold;
 }
+
+.contractsmenu{
+	margin-top: 10px;
+}
+

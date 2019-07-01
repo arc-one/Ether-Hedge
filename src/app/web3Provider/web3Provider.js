@@ -13,6 +13,10 @@ import {  fetchNetwork,
           getAvailableBalance,
           getLastPrice,
           getSpotPrice,
+          fetchOrders,
+          checkIfTrustedFuture,
+          fetchHistory,
+          listenMarketOrderLog
 
         } from '../../actions/web3Actions'
 import {WEB3_POLL_INTERVAL} from '../../config'
@@ -23,18 +27,25 @@ class Web3Provider extends Component {
     this.dataLoaded = false;
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    let activeFuture = this.props.smartContracts.activeFuture;
+    if (activeFuture !== prevProps.smartContracts.activeFuture) {
+      this.fetchFutureData();
+    }
+  }
+
   componentDidMount() {
     var _this = this;
-
+    this.props.initSmartContracts();
     this.loadData()
     if(window.ethereum) {
-      window.ethereum.on('accountsChanged', function (accounts) {
+      window.ethereum.on('accountsChanged', accounts => {
         _this.props.fetchAccounts();
         _this.dataLoaded = false;
         _this.loadData();
       })
 
-      window.ethereum.on('networkChanged', function (netId) {
+      window.ethereum.on('networkChanged', netId => {
         _this.props.fetchNetwork();
         _this.dataLoaded = false;
         _this.loadData();
@@ -44,17 +55,19 @@ class Web3Provider extends Component {
 
   loadData() {
     let interval = setInterval(() => {
+
       if(this.props.enabledMetamask) {
           this.props.fetchAccounts();
           this.props.fetchNetwork();
           if(this.props.accounts.length>0 && this.props.network) {
+            
             if(isEmpty(this.props.smartContracts)){
               this.props.initSmartContracts();
             } else {
               this.fetchUserData();
-              this.fetchFutureData();
               this.isDataLoaded();
             }
+        
             if(this.dataLoaded){
               clearInterval(interval);
             }
@@ -77,7 +90,16 @@ class Web3Provider extends Component {
   fetchFutureData() {
     this.props.getLastPrice();
     this.props.getSpotPrice();
+    this.props.fetchOrders();
+    this.props.fetchHistory();
+    this.props.checkIfTrustedFuture();
+    this.startEventsListener();
   }
+
+  startEventsListener(){
+    this.props.listenMarketOrderLog();
+  }
+
 
   render() {
     return null;
@@ -88,7 +110,7 @@ const mapStateToProps = (state) => ({
   accounts:state.accounts,
   network:state.network,
   enabledMetamask:state.enabledMetamask,
-  smartContracts:state.smartContracts//,
+  smartContracts:state.smartContracts
 })
 
 const mapDispatchToProps = dispatch => (
@@ -101,7 +123,11 @@ const mapDispatchToProps = dispatch => (
     getStakedFunds,
     getAvailableBalance,      
     getLastPrice,
-    getSpotPrice
+    getSpotPrice,
+    fetchOrders,
+    checkIfTrustedFuture,
+    fetchHistory,
+    listenMarketOrderLog
   }, dispatch)
 );
 

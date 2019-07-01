@@ -11,7 +11,6 @@ class OrderDesk extends PureComponent {
   
   render () {
     return (  
-
       <div>
         <Row className="order_desk_cont border_bottom d-flex justify-content-between">
           <div className="info_row">
