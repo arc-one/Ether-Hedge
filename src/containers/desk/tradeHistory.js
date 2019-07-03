@@ -36,9 +36,9 @@ class TradeHistory extends PureComponent {
             <div className="grid_title">Trade History</div>
         </div>
         <div className="grid_table_header">
-            <table width="100%" >
+            <table className="table_list"  >
                 <thead>
-                   <tr>
+                   <tr className="table_header">
                      <th width="30%">Price</th>
                      <th width="33%">Amount</th>
                      <th width="36%">Value</th>
@@ -48,7 +48,7 @@ class TradeHistory extends PureComponent {
         </div>
         <div className="grid_content_order_book" >
           <div className="order_book_container trade_history">
-             <table className="order_book " >
+             <table className="table_list"  >
                 <tbody>
                   { //onClick={_this.tradeHistory} data-trade={ JSON.stringify(obj) }
                     this.props.trades.slice(0).sort((a, b) => b.returnValues.timestamp*1 - a.returnValues.timestamp*1).reverse().map(function(obj, index){

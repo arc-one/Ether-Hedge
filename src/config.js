@@ -49,6 +49,8 @@ export const smartContracts = {
 			ticker: 'BTCUSD'
 		},
 
+
+
 	]
 
 	

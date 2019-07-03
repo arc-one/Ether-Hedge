@@ -1,4 +1,4 @@
-import { BANCRUPCY_DIFF, DECIMALS } from '../config'
+import { BANCRUPCY_DIFF, DECIMALS, ETH_DECIMALS } from '../config'
 
 const roundTo = (number, precision = 0) => {
   const d = Math.pow(10, precision);
@@ -28,4 +28,16 @@ export const calcOrdervalue = (pos) => {
 export const calcCost = (pos) => {
 	if(pos.price === 0 || pos.leverage === 0) return 0;
 	return roundTo(pos.amount/pos.price/pos.leverage, 6);
+
+}
+
+export const calcROE = (obj) => {
+    let res = 0;
+    if(obj.pnl){
+      let pnl = obj.pnl / ETH_DECIMALS;
+      if(obj.pnl<0) pnl = obj.pnl * 1 / ETH_DECIMALS;
+      let cost =  ((obj.amount)/(obj.price))/(obj.leverage/100);
+      res = pnl*100/cost;
+    }
+    return res.toFixed(2);
 }

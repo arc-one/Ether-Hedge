@@ -192,34 +192,27 @@ input[type="radio"]{
   padding: 5px 10px;
   font-size: 12px;
 }
-.grid_table_header table th{ 
-  padding: 5px 10px;
-}
 
 
-.order_book{
-  font-size: 11px;
-  width: 100%;
-}
 
-.order_book tr{
+.table_list tr{
   cursor: pointer;
 }
-.order_book tr.odd{
+.table_list tr.odd{
   background: #f1f1f1;
 }
 
-.order_book tr:hover{
+.table_list tr:hover{
   background: #eee;
 }
 
 .red_text{
   color:#F31B69;
-  padding-left:7px;
+
 }
 .green_text{
   color:#3A71FF;
-  padding-left:7px;
+
 }
 .spread_block{
   border-top: 1px solid #eee;
@@ -230,19 +223,19 @@ input[type="radio"]{
   background: #f8f8f8;
 }
 .order_book_container{
-  padding-left: 10px;
   overflow-y: scroll;
 }
-
 .order_book_top, .order_book_bottom{
   height: calc(48%);
 }
-
 .trade_history{
   height: calc(100% - 5px);
 }
-
-.grid_content_order_book{
+.grid_content{
+  height: calc(100% - 60px);
+  overflow: auto;
+}
+.grid_content_order_book, .grid_block{
   height: calc(100% - 60px);
   overflow: hidden;
 }
@@ -251,6 +244,7 @@ input[type="radio"]{
   height: calc(100%);
   overflow: hidden;
 }
+
 
 .grid_block{
 
@@ -272,7 +266,6 @@ input[type="radio"]{
 .userDeskNav .nav-link:hover {
     background-color: #ddd;
     border-color: #ddd #ddd #ddd;
-
 }
 
 .userDeskNav .nav-link.active {
@@ -280,4 +273,32 @@ input[type="radio"]{
     background-color: #f8f8f8;
     border-color: #ddd #ddd #f8f8f8;
 
+}
+
+.table_list{
+  margin-left: 0px;
+  width: calc(100% - 0px);
+  font-size: 11px;
+}
+.table_list th, .table_list td{
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+.table_list th{
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+}
+
+.table_list .table_header, .table_list .table_header:hover{
+  background: #f8f8f8;
+  border-bottom: 1px solid #eee;
+}
+
+.sm_btn {
+    background: #3a71ff;
+    border: 1px solid #3a71ff;
+    color: #fff;
+    padding: 0 15px;
 }

@@ -1,10 +1,10 @@
 import {
-  INIT_SMART_CONTRACTS
+  FETCH_POSITIONS,
 } from '../actions/web3Actions'
 
 export default (state = [], action) => {
   switch (action.type) {
-    case INIT_SMART_CONTRACTS:{
+    case FETCH_POSITIONS:{
       return action.payload
     }
     default:

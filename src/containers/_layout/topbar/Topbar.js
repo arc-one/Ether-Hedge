@@ -1,17 +1,11 @@
 import React, { PureComponent } from 'react'
 import ToggleTheme from '../customizer/ToggleTheme'
-import { Col, Container, Row, Button } from 'reactstrap'
+import { Col, Container, Row } from 'reactstrap'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { enableMetamask, changeActiveFuture } from '../../../actions/web3Actions'
-import { isEmpty, isNull }  from 'lodash';
+import { changeActiveFuture } from '../../../actions/web3Actions'
 
 class Topbar extends PureComponent {
-
-  handleEnableMetamask = () => {
-    this.props.enableMetamask()
-  };
-
 
   render () {
     return (
@@ -26,17 +20,13 @@ class Topbar extends PureComponent {
                   <ul className="contractsmenu nav nav-tabs">
                     {this.props.smartContracts.futures?this.props.smartContracts.futures.map((future, index)=>{
                       return (<li className="nav-item" key={future.ticker} onClick={() => this.props.changeActiveFuture(index)}>
-                        <a className={index===this.props.smartContracts.activeFuture ?'nav-link active':'nav-link'} href="#">{future.ticker}</a>
+                        <a className={index===this.props.smartContracts.activeFuture ?'nav-link active':'nav-link'} href={'#'+future.ticker}>{future.ticker}</a>
                       </li>)
                     }):null}
                   </ul>                  
                 </Col>
                 <Col className="" >
                   <ToggleTheme/>
-                  {
-                    isEmpty(this.props.accounts)  || isNull(this.props.network) || !this.props.enabledMetamask?
-                    <Button color="primary" onClick={this.handleEnableMetamask}  size="xs">Enable Metamask</Button>:null
-                  }
                 </Col>
             </Row>
             <Row className="bottomsubbar">
@@ -57,7 +47,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = dispatch => (
-  bindActionCreators({ enableMetamask, changeActiveFuture }, dispatch)
+  bindActionCreators({ changeActiveFuture }, dispatch)
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Topbar)

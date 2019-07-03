@@ -13,7 +13,6 @@ const orderFormInitial = {
 	}
 
 export default (state = orderFormInitial, action) => {
-	let _this = this;
 	const newState = {...state}  
 	switch (action.type) {
 		case UPDATE_ORDER_FORM:

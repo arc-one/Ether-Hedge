@@ -1,7 +1,7 @@
 import Web3 from 'web3'
+import async from 'async'
 import { isEmpty, isUndefined } from 'lodash';
 import {smartContracts, INFURA_RPC_URL, ORDERS_LIMIT_BLOCKS, HISTORY_LIMIT_BLOCKS} from '../config'
-
 
 export const FETCH_NETWORK = 'FETCH_NETWORK'
 export const FETCH_NETWORK_FAIL = 'FETCH_NETWORK_FAIL'
@@ -12,8 +12,6 @@ export const ENABLE_METAMASK_FAIL = 'ENABLE_METAMASK_FAIL'
 export const GET_BALANCE = 'GET_BALANCE'
 export const GET_BALANCE_ERROR = 'GET_BALANCE_ERROR'
 export const GET_WALLET_BALANCE = 'GET_WALLET_BALANCE'
-export const GET_POSITIONS = 'GET_POSITIONS'
-export const GET_POSITIONS_ERROR = 'GET_POSITIONS_ERROR'
 export const GET_STAKED_FUNDS = 'GET_STAKED_FUNDS'
 export const GET_STAKED_FUNDS_ERROR = 'GET_STAKED_FUNDS_ERROR'
 export const CALC_DIVIDENDS = 'CALC_DIVIDENDS'
@@ -40,6 +38,14 @@ export const CHECK_IF_TRUSTED_FUTURE = 'CHECK_IF_TRUSTED_FUTURE'
 export const CHECK_IF_TRUSTED_FUTURE_ERROR  = 'CHECK_IF_TRUSTED_FUTURE_ERROR'
 export const INIT_SMART_CONTRACTS = 'INIT_SMART_CONTRACTS'
 export const UPDATE_SMART_CONTRACTS = 'UPDATE_SMART_CONTRACTS'
+export const FETCH_POSITIONS = 'FETCH_POSITIONS'
+export const FETCH_POSITIONS_ERROR = 'FETCH_POSITIONS_ERROR'
+export const GET_PNL = 'GET_PNL'
+export const GET_PNL_ERROR = 'GET_PNL_ERROR'
+export const GET_LIQUIDATION_PRICE = 'GET_LIQUIDATION_PRICE'
+export const GET_LIQUIDATION_PRICE_ERROR = 'GET_LIQUIDATION_PRICE_ERROR'
+
+
 export const ADD_FILLS = 'ADD_FILLS'
 export const SET_FILLS = 'SET_FILLS'
 
@@ -261,7 +267,6 @@ export const getAvailableBalance = () => {
   	}
 }
 
-
 export const getLastPrice = () => {
 	return (dispatch, state) => {
 		let activeFuture = state().smartContracts.activeFuture;
@@ -282,11 +287,78 @@ export const getLastPrice = () => {
   	}
 }
 
+const fetchPositionAsync = async (future, address, callbackPosition) =>{
+	async.parallel([
+	    function(callback) {
+			future.inst.methods.positions(address).call((err, response) => {
+				callback(err, response);
+			});
+	    },
+	    function(callback) {
+			future.inst.methods.getCurrentPositionPNL(address).call((err, response) => {
+				callback(err, response);
+			});
+	    },
+	    function(callback) {
+			future.inst.methods.getPositionLiquidationPrice(address).call((err, response) => {
+				callback(err, response);
+			});
+	    }
+	],
+	function(err, results) {
+		if(err){
+			callbackPosition(err, null);
+		} else {
+			callbackPosition (null, {
+				ticker:future.ticker,
+				amount:results[0].amount*1,
+				price:results[0].price*1,
+				leverage:results[0].leverage*1,
+				positionType:results[0].positionType*1,
+				pnl:(results[1].prefix)?results[1].pnl*1:('-'+results[1].pnl)*1,
+				liquidationPrice:results[2][1]*1
+			});
+		}
+
+
+	});
+}
+
+const fetchPositionsAsync = async (futures, address, callbackPositions) => {
+	let  positions = [];
+	async.each(futures, function(future, callback) {
+		fetchPositionAsync(future, address, (err, position) => {
+			if(position){
+				positions.push(position);
+			}
+			callback();
+		});
+	}, function(err) {
+	    callbackPositions(err, positions);
+	});
+	
+}
+
+export const fetchPositions = () => {
+	return (dispatch, state) => {
+		fetchPositionsAsync(state().smartContracts.futures, state().accounts[0], (err, positions) => {
+			if(err){
+				dispatch({
+				    type: FETCH_POSITIONS_ERROR
+				});
+			} else {
+				dispatch({
+				    type: FETCH_POSITIONS,
+				    payload: positions
+				});
+			}
+		});
+  	}
+}
+
 export const getSpotPrice = () => {
 	return (dispatch, state) => {
-		//let depository = state().smartContracts.depository.inst;
 		let depository = state().smartContracts.settings.inst;
-
 		depository.methods.getUSDETHPrice().call((err, response) => {
 			if(err) {
 			  dispatch({
@@ -413,7 +485,7 @@ export const listenMarketOrderLog = () => {
 				      orderFills[orderHash] = 0;
 				    }
 				    
-				    orderFills[orderHash] +=event.returnValues.amount*1;
+				    orderFills[orderHash] += event.returnValues.amount*1;
 
 				    dispatch(  {
 						type: ADD_FILLS,

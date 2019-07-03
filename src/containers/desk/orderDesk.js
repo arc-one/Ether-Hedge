@@ -58,10 +58,10 @@ class OrderDesk extends PureComponent {
         <div className="limit_market border_bottom">
           <ul className="nav nav-tabs">
             <li className="nav-item" >
-              <a className={this.props.orderForm.priceType==='limit'?"nav-link active":"nav-link"}  href="#" onClick={() => this.props.dispatch(updateOrderForm({fieldName:'priceType', value: 'limit'}))}>&emsp;Limit</a>
+              <a className={this.props.orderForm.priceType==='limit'?"nav-link active":"nav-link"}  href="#limit" onClick={() => this.props.dispatch(updateOrderForm({fieldName:'priceType', value: 'limit'}))}>&emsp;Limit</a>
             </li>
             <li className="nav-item">
-              <a className={this.props.orderForm.priceType==='market'?"nav-link active":"nav-link"}  href="#" onClick={() => this.props.dispatch(updateOrderForm({fieldName:'priceType', value: 'market'}))}>Market&emsp; </a>
+              <a className={this.props.orderForm.priceType==='market'?"nav-link active":"nav-link"}  href="#market" onClick={() => this.props.dispatch(updateOrderForm({fieldName:'priceType', value: 'market'}))}>Market&emsp; </a>
             </li>
           </ul>
         </div>

@@ -16,8 +16,8 @@ import {  fetchNetwork,
           fetchOrders,
           checkIfTrustedFuture,
           fetchHistory,
-          listenMarketOrderLog
-
+          listenMarketOrderLog,
+          fetchPositions
         } from '../../actions/web3Actions'
 import {WEB3_POLL_INTERVAL} from '../../config'
 
@@ -85,6 +85,7 @@ class Web3Provider extends Component {
     this.props.getWalletBalance();
     this.props.getStakedFunds();
     this.props.getAvailableBalance();
+    this.props.fetchPositions();
   }
 
   fetchFutureData() {
@@ -99,7 +100,6 @@ class Web3Provider extends Component {
   startEventsListener(){
     this.props.listenMarketOrderLog();
   }
-
 
   render() {
     return null;
@@ -127,7 +127,8 @@ const mapDispatchToProps = dispatch => (
     fetchOrders,
     checkIfTrustedFuture,
     fetchHistory,
-    listenMarketOrderLog
+    listenMarketOrderLog,
+    fetchPositions
   }, dispatch)
 );
 
