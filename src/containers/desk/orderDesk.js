@@ -2,42 +2,77 @@ import React, { PureComponent } from 'react'
 import { Row, Form, FormGroup, Input, Label, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
 import { connect } from 'react-redux'
 import { updateOrderForm } from '../../actions/orderFormActions'
-import {ETH_DECIMALS, DECIMALS} from '../../config'
+import {ETH_DECIMALS, DECIMALS, LEVERAGE_DECIMALS, EXPIRES_IN} from '../../config'
 class OrderDesk extends PureComponent {
   
   handleFocus = (event) => {
     event.target.select();
   }
-  
+      
+  constructor() {
+    super();
+    this.handlePlaceOrder = this.handlePlaceOrder.bind(this);
+  }
+
+  handlePlaceOrder() {
+    console.log(this.props.orderForm.priceType)
+    if(this.props.orderForm.priceType === 'limit') {
+      this.sendLimit();
+    } 
+    if(this.props.orderForm.priceType === 'market') {
+      this.sendMarket();
+    } 
+  }
+
+  sendLimit = () => {
+    const price = this.props.orderForm.price*DECIMALS ;
+    const amount = this.props.orderForm.amount*DECIMALS;
+    const leverage = (this.props.orderForm.leverage*1).toFixed(2)*LEVERAGE_DECIMALS;
+
+    const activeFuture = this.props.smartContracts.activeFuture;
+    this.props.smartContracts.futures[activeFuture].inst.methods
+      .placeLimitOrder(Math.round(price), Math.round(amount), this.props.orderForm.orderType*1, Math.round(leverage), EXPIRES_IN)
+      .send({from: this.props.accounts[0]}); 
+  }
+
+  sendMarket = () => {
+    const price = this.props.orderForm.price*DECIMALS ;
+    const amount = this.props.orderForm.amount*DECIMALS;
+    const leverage = (this.props.orderForm.leverage*1).toFixed(2)*LEVERAGE_DECIMALS;
+
+
+  }
+
+
   render () {
     return (  
       <div>
         <Row className="order_desk_cont border_bottom d-flex justify-content-between">
           <div className="info_row">
-            <div className="float-right">Ξ {(this.props.userWalletBalance/ETH_DECIMALS).toFixed(4)}</div>
+            <div className="float-right">Ξ {(this.props.userWalletBalance/ETH_DECIMALS).toFixed(6)}</div>
             <div className="float-left">Wallet:</div>
           </div>
           <div className="info_row">
-            <div className="float-right">Ξ {(this.props.stakedFunds/ETH_DECIMALS).toFixed(4)}</div>
+            <div className="float-right">Ξ {(this.props.stakedFunds/ETH_DECIMALS).toFixed(6)}</div>
             <div className="float-left">Stake:</div>
           </div>
           <div className="info_row">
-            <div className="float-right">Ξ {(this.props.userBalance/ETH_DECIMALS).toFixed(4)}</div>
+            <div className="float-right">Ξ {(this.props.userBalance/ETH_DECIMALS).toFixed(6)}</div>
             <div className="float-left">Deposit:</div>
           </div>
           <div className="info_row">
-            <div className="float-right">Ξ {(this.props.availableBalance/ETH_DECIMALS).toFixed(4)}</div>
+            <div className="float-right">Ξ {(this.props.availableBalance/ETH_DECIMALS).toFixed(6)}</div>
             <div className="float-left">Available:</div>
           </div>
         </Row>
 
         <Row className="order_desk_cont border_bottom d-flex justify-content-between">
           <div className="info_row">
-            <div className="float-right">Ξ {(this.props.lastPrice/DECIMALS).toFixed(4)}</div>
+            <div className="float-right">$ {(this.props.lastPrice/DECIMALS).toFixed(2)}</div>
             <div className="float-left">Last Price:</div>
           </div>
           <div className="info_row">
-            <div className="float-right">Ξ {(this.props.spotPrice/DECIMALS).toFixed(4)}</div>
+            <div className="float-right">$ {(this.props.spotPrice/DECIMALS).toFixed(2)}</div>
             <div className="float-left">Spot Price:</div>
           </div>
         </Row>
@@ -129,7 +164,6 @@ class OrderDesk extends PureComponent {
             </FormGroup>
           </Form>
 
-
           <div className="info_row">
             <div className="float-right">Ξ {this.props.orderForm.cost}</div>
             <div className="float-left">Cost:</div>
@@ -143,7 +177,7 @@ class OrderDesk extends PureComponent {
             <div className="float-left">Liquidation:</div>
           </div>
 
-          <button className={this.props.orderForm.orderType==='1'?"green_bckgr btn btn-default active btn-block":"red_bckgr btn btn-default active btn-block"} disabled={!this.props.enabledMetamask}>Place Order</button>
+          <button className={this.props.orderForm.orderType==='1'?"green_bckgr btn btn-default active btn-block":"red_bckgr btn btn-default active btn-block"} disabled={!this.props.enabledMetamask} onClick={this.handlePlaceOrder} >Place Order</button>
 
         </Row>
       </div>
@@ -160,6 +194,8 @@ export default connect(state => {
     stakedFunds:state.stakedFunds,
     availableBalance: state.availableBalance,
     lastPrice: state.lastPrice,
-    spotPrice: state.spotPrice
+    spotPrice: state.spotPrice,
+    smartContracts: state.smartContracts,
+    accounts: state.accounts
   }
 })(OrderDesk)

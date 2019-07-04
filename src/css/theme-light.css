@@ -1,3 +1,6 @@
+.wrapper{
+  min-width: 1028px;
+}
 .topbar {
   height: 70px;
   padding: 0px;
@@ -7,7 +10,6 @@
 .page-title{
   font-size:14px;
 }
-
 .loader {
   border: 3px solid #ddd; 
   border-top: 3px solid #3a71ff; 
@@ -26,10 +28,10 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
+    width:5px;
+    height:5px;
 }
 
 /* Track */
@@ -40,18 +42,16 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: #CDCDCD; 
-    border: 1px solid #fdfdfd;
+    border-radius: 5px;
 }
-
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #CDCDCD; 
-    border: 1px solid #fdfdfd;
 }
 textarea, input, input[type], .uneditable-input{   
     color: #333;
-    background: #F5F5F5;
-    border: 1px solid #e5e5e5;
+    background: #fff;
+    border: 1px solid #ddd;
 }
 textarea:hover, input:hover, input[type]:hover, .uneditable-input:hover {   
     border-color: #999;
@@ -143,6 +143,7 @@ input[type="radio"]{
     background-color: #F5F5F5;
     border-color: #ddd #ddd #F5F5F5;
     border-radius: 0;
+
 }
 .nav-tabs a {
   color: #555;
@@ -159,23 +160,18 @@ input[type="radio"]{
 .bottomsubbar{
   border-top:1px solid #ddd;
 }
-
 .grid_block{
   background: #f8f8f8;
 }
-
 .left_border{
   border-left: 1px solid #ddd;
 }
-
 .right_border{
   border-left: 1px solid #ddd;
 }
-
 .workdesk{
   margin-top: -2px;
   background: #ddd;
-
 }
 .grid_block{
   padding: 0;
@@ -186,15 +182,11 @@ input[type="radio"]{
   cursor: pointer;
   background: #eee;
   border-bottom: 1px solid #ddd;
-
 }
 .grid_title{
   padding: 5px 10px;
   font-size: 12px;
 }
-
-
-
 .table_list tr{
   cursor: pointer;
 }
@@ -205,18 +197,14 @@ input[type="radio"]{
 .table_list tr:hover{
   background: #eee;
 }
-
 .red_text{
   color:#F31B69;
-
 }
 .green_text{
   color:#3A71FF;
-
 }
 .spread_block{
   border-top: 1px solid #eee;
-
   font-size: 12px;
   padding: 1px;
   margin: 12px 0 10px 0px;
@@ -224,6 +212,7 @@ input[type="radio"]{
 }
 .order_book_container{
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 .order_book_top, .order_book_bottom{
   height: calc(48%);
@@ -239,20 +228,15 @@ input[type="radio"]{
   height: calc(100% - 60px);
   overflow: hidden;
 }
-
 .grid_content_getstarted{
   height: calc(100%);
   overflow: hidden;
 }
-
-
 .grid_block{
-
   overflow: hidden;
   height: 100%;
   box-sizing: border-box;
 }
-
 .userDeskNav {
   margin-top: -1px;
   margin-left: -1px;
@@ -263,18 +247,15 @@ input[type="radio"]{
     padding-top: 4px;
     padding-bottom: 3px;
 }
-.userDeskNav .nav-link:hover {
+.userDeskNav .nav-link:hover, .userDeskNav .nav-link.active {
     background-color: #ddd;
     border-color: #ddd #ddd #ddd;
+    font-weight: normal;
 }
-
 .userDeskNav .nav-link.active {
-
     background-color: #f8f8f8;
     border-color: #ddd #ddd #f8f8f8;
-
 }
-
 .table_list{
   margin-left: 0px;
   width: calc(100% - 0px);
@@ -283,22 +264,118 @@ input[type="radio"]{
 .table_list th, .table_list td{
   padding-left: 10px;
   padding-right: 10px;
-
 }
 .table_list th{
   padding-top: 5px;
   padding-bottom: 5px;
-
 }
-
 .table_list .table_header, .table_list .table_header:hover{
   background: #f8f8f8;
   border-bottom: 1px solid #eee;
 }
-
 .sm_btn {
     background: #3a71ff;
     border: 1px solid #3a71ff;
     color: #fff;
     padding: 0 15px;
+}
+
+.left_topbar{
+  width:100px;
+}
+
+
+
+/* Day Night Toggle. Created By Joseph Shenton @TeamiHackify */
+
+.button-con {
+  cursor: default;
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+}
+
+#icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  top: -8px;
+  margin: 0 7px;
+  fill: #333;
+}
+
+#dayIcon, #nightIcon {
+  cursor: pointer;
+}
+
+.toggle {
+  display: none;
+}
+
+.toggle, .toggle:after, .toggle:before, .toggle *, .toggle *:after, .toggle *:before, .toggle + .toggle-button {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.toggle::-moz-selection, .toggle:after::-moz-selection, .toggle:before::-moz-selection, .toggle *::-moz-selection, .toggle *:after::-moz-selection, .toggle *:before::-moz-selection, .toggle + .toggle-button::-moz-selection {
+  background: none;
+}
+
+.toggle::selection, .toggle:after::selection, .toggle:before::selection, .toggle *::selection, .toggle *:after::selection, .toggle *:before::selection, .toggle + .toggle-button::selection {
+  background: none;
+}
+
+.toggle + .toggle-button {
+  outline: 0;
+  display: inline-block;
+  width: 30px;
+  height: 10px;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid #333;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.toggle + .toggle-button:after, .toggle + .toggle-button:before {
+  position: relative;
+  display: block;
+  content: "";
+  width: 50%;
+  height: 100%;
+}
+
+.toggle + .toggle-button:after {
+  left: 0;
+}
+
+.toggle + .toggle-button:before {
+  display: none;
+}
+
+.toggle:checked + .toggle-button:after {
+  left: 50%;
+}
+
+.toggle + .toggle-button {
+  padding: 2px;
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 2em;
+}
+
+.toggle + .toggle-button:after {
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  background: #333;
+  content: "";
+  border-radius: 1em;
+}
+
+.toggle:checked + .toggle-button:after {
+  left: 50%;
 }

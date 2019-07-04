@@ -49,12 +49,17 @@ class WorkDesk extends PureComponent {
 	getHeight(){
 		return (window.innerHeight-69-(30 - 0) * 1)/30;
 	}
+	getWidth(){
+		//var element = document.getElementById('workdesk');
+		//if(window.innerWidth<1028) return 1028;
+		return window.innerWidth;
+	}
 
 	render () {
 		return (  
-			<Row className="workdesk">
+			<Row className="workdesk" id="workdesk">
 
-				<GridLayout className="layout" layout={originalLayout} /*onLayoutChange={this.onLayoutChange} */cols={36} margin={[1, 1]}  rowHeight={this.getHeight()}   width={window.innerWidth} draggableCancel=".grid_content, .grid_table_header, .grid_content_order_book, .nav-link" /*onResizeStop={this.onResizeStop.bind(this)}  onResize={this.onResize.bind(this)}*/>
+				<GridLayout className="layout" layout={originalLayout} /*onLayoutChange={this.onLayoutChange} */cols={36} margin={[1, 1]}  rowHeight={this.getHeight()}   width={this.getWidth()} draggableCancel=".grid_content, .grid_table_header, .grid_content_order_book, .nav-link" /*onResizeStop={this.onResizeStop.bind(this)}  onResize={this.onResize.bind(this)}*/>
 					<div className="grid_block" key="a">
 						<OrderBook/>
 					</div>

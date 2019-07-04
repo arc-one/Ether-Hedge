@@ -147,6 +147,7 @@ export const initSmartContracts = () => {
 		    		for (var i = 0; i < smartContracts[key].length; i++) {
 		    			if(isUndefined(smartContractsInst[key])) smartContractsInst[key] = [];
 		    			smartContractsInst[key].push({
+
 				    		inst: new web3.eth.Contract(smartContracts[key][i].abi, smartContracts[key][i].address),
 				    		address: smartContracts[key][i].address,
 				    		ticker: smartContracts[key][i].ticker
@@ -249,10 +250,9 @@ export const getStakedFunds = () => {
 export const getAvailableBalance = () => {
 	return (dispatch, state) => {
 		let address = state().accounts[0];
-		let activeFuture = state().smartContracts.activeFuture;
-		let future = state().smartContracts.futures[activeFuture].inst;
+		let depository = state().smartContracts.depository.inst;
 
-		future.methods.getAvailableBalance(address, 140000000000, 1000).call((err, response) => {
+		depository.methods.getAvailableBalance(address).call((err, response) => {
 			if(err) {
 			  dispatch({
 			    type: GET_AVAILABLE_BALANCE_ERROR
@@ -358,7 +358,7 @@ export const fetchPositions = () => {
 
 export const getSpotPrice = () => {
 	return (dispatch, state) => {
-		let depository = state().smartContracts.settings.inst;
+		let depository = state().smartContracts.depository.inst;
 		depository.methods.getUSDETHPrice().call((err, response) => {
 			if(err) {
 			  dispatch({
@@ -394,7 +394,7 @@ export const fetchOrders = (index) => {
 		let web3 = getWeb3();
 
 		if(web3 && web3.eth) {
-	    	web3.eth.getBlockNumber().then(fromBlock => {
+	    	web3.eth.getBlockNumber().then(fromBlock => { 
 				future.getPastEvents('LimitOrderLog', {
 				  fromBlock: fromBlock - ORDERS_LIMIT_BLOCKS,
 				  toBlock: 'latest'

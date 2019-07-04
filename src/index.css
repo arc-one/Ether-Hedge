@@ -7,7 +7,7 @@ body {
 }
 label {
     display: inline-block;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
     font-weight: bold;
     font-size: 11px;
 }
@@ -33,6 +33,15 @@ label {
 	height: 100%;
 	overflow-y: auto;	
 }
+.left_side_container{
+	width: 400px;
+	float: left;
+}
+.right_side_container{
+	width: calc(100% - 400px);
+	float: left;
+}
+
 .info_row{
 
 	width: 100%;
@@ -74,4 +83,24 @@ label {
 .contractsmenu{
 	margin-top: 10px;
 }
+.top_menu{
+	padding-top: 10px;
+	float: right;
+	padding-left: 15px;
+	padding-right: 15px;
+	cursor: pointer;
+}
+.top_menu:hover{
+	text-decoration: underline;
+}
 
+.modal-title{
+	font-size: 18px;
+}
+
+.modal-body input{
+	text-align: left;
+}
+.form-group input {
+    font-size: 14px;
+}

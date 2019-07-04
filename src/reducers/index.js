@@ -17,6 +17,8 @@ import trustedFutureReducer from './trustedFutureReducer'
 import tradesReducer from './tradesReducer'
 import orderFillsReducer from './orderFillsReducer'
 import fetchPositionsReducer from './fetchPositionsReducer'
+import modalReducer from './modalReducer'
+
 
 
 const rootReducer = combineReducers({
@@ -37,7 +39,8 @@ const rootReducer = combineReducers({
   isTrustedActiveFuture: trustedFutureReducer,
   trades: tradesReducer,
   orderFills: orderFillsReducer,
-  userPositions:fetchPositionsReducer
+  userPositions:fetchPositionsReducer,
+  modal:modalReducer
 })
 
 export default rootReducer
