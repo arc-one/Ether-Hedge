@@ -2,7 +2,13 @@ import React, { PureComponent } from 'react'
 import { Row, Form, FormGroup, Input, Label, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
 import { connect } from 'react-redux'
 import { updateOrderForm } from '../../actions/orderFormActions'
-import {ETH_DECIMALS, DECIMALS, LEVERAGE_DECIMALS, EXPIRES_IN} from '../../config'
+import { ETH_DECIMALS, DECIMALS, LEVERAGE_DECIMALS, EXPIRES_IN, MAX_ORDER_LIST } from '../../config'
+import { checkOrderAmount } from '../../utils/calculations'
+import { isNumber, isUndefined, isEmpty } from 'lodash'
+
+const currentBlockNumber = 9999999;
+
+
 class OrderDesk extends PureComponent {
   
   handleFocus = (event) => {
@@ -15,7 +21,6 @@ class OrderDesk extends PureComponent {
   }
 
   handlePlaceOrder() {
-    console.log(this.props.orderForm.priceType)
     if(this.props.orderForm.priceType === 'limit') {
       this.sendLimit();
     } 
@@ -39,10 +44,7 @@ class OrderDesk extends PureComponent {
     const price = this.props.orderForm.price*DECIMALS ;
     const amount = this.props.orderForm.amount*DECIMALS;
     const leverage = (this.props.orderForm.leverage*1).toFixed(2)*LEVERAGE_DECIMALS;
-
-
   }
-
 
   render () {
     return (  
@@ -118,6 +120,8 @@ class OrderDesk extends PureComponent {
                   placeholder="Amount" 
                   onFocus={this.handleFocus} 
                   onChange={event => this.props.dispatch(updateOrderForm({fieldName:'amount', value: event.target.value*1}))}
+                  disabled={this.props.accounts[0]?false:true}
+                  value={ this.props.orderForm.amount}
                 />
               </InputGroup>
             </FormGroup>
@@ -138,6 +142,25 @@ class OrderDesk extends PureComponent {
                     placeholder="Limit Price" 
                     onFocus={this.handleFocus} 
                     onChange={event => this.props.dispatch(updateOrderForm({fieldName:'price', value: event.target.value*1}))}
+                    value={this.props.orderForm.price}
+                    disabled={this.props.accounts[0]?false:true}
+                  />
+                </InputGroup>
+              </FormGroup>:null}
+
+            {this.props.orderForm.priceType==='market'?
+              <FormGroup>
+                <Label for="limitPrice">Average Price:</Label>
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>$</InputGroupText>
+                  </InputGroupAddon>
+                  <Input 
+                    className="order_desk_input" 
+                    type="number" 
+                    name="limitPrice" 
+                    value={ this.props.orderForm.price.toFixed(2)}
+                    disabled
                   />
                 </InputGroup>
               </FormGroup>:null
@@ -159,6 +182,9 @@ class OrderDesk extends PureComponent {
                   placeholder="Leverage" 
                   onFocus={this.handleFocus} 
                   onChange={event => this.props.dispatch(updateOrderForm({fieldName:'leverage', value: event.target.value*1}))}
+                  disabled={this.props.accounts[0]?false:true}
+
+                  value={ this.props.orderForm.leverage}
                 />
               </InputGroup>
             </FormGroup>
@@ -196,6 +222,8 @@ export default connect(state => {
     lastPrice: state.lastPrice,
     spotPrice: state.spotPrice,
     smartContracts: state.smartContracts,
-    accounts: state.accounts
+    accounts: state.accounts,
+    orders: state.orders,
+    orderFills: state.orderFills
   }
 })(OrderDesk)

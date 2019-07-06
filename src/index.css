@@ -104,3 +104,6 @@ label {
 .form-group input {
     font-size: 14px;
 }
+.bold{
+	font-weight: bold;
+}

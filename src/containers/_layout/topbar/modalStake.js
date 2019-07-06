@@ -40,7 +40,7 @@ class ModalStake extends PureComponent {
     render() {
         return (
             <div>
-                <Modal isOpen={this.props.modal==='stake'}  unmountOnClose={true}>
+                <Modal isOpen={this.props.modal==='stake'} toggle={() => this.props.toggleModal(null)} unmountOnClose={true}>
                     <ModalHeader toggle={() => this.props.toggleModal(null)}>Stake</ModalHeader>
                     <ModalBody>
                       <ul className="modal_ul">

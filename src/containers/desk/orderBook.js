@@ -1,27 +1,18 @@
-import { isUndefined }  from 'lodash';
+import classNames  from 'classnames';
+import { isUndefined, isEmpty }  from 'lodash';
 import React, { PureComponent } from 'react'
-//import { Row, Col, Container } from 'reactstrap'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { DECIMALS} from '../../config'
+import { checkOrderAmount } from '../../utils/calculations'
+import { updateOrderForm } from '../../actions/orderFormActions'
+
 const currentBlockNumber = 9999999;
 
 class OrderBook extends PureComponent {
 
 	componentDidUpdate() {
 		this.scrollToBottom();
-	}
-
-	checkOrderAmount(u){
-		let order = u.returnValues;
-		let fills = 0;
-		let remaining = order.amount;
-
-		order.amount*=1;  
-		order.price*=1;  
-
-		if(isUndefined(this.props.orderFills[order.hash])) fills = this.props.orderFills[order.hash] * 1;
-		if(order.amount>=fills) remaining = order.amount*1-fills*1;
-		if(remaining>1000000) return remaining; else return false;
 	}
 
 	scrollToBottom() {
@@ -31,9 +22,29 @@ class OrderBook extends PureComponent {
 		this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
 	}
 
+
+    handleOrderBookClick = async (event) => {
+	    let orderHash = event.target.getAttribute('data-hash');
+	    let orderType = event.target.getAttribute('data-ordertype');
+	    let price = event.target.getAttribute('data-price');
+	    let amount = event.target.getAttribute('data-amount');
+
+	    this.props.updateOrderForm({fieldName:'orderType', value: orderType});
+
+	    if(this.props.orderForm.priceType==='market') {
+	    	this.props.updateOrderForm({fieldName:'selectedHash', value: orderHash});
+	    }
+
+	    if(this.props.orderForm.priceType==='limit') {
+	    	this.props.updateOrderForm({fieldName:'amount', value: amount/DECIMALS});
+	    	this.props.updateOrderForm({fieldName:'price', value: price/DECIMALS});
+	    }
+	}
+
+
+
 	render () {
 
-		//let this = this;
 		return (  
 			<div className="grid_block">
                 <div className="grid_header">
@@ -55,14 +66,16 @@ class OrderBook extends PureComponent {
                   <div className="order_book_container order_book_top"  id="order_book_top" ref={el => { this.el = el; }}>
                      <table  className="table_list" >
                         <tbody>
-                           {
+
+                            {
                               
+
                               this.props.orders
-                                .filter(u => u.returnValues.orderType === '0' && this.checkOrderAmount(u) && u.returnValues.expires*1 > currentBlockNumber*1)
+                                .filter(u => u.returnValues.orderType === '0' && checkOrderAmount(u, this.props.orderFills) && u.returnValues.expires*1 > currentBlockNumber*1)
                                 .sort((a, b) =>  b.returnValues.price*1 - a.returnValues.price*1)
-                                .map((event, index) => {
+                                .map((event, index, array) => {
                                     var obj = event.returnValues;
-                                    var remaining = this.checkOrderAmount(event);
+                                    var remaining = checkOrderAmount(event, this.props.orderFills);
 
                                    // var fromBlockNumber = currentBlockNumber*1 - obj.expires*1 ;
 
@@ -70,22 +83,32 @@ class OrderBook extends PureComponent {
                                     //     this.state.orderHistory[obj.hash] = event;
                                     // } 
 
-                                     
-
                                       // if(obj.addr === this.state.address){
                                       //     this.state.activeOrders[obj.hash] = event;
                                       // }   
 
+								    var rowClasses = classNames({
+								      'odd': index % 2 !== 0,
+								      'even': index % 2 === 0,
+								      'selected_red': (this.props.orderForm.priceType==="market" && this.props.orderForm.orderType==="1" && !isEmpty(this.props.accounts) && index>=array.length - this.props.orderForm.selectedRows && event.returnValues.addr.toLowerCase()  !== this.props.accounts[0].toLowerCase()),
+								      'owner' : ( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase())
+								    });
+								    
+								    var priceClasses = classNames({
+								      'red_text': !( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase()),
+								    });
+								    
+
+
 									return  (
-										<tr className={(index % 2 !== 0)?'odd':'even'} key={event.transactionHash} >
-											<td onClick={this.handleMarket} data-ordertype="1" data-hash={obj.hash} width="30%" className="red_text">{(obj.price*1/DECIMALS).toFixed(2)}</td>
-											<td onClick={this.handleMarket} data-ordertype="1" data-hash={obj.hash} width="33%" >{(remaining/DECIMALS).toFixed(2)}</td>                      
-											<td onClick={this.handleMarket} data-ordertype="1" data-hash={obj.hash} width="36%" >{(remaining/obj.price).toFixed(6)}</td>
+										<tr className={rowClasses} key={event.transactionHash} >
+											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="30%" className={priceClasses}>{(obj.price*1/DECIMALS).toFixed(2)}</td>
+											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="33%" >{(remaining/DECIMALS).toFixed(2)}</td>                      
+											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="36%" >{(remaining/obj.price).toFixed(6)}</td>
 										</tr>
 									); 
-             
-                              })
-                           }
+                                })
+                            }
                         </tbody>
                      </table>
                   </div>
@@ -97,11 +120,11 @@ class OrderBook extends PureComponent {
                             {
 
                               this.props.orders
-                                .filter(u => u.returnValues.orderType === '1' && this.checkOrderAmount(u) && u.returnValues.expires*1 > currentBlockNumber*1)
+                                .filter(u => u.returnValues.orderType === '1' && checkOrderAmount(u, this.props.orderFills) && u.returnValues.expires*1 > currentBlockNumber*1)
                                 .sort((a, b) =>  b.returnValues.price*1 - a.returnValues.price*1)
-                                .map((event, index) => {
+                                .map((event, index, array) => {
                                     var obj = event.returnValues;
-                                    var remaining = this.checkOrderAmount(event);
+                                    var remaining = checkOrderAmount(event, this.props.orderFills);
 
 /*
                                     var fromBlockNumber = _this.state.currentBlockNumber*1 - obj.expires*1 ;
@@ -116,13 +139,27 @@ class OrderBook extends PureComponent {
                                         _this.state.activeOrders[obj.hash] = event;
                                     } 
 */
+                                    
+
+								    var rowClasses = classNames({
+								      'odd': index % 2 !== 0,
+								      'even': index % 2 === 0,
+								      'selected_green': (this.props.orderForm.priceType==="market" &&  this.props.orderForm.orderType==="0" && !isEmpty(this.props.accounts) && index<this.props.orderForm.selectedRows && event.returnValues.addr.toLowerCase()  !== this.props.accounts[0].toLowerCase()),
+								      'owner' : ( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase())
+								    });
+								    
+								    var priceClasses = classNames({
+								      'green_text': !( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase()),
+								    });
+
+
                                     return  (
-                                      <tr className={(index % 2 !== 0)?'odd':'even'} key={event.transactionHash} >
-                                        <td onClick={this.handleMarket} data-ordertype="0" data-hash={obj.hash} width="30%" className="green_text">
+                                      <tr className={rowClasses} key={event.transactionHash} >
+                                        <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="30%" className={priceClasses}>
                                           {(obj.price*1/DECIMALS).toFixed(2)}
                                         </td>
-                                        <td onClick={this.handleMarket} data-ordertype="0" data-hash={obj.hash} width="33%" >{(remaining/DECIMALS).toFixed(2)}</td>                                          
-                                        <td onClick={this.handleMarket} data-ordertype="0" data-hash={obj.hash} width="36%" >{(remaining/obj.price).toFixed(6)} </td>
+                                        <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="33%" >{(remaining/DECIMALS).toFixed(2)}</td>                                          
+                                        <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="36%" >{(remaining/obj.price).toFixed(6)} </td>
                                       </tr>
                                     ); 
                               })
@@ -138,9 +175,15 @@ class OrderBook extends PureComponent {
 	}
 }
 
-export default connect(state => {
-  return {
+const mapStateToProps = (state) => ({
     orders: state.orders,
-    orderFills: state.orderFills
-  }
-})(OrderBook)
+    orderFills: state.orderFills,
+    orderForm: state.orderForm,
+    accounts: state.accounts
+})
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({ updateOrderForm }, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderBook)

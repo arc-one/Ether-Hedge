@@ -31,7 +31,7 @@ class ModalWithdraw extends PureComponent {
                       from: this.props.accounts[0],
                       value:web3.utils.toWei(this.state.withdrawAmount, 'ether')
                     }); 
-                    this.toggleWithdraw();
+                    this.props.toggleModal(null);
                 } else {
                     alert("Please deposit more than 0 ETH");
             }
@@ -42,7 +42,7 @@ class ModalWithdraw extends PureComponent {
         return (
             <div>
                 <Modal isOpen={this.props.modal==="withdraw"} toggle={() => this.props.toggleModal(null)} unmountOnClose={true}>
-                    <ModalHeader toggle={this.toggleWithdraw}>Withdraw</ModalHeader>
+                    <ModalHeader toggle={() => this.props.toggleModal(null)}>Withdraw</ModalHeader>
                     <ModalBody>
                         <div className="form-group">
                           <label htmlFor="amount">ETH Amount</label>

@@ -12,6 +12,8 @@ export const ETH_DECIMALS = 1000000000000000000;
 export const DECIMALS = 1000000000;
 export const LEVERAGE_DECIMALS = 100;
 export const EXPIRES_IN = 10000;
+export const MAX_ORDER_LIST = 50;
+
 
 export const INFURA_RPC_URL = 'https://kovan.infura.io/v3/28eae19dd0444340b4f9562e6813bad6';
 

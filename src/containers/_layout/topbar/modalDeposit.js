@@ -40,7 +40,7 @@ class ModalWithdraw extends PureComponent {
     render() {
         return (
             <div>
-                <Modal isOpen={this.props.modal==='deposit'}  unmountOnClose={true}>
+                <Modal isOpen={this.props.modal==='deposit'} toggle={() => this.props.toggleModal(null)} unmountOnClose={true}>
                     <ModalHeader toggle={() => this.props.toggleModal(null)}>Deposit</ModalHeader>
                     <ModalBody>
                       <div className="form-group">

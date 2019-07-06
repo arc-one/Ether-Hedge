@@ -192,6 +192,10 @@ input[type="radio"]{
 }
 .table_list tr.odd{
   background: #f1f1f1;
+  border-left: 1px solid #f1f1f1;
+}
+.table_list tr.even{
+  border-left: 1px solid transparent;
 }
 
 .table_list tr:hover{
@@ -378,4 +382,24 @@ input[type="radio"]{
 
 .toggle:checked + .toggle-button:after {
   left: 50%;
+}
+
+.table_list .selected_red {
+  border-left: 1px solid #F31B69 !important; 
+  box-sizing: border-box;
+  -webkit-transition: all .5s ease;
+  transition: all .5s ease;
+}
+.table_list .selected_green {
+  border-left: 1px solid #3A71FF !important; 
+  box-sizing: border-box;
+  -webkit-transition: all .5s ease;
+  transition: all .5s ease;
+}
+
+.owner, .owner:hover{
+  background: #ddd !important;
+  border-left:1px solid #ddd !important;
+  color:#999;
+  cursor: default;
 }
