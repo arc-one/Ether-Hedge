@@ -24,6 +24,7 @@ class TradeHistory extends PureComponent {
     this.orderFills[orderHash] +=event.returnValues.amount*1;
     if(index===this.props.trades.length-1) {
       this.props.setFills(this.orderFills);
+      this.orderFills = {};
     }
   }
 
@@ -50,12 +51,10 @@ class TradeHistory extends PureComponent {
           <div className="order_book_container trade_history">
              <table className="table_list"  >
                 <tbody>
-                  { //onClick={_this.tradeHistory} data-trade={ JSON.stringify(obj) }
-                    this.props.trades.slice(0).sort((a, b) => b.returnValues.timestamp*1 - a.returnValues.timestamp*1).reverse().map(function(obj, index){
+                  { 
+                    this.props.trades.slice(0).sort((a, b) => b.returnValues.timestamp*1 - a.returnValues.timestamp*1).map(function(obj, index){
                       _this.createOrderFills(obj, index);
                       return  (
-                        ((obj.returnValues.amount*1/DECIMALS).toFixed(2)>0)?
-
                         <tr className={(index % 2 !== 0)?'odd':'even'} key={Math.random()} > 
                           {
                             obj.returnValues.positionType === '0'?
@@ -84,7 +83,7 @@ class TradeHistory extends PureComponent {
                             width="36%">
                               { ((obj.returnValues.amount*1/DECIMALS)/(obj.returnValues.price*1/DECIMALS)).toFixed(6) }
                           </td>
-                        </tr> : null
+                        </tr> 
                       )
                     })
                   }

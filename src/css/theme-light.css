@@ -192,7 +192,7 @@ input[type="radio"]{
 }
 .table_list tr.odd{
   background: #f1f1f1;
-  border-left: 1px solid #f1f1f1;
+  border-left: 1px solid transparent;
 }
 .table_list tr.even{
   border-left: 1px solid transparent;
@@ -399,7 +399,7 @@ input[type="radio"]{
 
 .owner, .owner:hover{
   background: #ddd !important;
-  border-left:1px solid #ddd !important;
+
   color:#999;
   cursor: default;
 }

@@ -24,7 +24,7 @@ export default (state = orderFormInitial, action) => {
 			newState[action.fieldName] = action.value;
 			const availableOrders = getOrderList(newState, action.state);
 
-			if(action.fieldName=='selectedHash'){
+			if(action.fieldName === 'selectedHash'){
 				newState.amount = availableOrders.totalAmount;
 				newState[action.fieldName] = null;
 			}

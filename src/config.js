@@ -5,6 +5,8 @@ import tokenABI  from './contracts/Token.json'
 import futureContractABI_01  from './contracts/FutureContract.json'
 
 export const WEB3_POLL_INTERVAL = 300;
+export const POLL_BLOCK_NUMBER_INTERVAL = 15000;
+
 export const ORDERS_LIMIT_BLOCKS = 500000; //blocks
 export const HISTORY_LIMIT_BLOCKS = 5000000; //blocks
 

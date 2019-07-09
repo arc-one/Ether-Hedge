@@ -17,30 +17,35 @@ import trustedFutureReducer from './trustedFutureReducer'
 import tradesReducer from './tradesReducer'
 import orderFillsReducer from './orderFillsReducer'
 import fetchPositionsReducer from './fetchPositionsReducer'
+import fetchPositionReducer from './fetchPositionReducer'
 import modalReducer from './modalReducer'
+import getBlockNumberReducer from './getBlockNumberReducer'
+
 
 
 
 const rootReducer = combineReducers({
-  theme: themeReducer,
-  height: getWindowHeightReducer,
-  accounts: fetchAccountsReducer,
-  network: fetchNetworkReducer,
-  enabledMetamask: enableMetamaskReducer,
-  orderForm: orderFormReducer,
-  smartContracts: smartContractsReducer,
-  userBalance: getBalanceReducer,
-  userWalletBalance: getWalletBalanceReducer,
-  stakedFunds: getStakedFundsReducer,
-  availableBalance: getAvailableBalanceReducer,
-  lastPrice: getLastPriceReducer,
-  spotPrice: getSpotPriceReducer,
-  orders: ordersReducer,
-  isTrustedActiveFuture: trustedFutureReducer,
-  trades: tradesReducer,
-  orderFills: orderFillsReducer,
-  userPositions:fetchPositionsReducer,
-  modal:modalReducer
+	theme: themeReducer,
+	height: getWindowHeightReducer,
+	accounts: fetchAccountsReducer,
+	network: fetchNetworkReducer,
+	enabledMetamask: enableMetamaskReducer,
+	orderForm: orderFormReducer,
+	smartContracts: smartContractsReducer,
+	userBalance: getBalanceReducer,
+	userWalletBalance: getWalletBalanceReducer,
+	stakedFunds: getStakedFundsReducer,
+	availableBalance: getAvailableBalanceReducer,
+	lastPrice: getLastPriceReducer,
+	spotPrice: getSpotPriceReducer,
+	orders: ordersReducer,
+	isTrustedActiveFuture: trustedFutureReducer,
+	trades: tradesReducer,
+	orderFills: orderFillsReducer,
+	userPositions:fetchPositionsReducer,
+	userPosition:fetchPositionReducer,
+	modal:modalReducer,
+	currentBlockNumber:getBlockNumberReducer
 })
 
 export default rootReducer

@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import async from 'async'
-import { isEmpty, isUndefined } from 'lodash';
+import { isEmpty, isUndefined, isObject } from 'lodash';
 import {smartContracts, INFURA_RPC_URL, ORDERS_LIMIT_BLOCKS, HISTORY_LIMIT_BLOCKS} from '../config'
 
 export const FETCH_NETWORK = 'FETCH_NETWORK'
@@ -30,6 +30,7 @@ export const GET_SPOT_PRICE = 'GET_SPOT_PRICE'
 export const GET_SPOT_PRICE_ERROR  = 'GET_SPOT_PRICE_ERROR'
 export const FETCH_ORDERS = 'FETCH_ORDERS'
 export const FETCH_ORDERS_ERROR  = 'FETCH_ORDERS_ERROR'
+export const ADD_ORDER = 'ADD_ORDER'
 export const FETCH_HISTORY = 'FETCH_HISTORY'
 export const FETCH_HISTORY_ERROR  = 'FETCH_HISTORY_ERROR'
 export const GET_CURRENT_BLOCK_NUMBER  = 'GET_CURRENT_BLOCK_NUMBER'
@@ -44,10 +45,11 @@ export const GET_PNL = 'GET_PNL'
 export const GET_PNL_ERROR = 'GET_PNL_ERROR'
 export const GET_LIQUIDATION_PRICE = 'GET_LIQUIDATION_PRICE'
 export const GET_LIQUIDATION_PRICE_ERROR = 'GET_LIQUIDATION_PRICE_ERROR'
-
-
+export const FETCH_POSITION = 'FETCH_POSITION'
+export const FETCH_POSITION_ERROR = 'FETCH_POSITION_ERROR'
 export const ADD_FILLS = 'ADD_FILLS'
 export const SET_FILLS = 'SET_FILLS'
+export const ADD_TRADE = 'ADD_TRADE'
 
 
 const getWeb3 = () => {
@@ -65,7 +67,6 @@ const getAccounts = () => {
     return [];
   }
 }
-
 
 export const enableMetamask = () => {
   	return (dispatch, enableMetamask) => {
@@ -419,10 +420,8 @@ export const fetchOrders = (index) => {
   	}
 }
 
-
 export const fetchHistory = (index) => {
 	return (dispatch, state) => {
-
 		let activeFuture = state().smartContracts.activeFuture;
 		let future = state().smartContracts.futures[activeFuture].inst;
 
@@ -449,7 +448,6 @@ export const fetchHistory = (index) => {
 					type: GET_CURRENT_BLOCK_NUMBER_ERROR
 				})
 	    	})
-
 		}
   	}
 }
@@ -463,43 +461,111 @@ export const setFills = (fills) => {
 	}
 };
 
+export const fetchPosition = () => {
+	return (dispatch, state) => {
+		let address = state().accounts[0];
+		let activeFuture = state().smartContracts.activeFuture;
+		let future = state().smartContracts.futures[activeFuture];
+		future.inst.methods.positions(address).call((err, position) => {
+			if(err) {
+			  dispatch({
+			    type: FETCH_POSITION_ERROR
+			  })
+			} else {
+				async.parallel([
+				    function(callback) {
+						future.inst.methods.getCurrentPositionPNL(address).call((err, response) => {
+							callback(err, response);
+						});
+				    },
+				    function(callback) {
+						future.inst.methods.getPositionLiquidationPrice(address).call((err, response) => {
+							callback(null, response);
+						});
+				    }
+				],
+				function(err, results) {
+					let liquidationPrice = null;
+					if(!isUndefined(results[1])) liquidationPrice = results[1][1]*1;
+					dispatch({
+					    type: FETCH_POSITION,
+					    payload: {
+							ticker:future.ticker,
+							amount:position.amount*1,
+							price:position.price*1,
+							leverage:position.leverage*1,
+							positionType:position.positionType*1,
+							pnl:(results[0].prefix)?results[0].pnl*1:('-'+results[0].pnl)*1,
+							liquidationPrice: liquidationPrice
+						}
+					});
+				});
+			}
+		});
+	}
+}
 
 export const listenMarketOrderLog = () => {
 	return (dispatch, state) => {
 		let activeFuture = state().smartContracts.activeFuture;
 		let future = state().smartContracts.futures[activeFuture].inst;
+	    future.events.MarketOrderLog({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+	    	let trades = [...state().trades];
+	    	let exists = trades.find((obj) => obj.transactionHash === event.transactionHash);
+            if(!isObject(exists)) {
+            	trades.unshift(event);
+			    dispatch(  {
+					type: ADD_TRADE,
+					payload: trades
+				});
+            }
+	    });
+  	}
+}
+
+
+export const listenLimitOrderLog = () => {
+	return (dispatch, state) => {
+		let activeFuture = state().smartContracts.activeFuture;
+		let future = state().smartContracts.futures[activeFuture].inst;
+
+	    future.events.LimitOrderLog({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+	      	let orders = [...state().orders];
+            let exists = orders.find((obj) => obj.returnValues.hash === event.returnValues.hash);
+            if(!isObject(exists)) orders.unshift(event);
+			dispatch(  {
+				type: ADD_ORDER,
+				payload: orders
+			})
+	    });
+  	}
+}
+
+
+export const getBlockNumber = (index) => {
+	return (dispatch, state) => {
+
 		let web3 = getWeb3();
 
 		if(web3 && web3.eth) {
-	    	web3.eth.getBlockNumber().then(fromBlock => {
-			    future.events.MarketOrderLog({}, { 
-			      fromBlock: fromBlock, 
-			      toBlock: 'latest' 
-			    }).on('data', function(event) {
-			      	console.log('MarketOrderLog:', event);
-			      	
-			  		let orderFills = {...state().orderFills};
-				    let orderHash = event.returnValues.orderHash;
-
-				    if(isUndefined(orderFills[orderHash])) {
-				      orderFills[orderHash] = 0;
-				    }
-				    
-				    orderFills[orderHash] += event.returnValues.amount*1;
-
-				    dispatch(  {
-						type: ADD_FILLS,
-						payload: orderFills
-					})
-			    });
+	    	web3.eth.getBlockNumber().then(response => {
+				dispatch({
+				    type: GET_CURRENT_BLOCK_NUMBER,
+				    payload: response
+				});
 	    	})
 	    	.catch(err => {
 				dispatch({
 					type: GET_CURRENT_BLOCK_NUMBER_ERROR
 				})
 	    	})
+
 		}
   	}
 }
-
-

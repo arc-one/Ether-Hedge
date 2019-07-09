@@ -1,9 +1,8 @@
 import { isEmpty }  from 'lodash';
 import { Component } from 'react'
 import { connect } from 'react-redux'
-//import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-
+import { WEB3_POLL_INTERVAL, POLL_BLOCK_NUMBER_INTERVAL } from '../../config'
 import {  fetchNetwork, 
           fetchAccounts, 
           initSmartContracts, 
@@ -17,37 +16,40 @@ import {  fetchNetwork,
           checkIfTrustedFuture,
           fetchHistory,
           listenMarketOrderLog,
-          fetchPositions
+          listenLimitOrderLog,
+          fetchPosition,
+          getBlockNumber
         } from '../../actions/web3Actions'
-import {WEB3_POLL_INTERVAL} from '../../config'
+
 
 class Web3Provider extends Component {
-  constructor(props) {
-    super(props);
-    this.dataLoaded = false;
-  }
 
   componentDidUpdate(prevProps, prevState) {
     let activeFuture = this.props.smartContracts.activeFuture;
     if (activeFuture !== prevProps.smartContracts.activeFuture) {
       this.fetchFutureData();
     }
+    
+    if(this.props.enabledMetamask) {
+      if(this.props.trades.length !== prevProps.trades.length){
+        this.props.fetchPosition();
+      }  
+    }
   }
 
   componentDidMount() {
     var _this = this;
     this.props.initSmartContracts();
-    this.loadData()
+    this.loadData();
+    this.startEventsListener();
+
     if(window.ethereum) {
       window.ethereum.on('accountsChanged', accounts => {
         _this.props.fetchAccounts();
-        _this.dataLoaded = false;
         _this.loadData();
       })
-
       window.ethereum.on('networkChanged', netId => {
         _this.props.fetchNetwork();
-        _this.dataLoaded = false;
         _this.loadData();
       })
     }
@@ -60,24 +62,20 @@ class Web3Provider extends Component {
           this.props.fetchAccounts();
           this.props.fetchNetwork();
           if(this.props.accounts.length>0 && this.props.network) {
-            
             if(isEmpty(this.props.smartContracts)){
               this.props.initSmartContracts();
             } else {
               this.fetchUserData();
-              this.isDataLoaded();
-            }
-        
-            if(this.dataLoaded){
               clearInterval(interval);
             }
           }
       }
     }, WEB3_POLL_INTERVAL);
-  }
-
-  isDataLoaded(){
-    this.dataLoaded = true;
+    
+    this.props.getBlockNumber();
+    setInterval(() => {
+      this.props.getBlockNumber();
+    }, POLL_BLOCK_NUMBER_INTERVAL);
   }
 
   fetchUserData() {
@@ -85,20 +83,20 @@ class Web3Provider extends Component {
     this.props.getWalletBalance();
     this.props.getStakedFunds();
     this.props.getAvailableBalance();
-    this.props.fetchPositions();
+    this.props.fetchPosition();
   }
 
   fetchFutureData() {
     this.props.getLastPrice();
     this.props.getSpotPrice();
-    this.props.fetchOrders();
     this.props.fetchHistory();
+    this.props.fetchOrders();
     this.props.checkIfTrustedFuture();
-    this.startEventsListener();
   }
 
   startEventsListener(){
     this.props.listenMarketOrderLog();
+    this.props.listenLimitOrderLog();
   }
 
   render() {
@@ -107,10 +105,11 @@ class Web3Provider extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  accounts:state.accounts,
-  network:state.network,
-  enabledMetamask:state.enabledMetamask,
-  smartContracts:state.smartContracts
+  accounts: state.accounts,
+  network: state.network,
+  enabledMetamask: state.enabledMetamask,
+  smartContracts: state.smartContracts,
+  trades: state.trades
 })
 
 const mapDispatchToProps = dispatch => (
@@ -128,7 +127,9 @@ const mapDispatchToProps = dispatch => (
     checkIfTrustedFuture,
     fetchHistory,
     listenMarketOrderLog,
-    fetchPositions
+    listenLimitOrderLog,
+    fetchPosition,
+    getBlockNumber
   }, dispatch)
 );
 

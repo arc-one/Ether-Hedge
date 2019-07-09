@@ -17,7 +17,7 @@ class Orders extends PureComponent {
                 <thead>
                    <tr className="table_header">
                      <th width="7%">Type</th>
-                     <th width="10%" >Ticker</th>
+       
                      <th width="9%">Size</th>
                      <th width="10%">Price</th>
                      <th width="9%">Margin</th>
@@ -43,7 +43,7 @@ class Orders extends PureComponent {
                          : 
                          <td width="7%" className="red_text" >Short</td>
                          }
-                         <td width="10%">{obj.ticker}</td>
+                   
                          <td width="9%">{(obj.amount/DECIMALS).toFixed(2)}</td>
                          <td width="10%" >${(obj.price/DECIMALS).toFixed(2)}</td>
                          <td width="9%" >{obj.leverage/100}x</td>

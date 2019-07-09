@@ -2,12 +2,8 @@ import React, { PureComponent } from 'react'
 import { Row, Form, FormGroup, Input, Label, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
 import { connect } from 'react-redux'
 import { updateOrderForm } from '../../actions/orderFormActions'
-import { ETH_DECIMALS, DECIMALS, LEVERAGE_DECIMALS, EXPIRES_IN, MAX_ORDER_LIST } from '../../config'
-import { checkOrderAmount } from '../../utils/calculations'
-import { isNumber, isUndefined, isEmpty } from 'lodash'
-
-const currentBlockNumber = 9999999;
-
+import { ETH_DECIMALS, DECIMALS, LEVERAGE_DECIMALS, EXPIRES_IN } from '../../config'
+//import { isNumber, isUndefined, isEmpty } from 'lodash'
 
 class OrderDesk extends PureComponent {
   
@@ -41,9 +37,13 @@ class OrderDesk extends PureComponent {
   }
 
   sendMarket = () => {
-    const price = this.props.orderForm.price*DECIMALS ;
     const amount = this.props.orderForm.amount*DECIMALS;
     const leverage = (this.props.orderForm.leverage*1).toFixed(2)*LEVERAGE_DECIMALS;
+    const activeFuture = this.props.smartContracts.activeFuture;
+
+    this.props.smartContracts.futures[activeFuture].inst.methods
+      .placeMarketOrder(this.props.orderForm.orderList, Math.round(amount), Math.round(leverage))
+      .send({from: this.props.accounts[0]}); 
   }
 
   render () {
