@@ -1,8 +1,8 @@
-export const GET_WINDOW_HEIGHT = 'GET_WINDOW_HEIGHT'
+export const GET_WINDOW_SIZE = 'GET_WINDOW_SIZE'
 
 export function getWindowHeight (response) {
   return {
-    type: GET_WINDOW_HEIGHT
+    type: GET_WINDOW_SIZE
   }
 }
 

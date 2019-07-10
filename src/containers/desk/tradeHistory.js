@@ -52,7 +52,7 @@ class TradeHistory extends PureComponent {
              <table className="table_list"  >
                 <tbody>
                   { 
-                    this.props.trades.slice(0).sort((a, b) => b.returnValues.timestamp*1 - a.returnValues.timestamp*1).map(function(obj, index){
+                    this.props.trades.slice(0.).filter((obj, index) => index<100).sort((a, b) => b.returnValues.timestamp*1 - a.returnValues.timestamp*1).map(function(obj, index){
                       _this.createOrderFills(obj, index);
                       return  (
                         <tr className={(index % 2 !== 0)?'odd':'even'} key={Math.random()} > 

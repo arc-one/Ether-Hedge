@@ -68,17 +68,6 @@ class OrderDesk extends PureComponent {
           </div>
         </Row>
 
-        <Row className="order_desk_cont border_bottom d-flex justify-content-between">
-          <div className="info_row">
-            <div className="float-right">$ {(this.props.lastPrice/DECIMALS).toFixed(2)}</div>
-            <div className="float-left">Last Price:</div>
-          </div>
-          <div className="info_row">
-            <div className="float-right">$ {(this.props.spotPrice/DECIMALS).toFixed(2)}</div>
-            <div className="float-left">Spot Price:</div>
-          </div>
-        </Row>
-
         <Row className="order_desk_cont">
            <div data-toggle="buttons" className="btn-group btn-group-justified">
               <label type="button" id="longButton" className={this.props.orderForm.orderType==='1'?"green_bckgr btn btn-default active":"green_bckgr btn btn-default"}>
@@ -219,8 +208,6 @@ export default connect(state => {
     userWalletBalance:state.userWalletBalance,
     stakedFunds:state.stakedFunds,
     availableBalance: state.availableBalance,
-    lastPrice: state.lastPrice,
-    spotPrice: state.spotPrice,
     smartContracts: state.smartContracts,
     accounts: state.accounts,
     orders: state.orders,

@@ -30,7 +30,7 @@ class Desk extends Component {
   render () {
     return (  
       <Container className="page" >
-        <Row style={this.props.height}>
+        <Row style={this.props.windowSize}>
           <Col className="left_side" lg={2} md={3} sm={3} xs={4}>
             <OrderDesk/>
           </Col>
@@ -45,7 +45,7 @@ class Desk extends Component {
 
 export default connect(state => {
   return {
-    height: state.height
+    windowSize: state.windowSize
   }
 })(Desk)
 

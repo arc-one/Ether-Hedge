@@ -1,3 +1,6 @@
+html {
+ overflow-x: hidden;
+}
 body {
 	margin: 0;
 	padding: 0;
@@ -106,4 +109,8 @@ label {
 }
 .bold{
 	font-weight: bold;
+}
+
+#type, .grid_content label {
+    display: none;
 }

@@ -268,6 +268,62 @@ export const getAvailableBalance = () => {
   	}
 }
 
+export const getMaxLeverage = () => {
+	return (dispatch, state) => {
+		let activeFuture = state().smartContracts.activeFuture;
+		let future = state().smartContracts.futures[activeFuture].inst;
+		
+		future.methods.maxLeverage().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: GET_MAX_LEVERAGE_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: GET_MAX_LEVERAGE,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getFeeLimit = () => {
+	return (dispatch, state) => {
+		let settings = state().smartContracts.settings.inst;
+		settings.methods.getFeeLimitOrder().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: GET_FEE_LIMIT_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: GET_FEE_LIMIT,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getFeeMarket = () => {
+	return (dispatch, state) => {
+		let settings = state().smartContracts.settings.inst;
+		settings.methods.getFeeMarketOrder().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: GET_FEE_MARKET_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: GET_FEE_MARKET,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
 export const getLastPrice = () => {
 	return (dispatch, state) => {
 		let activeFuture = state().smartContracts.activeFuture;

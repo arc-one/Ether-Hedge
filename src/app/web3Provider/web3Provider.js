@@ -18,7 +18,10 @@ import {  fetchNetwork,
           listenMarketOrderLog,
           listenLimitOrderLog,
           fetchPosition,
-          getBlockNumber
+          getBlockNumber,
+          getMaxLeverage,
+          getFeeLimit,
+          getFeeMarket
         } from '../../actions/web3Actions'
 
 
@@ -29,7 +32,6 @@ class Web3Provider extends Component {
     if (activeFuture !== prevProps.smartContracts.activeFuture) {
       this.fetchFutureData();
     }
-    
     if(this.props.enabledMetamask) {
       if(this.props.trades.length !== prevProps.trades.length){
         this.props.fetchPosition();
@@ -92,6 +94,9 @@ class Web3Provider extends Component {
     this.props.fetchHistory();
     this.props.fetchOrders();
     this.props.checkIfTrustedFuture();
+    this.props.getMaxLeverage();
+    this.props.getFeeLimit();
+    this.props.getFeeMarket();
   }
 
   startEventsListener(){
@@ -129,7 +134,10 @@ const mapDispatchToProps = dispatch => (
     listenMarketOrderLog,
     listenLimitOrderLog,
     fetchPosition,
-    getBlockNumber
+    getBlockNumber,
+    getMaxLeverage,
+    getFeeLimit,
+    getFeeMarket
   }, dispatch)
 );
 

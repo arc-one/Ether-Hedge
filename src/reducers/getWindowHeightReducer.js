@@ -1,12 +1,15 @@
-import { GET_WINDOW_HEIGHT } from '../actions/index'
+import { GET_WINDOW_SIZE } from '../actions/index'
 
 const initialState = {'height': '100px'}
 
 export default (state = initialState, action) => {
-  switch (action.type) {
-    case GET_WINDOW_HEIGHT:
-      return  {'height': window.innerHeight-70+'px'}
-    default:
-      return state
-  }
+	let width = window.innerWidth;
+	//if(window.innerWidth < 1024) width = 1024;
+
+	switch (action.type) {
+		case GET_WINDOW_SIZE:
+		  	return  {height: window.innerHeight-70, width: width};
+		default:
+		  	return state;
+	}
 }

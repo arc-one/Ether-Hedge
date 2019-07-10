@@ -26,10 +26,10 @@ class ModalWithdraw extends PureComponent {
         if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
             let provider = window.ethereum;
                 const web3 = new Web3(provider);
-                if(this.state.withdrawAmount>0) {
-                    this.props.smartContracts.depository.inst.methods.deposit().send({
-                      from: this.props.accounts[0],
-                      value:web3.utils.toWei(this.state.withdrawAmount, 'ether')
+                if(this.state.amount>0) {
+                    this.props.smartContracts.depository.inst.methods.withdraw(this.state.amount*ETH_DECIMALS).send({
+                      from: this.props.accounts[0]
+                      
                     }); 
                     this.props.toggleModal(null);
                 } else {

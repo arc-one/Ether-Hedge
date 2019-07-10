@@ -36,14 +36,14 @@ class UserDesk extends PureComponent {
                 <a className={this.state.activeTab==='positions' ?'nav-link active':'nav-link'} href="#positions" data-item="positions" onClick={this.selectTab}>Positions</a>
               </li>
               <li className="nav-item" >
-                <a className={this.state.activeTab==='orders' ?'nav-link active':'nav-link'} href="#orders" data-item="orders" onClick={this.selectTab}>Orders</a>
+                <a className={this.state.activeTab==='orders' ?'nav-link active':'nav-link'} href="#orders" data-item="orders" onClick={this.selectTab}>Limit Orders</a>
               </li>
-              <li className="nav-item" >
+{          /*    <li className="nav-item" >
                 <a className={this.state.activeTab==='recent_trades' ?'nav-link active':'nav-link'} href="#recent_trades" data-item="recent_trades" onClick={this.selectTab}>Recent Trades</a>
               </li>
               <li className="nav-item" >
                 <a className={this.state.activeTab==='order_history' ?'nav-link active':'nav-link'} href="#order_history" data-item="order_history" onClick={this.selectTab}>Order History</a>
-              </li>
+              </li>*/}
             </ul>
         </div>
         {

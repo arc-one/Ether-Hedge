@@ -1,14 +1,15 @@
 import React, { PureComponent } from 'react'
 import GridLayout from 'react-grid-layout'
 import { Row } from 'reactstrap'
+import { bindActionCreators } from 'redux';  
 import { connect } from 'react-redux'
-import '../../css/react-grid-styles.css' 
 import OrderBook from './orderBook'
 import TradeHistory from './tradeHistory'
 import UserDesk from './userDesk'
-
-
-
+import ChartDesk from './chartDesk'
+import { getFromLS, saveToLS } from "../../utils/localStorage"
+import { chartSizeUpdate } from "../../actions/chartSizeActions"
+import '../../css/react-grid-styles.css' 
 
 const originalLayout = getFromLS("layout") || [
   {i: 'a', x: 0, y: 0, w: 6, h: 30},
@@ -16,55 +17,49 @@ const originalLayout = getFromLS("layout") || [
   {i: 'c', x: 24, y: 0, w: 6, h: 30},
   {i: 'd', x: 6, y: 2, w: 18, h: 10},
 ];
-/*
-const chartWidth = getFromLS("chartWidth") || window.innerWidth - window.innerWidth*51.8/100;
-const chartHeight = getFromLS("chartHeight") || window.innerHeight - window.innerHeight*44/100;*/
-
-function getFromLS(key) {
-  let ls = {};
-  if (global.localStorage) {
-    try {
-      ls = JSON.parse(global.localStorage.getItem(key)) || {};
-    } catch (e) {
-
-    }
-  }
-  return ls[key];
-}
-
-/*function saveToLS(key, value) {
-  if (global.localStorage) {
-    global.localStorage.setItem(
-      key,
-      JSON.stringify({
-        [key]: value
-      })
-    );
-  }
-}*/
-
 
 class WorkDesk extends PureComponent {
+
+	componentDidUpdate(prevProps, prevState){
+		if(this.props.windowSize !== prevProps.windowSize) {
+			this.onResize();
+		}
+	}
 
 	getHeight(){
 		return (window.innerHeight-69-(30 - 0) * 1)/30;
 	}
-	getWidth(){
-		//var element = document.getElementById('workdesk');
-		//if(window.innerWidth<1028) return 1028;
-		return window.innerWidth;
+
+	onLayoutChange(layout) {
+	  	saveToLS("layout", layout);
+	}
+
+	onResize() {
+		let height=document.getElementById('pricechart').offsetHeight;
+		let width=document.getElementById('pricechart').offsetWidth;
+		this.props.chartSizeUpdate({height: height-20, width: width-5})
+	}
+
+	onResizeStop() {
+		var _this = this;
+		setTimeout(function(){
+			let height=document.getElementById('pricechart').offsetHeight;
+			let width=document.getElementById('pricechart').offsetWidth;
+			saveToLS('chartHeight', height-20);
+			saveToLS('chartWidth', width-5);
+		}, 10);
 	}
 
 	render () {
 		return (  
 			<Row className="workdesk" id="workdesk">
 
-				<GridLayout className="layout" layout={originalLayout} /*onLayoutChange={this.onLayoutChange} */cols={36} margin={[1, 1]}  rowHeight={this.getHeight()}   width={this.getWidth()} draggableCancel=".grid_content, .grid_table_header, .grid_content_order_book, .nav-link" /*onResizeStop={this.onResizeStop.bind(this)}  onResize={this.onResize.bind(this)}*/>
+				<GridLayout className="layout" layout={originalLayout} onLayoutChange={this.onLayoutChange} cols={36} margin={[1, 1]}  rowHeight={this.getHeight()}   height={window.innerHeight}  width={window.innerWidth} draggableCancel=".grid_content, .grid_table_header, .grid_content_order_book, .nav-link, .grid_subtitle_title" onResizeStop={this.onResizeStop.bind(this)}  onResize={this.onResize.bind(this)}>
 					<div className="grid_block" key="a">
 						<OrderBook/>
 					</div>
 					<div className="grid_block" key="b">
-						bbb
+						<ChartDesk/>
 					</div>
 					<div className="grid_block" key="c">
 						<TradeHistory/>
@@ -72,15 +67,22 @@ class WorkDesk extends PureComponent {
 					<div className="grid_block" key="d">
 						<UserDesk/>
 					</div>
-
 				</GridLayout>
-
-
 			</Row>
 		)
 	}
 }
 
-export default connect(state => {
-  return {}
-})(WorkDesk)
+
+const mapStateToProps = (state) => ({
+	windowSize:state.windowSize
+})
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({ 
+    chartSizeUpdate,
+  }, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(WorkDesk)
+
