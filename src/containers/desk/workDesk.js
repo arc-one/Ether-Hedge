@@ -10,6 +10,20 @@ import ChartDesk from './chartDesk'
 import { getFromLS, saveToLS } from "../../utils/localStorage"
 import { chartSizeUpdate } from "../../actions/chartSizeActions"
 import '../../css/react-grid-styles.css' 
+import {  
+          getLastPrice, 
+          getSpotPrice, 
+          fetchHistory,
+          fetchOrders,
+          checkIfTrustedFuture,
+          getMaxLeverage,
+          getFeeLimit,
+          getFeeMarket,
+          listenMarketOrderLog,
+          listenLimitOrderLog,
+        } from '../../actions/web3Actions'
+
+
 
 const originalLayout = getFromLS("layout") || [
   {i: 'a', x: 0, y: 0, w: 6, h: 30},
@@ -24,6 +38,11 @@ class WorkDesk extends PureComponent {
 		if(this.props.windowSize !== prevProps.windowSize) {
 			this.onResize();
 		}
+
+	    if(this.props.currentBlockNumber!==prevProps.currentBlockNumber) {
+	      this.fetchFutureData();
+	      this.startEventsListener();
+	    }
 	}
 
 	getHeight(){
@@ -50,6 +69,23 @@ class WorkDesk extends PureComponent {
 		}, 10);
 	}
 
+	fetchFutureData() {
+		this.props.getLastPrice();
+		this.props.getSpotPrice();
+		this.props.fetchHistory();
+		this.props.fetchOrders();
+		this.props.checkIfTrustedFuture();
+		this.props.getMaxLeverage();
+		this.props.getFeeLimit();
+		this.props.getFeeMarket();
+	}
+
+	startEventsListener(){
+		this.props.listenMarketOrderLog();
+		this.props.listenLimitOrderLog();
+	}
+
+
 	render () {
 		return (  
 			<Row className="workdesk" id="workdesk">
@@ -75,12 +111,23 @@ class WorkDesk extends PureComponent {
 
 
 const mapStateToProps = (state) => ({
-	windowSize:state.windowSize
+	windowSize:state.windowSize,
+	currentBlockNumber: state.currentBlockNumber
 })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({ 
     chartSizeUpdate,
+	getLastPrice, 
+	getSpotPrice, 
+	fetchHistory,
+	fetchOrders,
+	checkIfTrustedFuture,
+	getMaxLeverage,
+	getFeeLimit,
+	getFeeMarket,
+	listenMarketOrderLog,
+	listenLimitOrderLog,
   }, dispatch)
 );
 

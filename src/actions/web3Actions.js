@@ -50,6 +50,26 @@ export const FETCH_POSITION_ERROR = 'FETCH_POSITION_ERROR'
 export const ADD_FILLS = 'ADD_FILLS'
 export const SET_FILLS = 'SET_FILLS'
 export const ADD_TRADE = 'ADD_TRADE'
+export const MAIN_TOTAL_SUPPLY_ERROR = 'MAIN_TOTAL_SUPPLY_ERROR'
+export const MAIN_TOTAL_SUPPLY = 'MAIN_TOTAL_SUPPLY'
+export const MAIN_BALANCE_OF_ERROR = 'MAIN_BALANCE_OF_ERROR'
+export const MAIN_BALANCE_OF = 'MAIN_BALANCE_OF'
+export const SALE_FINAL_RATE = 'SALE_FINAL_RATE'
+export const SALE_FINAL_RATE_ERROR = 'SALE_FINAL_RATE_ERROR'
+export const SALE_CURRENT_RATE = 'SALE_CURRENT_RATE'
+export const SALE_CURRENT_RATE_ERROR = 'SALE_CURRENT_RATE_ERROR'
+export const SALE_INITIAL_RATE = 'SALE_INITIAL_RATE'
+export const SALE_INITIAL_RATE_ERROR = 'SALE_INITIAL_RATE_ERROR'
+export const SALE_CLOSING_TIME = 'SALE_CLOSING_TIME'
+export const SALE_CLOSING_TIME_ERROR = 'SALE_CLOSING_TIME_ERROR'
+export const SALE_OPENING_TIME = 'SALE_OPENING_TIME'
+export const SALE_OPENING_TIME_ERROR = 'SALE_OPENING_TIME_ERROR'
+export const REISED_ETH_ERROR = 'REISED_ETH_ERROR'
+export const REISED_ETH = 'REISED_ETH'
+export const REKT_BALANCE_OF = 'REKT_BALANCE_OF'
+export const REKT_BALANCE_OF_ERROR = 'REKT_BALANCE_OF_ERROR'
+export const REKT_TOTAL_SUPPLY = 'REKT_TOTAL_SUPPLY'
+export const REKT_TOTAL_SUPPLY_ERROR = 'REKT_TOTAL_SUPPLY_ERROR'
 
 
 const getWeb3 = () => {
@@ -625,3 +645,189 @@ export const getBlockNumber = (index) => {
 		}
   	}
 }
+
+
+export const getTotalSupplyMainToken = () => {
+	return (dispatch, state) => {
+		let main_token = state().smartContracts.main_token.inst;
+		main_token.methods.totalSupply().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: MAIN_TOTAL_SUPPLY_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: MAIN_TOTAL_SUPPLY,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const mainTokenBalanceOf = () => {
+	return (dispatch, state) => {
+		let address = state().accounts[0];
+		let main_token = state().smartContracts.main_token.inst;
+		main_token.methods.balanceOf(address).call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: MAIN_BALANCE_OF_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: MAIN_BALANCE_OF,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+
+export const getTotalSupplyRektToken = () => {
+	return (dispatch, state) => {
+		let rekt_token = state().smartContracts.rekt_token.inst;
+		rekt_token.methods.totalSupply().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: REKT_TOTAL_SUPPLY_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: REKT_TOTAL_SUPPLY,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+
+export const rektTokenBalanceOf = () => {
+	return (dispatch, state) => {
+		let address = state().accounts[0];
+		let rekt_token = state().smartContracts.rekt_token.inst;
+		rekt_token.methods.balanceOf(address).call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: REKT_BALANCE_OF_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: REKT_BALANCE_OF,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getReisedETH = () => {
+	return (dispatch, state) => {
+		let sale = state().smartContracts.sale.inst;
+		sale.methods.weiRaised().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: REISED_ETH_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: REISED_ETH,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getSaleOpeningTime = () => {
+	return (dispatch, state) => {
+		let sale = state().smartContracts.sale.inst;
+		sale.methods.openingTime().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: SALE_OPENING_TIME_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: SALE_OPENING_TIME,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getSaleClosingTime = () => {
+	return (dispatch, state) => {
+		let sale = state().smartContracts.sale.inst;
+		sale.methods.closingTime().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: SALE_CLOSING_TIME_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: SALE_CLOSING_TIME,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getSaleInitialRate = () => {
+	return (dispatch, state) => {
+		let sale = state().smartContracts.sale.inst;
+		sale.methods.initialRate().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: SALE_INITIAL_RATE_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: SALE_INITIAL_RATE,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getSaleCurrentRate = () => {
+	return (dispatch, state) => {
+		let sale = state().smartContracts.sale.inst;
+		sale.methods.getCurrentRate().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: SALE_CURRENT_RATE_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: SALE_CURRENT_RATE,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getSaleFinalRate = () => {
+	return (dispatch, state) => {
+		let sale = state().smartContracts.sale.inst;
+		sale.methods.finalRate().call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: SALE_FINAL_RATE_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: SALE_FINAL_RATE,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+

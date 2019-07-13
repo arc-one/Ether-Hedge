@@ -25,7 +25,16 @@ import getMaxLeverageReducer from './getMaxLeverageReducer'
 import getFeeLimit from './getFeeLimit'
 import getFeeMarket from './getFeeMarket'
 
-
+import saleFinalRateReducer from './saleFinalRateReducer'
+import saleInitialRateReducer from './saleInitialRateReducer'
+import saleClosingTimeReducer from './saleClosingTimeReducer'
+import saleCurrentRateReducer from './saleCurrentRateReducer'
+import saleOpeningReducer from './saleOpeningReducer'
+import reisedETHReducer from './reisedETHReducer'
+import mainTokenTotalSupplyReducer from './mainTokenTotalSupplyReducer'
+import rektTokenBalanceOfReducer from './rektTokenBalanceOfReducer'
+import rektTokenTotalSupplyReducer from './rektTokenTotalSupplyReducer'
+import mainTokenBalanceOfReducer from './mainTokenBalanceOfReducer'
 
 const rootReducer = combineReducers({
 	theme: themeReducer,
@@ -53,7 +62,29 @@ const rootReducer = combineReducers({
 	maxLeverageReducer: getMaxLeverageReducer,
 	feeLimit: getFeeLimit,
 	feeMarket: getFeeMarket,
+	saleFinalRate: saleFinalRateReducer,
+	saleInitialRate: saleInitialRateReducer,
+	saleClosingTime: saleClosingTimeReducer,
+	saleCurrentRate: saleCurrentRateReducer,
+	saleOpening: saleOpeningReducer,
+	reisedETH: reisedETHReducer,
+	rektTokenBalanceOf: rektTokenBalanceOfReducer,
+	rektTokenTotalSupply: rektTokenTotalSupplyReducer,
+	mainTokenBalanceOf: mainTokenBalanceOfReducer,
+	mainTokenTotalSupply: mainTokenTotalSupplyReducer,
+	voting:[
+		{
+			type: 'changes',
+			title: 'Change Fee Limit from 0.3% to 0.5%',
+			description: 'lorem lorem lorem',
+			start: 1234,
+			end: 22333,
+			creator: '23232323232',
+			creator_stake: 2233323
+		},
 
+	]
 })
 
 export default rootReducer
+

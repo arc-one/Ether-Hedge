@@ -11,7 +11,10 @@ import TruncateString  from 'react-truncate-string'
 import ModalStake from './modalStake'
 import ModalWithdraw from './modalWithdraw'
 import ModalDeposit from './modalDeposit'
+import Account from './account'
 import { LEVERAGE_DECIMALS } from '../../../config'
+import { Link } from 'react-router-dom'
+import { getEtherscanLink } from '../../../utils/etherscan'
 
 var formatTime = timeFormat("%B %d, %Y");
 
@@ -19,19 +22,10 @@ class Topbar extends PureComponent {
 
   constructor(){
     super();
-    console.log('----------------', window.location.pathname);
-  }
+    this.state = {
 
-
-  getEtherscanLink(type, hash, _code){
-    let code = '';
-    if(_code==='contracts') code = '#'+_code;
-
-    if (this.props.network === 'main'){
-      return 'https://etherscan.io/'+type+'/'+hash+code;
-    } else {
-      return 'https://kovan.etherscan.io/'+type+'/'+hash+code;
     }
+
   }
 
   render () {
@@ -39,20 +33,14 @@ class Topbar extends PureComponent {
       <Container>
         <Row className="topbar" id="topbar" style={{width:this.props.windowSize.width}}>
           <Col className="left_side" lg={2} md={3} sm={3} xs={4}>
-
             <div className="row">
-
                 <div className="col">
                   <center><img alt="logotype" className="logo" src="logo1.png" /></center>
                 </div>
-
             </div>
-
-
           </Col>
           <Col className="right_side left_border" lg={10} md={9} sm={9} xs={8}>
             <Row className="topsubbar">
-                
                 <Col className="">
                   <ul className="contractsmenu nav nav-tabs">
                     {this.props.smartContracts.futures?this.props.smartContracts.futures.map((future, index)=>{
@@ -62,10 +50,7 @@ class Topbar extends PureComponent {
                     }):null}
                   </ul>                  
                 </Col>
-
-                
                 <Col className=" col-auto" >
-
                   <div className="top_menu">
                     <a href="/tools">How it works</a>
                   </div>
@@ -88,20 +73,20 @@ class Topbar extends PureComponent {
                 </Col>                
                 <Col className="left_border col-auto" >
                   <div className="top_menu">
-                    <a href="/tools">Tools</a>
+                    <Link to="/tools">Tools</Link>
                   </div>
                 </Col>
                 <Col className="left_topbar col-auto left_border">
                   <ToggleTheme/>
                 </Col>
-
             </Row>
+ 
             <Row className="bottomsubbar">
 
                 <div className="col">
 
                   {(!isEmpty(this.props.smartContracts) && !isEmpty(this.props.smartContracts.futures))?
-                    <a rel="noopener noreferrer" target="_blank" href={this.getEtherscanLink('address', this.props.smartContracts.futures[this.props.smartContracts.activeFuture].address, 'contracts')} >Contract  </a>:null
+                    <a rel="noopener noreferrer" target="_blank" href={getEtherscanLink('address', this.props.smartContracts.futures[this.props.smartContracts.activeFuture].address, 'contracts', this.props.network)} >Contract  </a>:null
                   }
 
                   {this.props.isTrustedActiveFuture?
@@ -121,17 +106,10 @@ class Topbar extends PureComponent {
                   }
 
                 </div>
-                <div className="col subheader_right">
-                  {
-                    (this.props.enabledMetamask===true && this.props.network && this.props.accounts.length>0 )?
-                     <span> Account: <a rel="noopener noreferrer" target="_blank" href={this.getEtherscanLink('address', this.props.accounts[0])}>{this.props.accounts[0] }</a> | {this.props.network===1?'Main':'Kovan'}</span>:
-                     <span> Not Connected</span>
-                  }
-                </div>
-           
-
+                <Account/>
 
             </Row>
+          
           </Col>
         </Row>
         <ModalStake/>
@@ -147,7 +125,6 @@ const mapStateToProps = (state) => ({
   network:state.network,
   accounts:state.accounts,
   enabledMetamask:state.enabledMetamask,
-  userWalletBalance:state.userWalletBalance,
   smartContracts:state.smartContracts,
   isTrustedActiveFuture: state.isTrustedActiveFuture,
   maxLeverageReducer: state.maxLeverageReducer,

@@ -1,4 +1,4 @@
-import {isUndefined} from 'lodash'
+import { isUndefined, isEmpty } from 'lodash'
 import React, { PureComponent } from 'react'
 import { Row, Col, Container } from 'reactstrap'
 import { bindActionCreators } from 'redux';  
@@ -57,7 +57,7 @@ class ChartDesk extends PureComponent {
                 type => {  
                   if(this.state.data && this.state.data.length>0) {
                     return(
-                      <Chart type={type} pnl={ null} position={ null} data={this.state.data} height={this.props.chartSize.height}  width={this.props.chartSize.width} />
+                      <Chart type={type} pnl={ null} position={null} data={this.state.data} height={this.props.chartSize.height}  width={this.props.chartSize.width} />
                     );
                   }
                 }

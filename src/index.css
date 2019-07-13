@@ -114,3 +114,7 @@ label {
 #type, .grid_content label {
     display: none;
 }
+.tools_header{
+	font-size: 16px;
+	padding-top: 8px;
+}

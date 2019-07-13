@@ -82,26 +82,26 @@ class OrderBook extends PureComponent {
                                       //     this.state.activeOrders[obj.hash] = event;
                                       // }   
 
-								    var rowClasses = classNames({
-								      'odd': index % 2 !== 0,
-								      'even': index % 2 === 0,
-								      'selected_red': (this.props.orderForm.priceType==="market" && this.props.orderForm.orderType==="1" && index>=array.length - this.props.orderForm.selectedRows ),
-								      'owner' : ( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase())
-								    });
-								    
-								    var priceClasses = classNames({
-								      'red_text': !( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase()),
-								    });
-								    
+                								    var rowClasses = classNames({
+                								      'odd': index % 2 !== 0,
+                								      'even': index % 2 === 0,
+                								      'selected_red': (this.props.orderForm.priceType==="market" && this.props.orderForm.orderType==="1" && index>=array.length - this.props.orderForm.selectedRows ),
+                								      'owner' : ( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase())
+                								    });
+                								    
+                								    var priceClasses = classNames({
+                								      'red_text': !( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase()),
+                								    });
+							    
 
 
-									return  (
-										<tr className={rowClasses} key={event.transactionHash} >
-											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="30%" className={priceClasses}>{(obj.price*1/DECIMALS).toFixed(2)}</td>
-											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="33%" >{(remaining/DECIMALS).toFixed(2)}</td>                      
-											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="36%" >{(remaining/obj.price).toFixed(6)}</td>
-										</tr>
-									); 
+                  									return  (
+                  										<tr className={rowClasses} key={event.transactionHash} >
+                  											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="30%" className={priceClasses}>{(obj.price*1/DECIMALS).toFixed(2)}</td>
+                  											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="33%" >{(remaining/DECIMALS).toFixed(2)}</td>                      
+                  											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="36%" >{(remaining/obj.price).toFixed(6)}</td>
+                  										</tr>
+                  									); 
                                 })
                             }
                         </tbody>
@@ -136,27 +136,26 @@ class OrderBook extends PureComponent {
 */
                                     
 
-								    var rowClasses = classNames({
-								      'odd': index % 2 !== 0,
-								      'even': index % 2 === 0,
-								      'selected_green': (this.props.orderForm.priceType==="market" &&  this.props.orderForm.orderType==="0" && index<this.props.orderForm.selectedRows),
-								      'owner' : ( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase())
-								    });
-								    
-								    var priceClasses = classNames({
-								      'green_text': !( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase()),
-								    });
+              								    var rowClasses = classNames({
+              								      'odd': index % 2 !== 0,
+              								      'even': index % 2 === 0,
+              								      'selected_green': (this.props.orderForm.priceType==="market" &&  this.props.orderForm.orderType==="0" && index<this.props.orderForm.selectedRows),
+              								      'owner' : ( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase())
+              								    });
+              								    
+              								    var priceClasses = classNames({
+              								      'green_text': !( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase()),
+              								    });
 
-
-                                    return  (
-                                      <tr className={rowClasses} key={event.transactionHash} >
-                                        <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="30%" className={priceClasses}>
-                                          {(obj.price*1/DECIMALS).toFixed(2)}
-                                        </td>
-                                        <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="33%" >{(remaining/DECIMALS).toFixed(2)}</td>                                          
-                                        <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="36%" >{(remaining/obj.price).toFixed(6)} </td>
-                                      </tr>
-                                    ); 
+                                  return  (
+                                    <tr className={rowClasses} key={event.transactionHash} >
+                                      <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="30%" className={priceClasses}>
+                                        {(obj.price*1/DECIMALS).toFixed(2)}
+                                      </td>
+                                      <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="33%" >{(remaining/DECIMALS).toFixed(2)}</td>                                          
+                                      <td onClick={this.handleOrderBookClick} data-ordertype="0" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="36%" >{(remaining/obj.price).toFixed(6)} </td>
+                                    </tr>
+                                  ); 
                               })
                             }
                         </tbody>

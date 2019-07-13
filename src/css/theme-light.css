@@ -155,6 +155,7 @@ input[type="radio"]{
     border-bottom: 1px solid #ddd;
 }
 .topsubbar{
+  height: 38.59px;
   margin:0px 0px 0;
 }
 .topsubbar .contractsmenu{
@@ -162,7 +163,7 @@ input[type="radio"]{
 }
 .bottomsubbar{
   border-top:1px solid #ddd;
-  padding-top: 6px;
+  padding-top: 5px;
   font-size: 11px;
 }
 .bottomsubbar a{
@@ -177,6 +178,13 @@ input[type="radio"]{
 .right_border{
   border-right: 1px solid #ddd;
 }
+.top_border{
+  border-top: 1px solid #ddd;
+}
+.bottom_border{
+  border-bottom: 1px solid #ddd;
+}
+
 .workdesk{
   margin-top: -2px;
   background: #ddd;
@@ -293,7 +301,15 @@ input[type="radio"]{
     color: #fff;
     padding: 0 15px;
 }
-
+.sm_btn_top {
+    background: #3a71ff;
+    border: 1px solid #3a71ff;
+    color: #fff;
+    padding: 3px 7px 2px;
+    margin-right: -13px;
+    margin-top: -3px;
+    font-size: 12px;
+}
 .left_topbar{
   width:100px;
 }
@@ -394,6 +410,8 @@ input[type="radio"]{
   left: 50%;
 }
 
+/*--------------------------------------------------------*/
+
 .table_list .selected_red {
   border-left: 1px solid #F31B69 !important; 
   box-sizing: border-box;
@@ -443,4 +461,108 @@ input[type="radio"]{
   margin-top: 22px;
   width: 95%;
   max-width:  180px;
+}
+
+.top_chart_cont{
+  height: 200px;
+}
+
+.countdown{
+  font-size: 26px;
+  color:#333;
+}
+.countdown_small{
+  font-size: 12px;
+  padding-right: 20px;
+  padding-left: 3px;
+}
+
+.tools_title{
+  font-size: 13px;
+  font-weight: bold;
+}
+.tools_changes_proposals{
+  height: 100%;
+}
+.proposal_tabs{
+  width: calc(100% + 1px);
+  margin-top: -1px;
+  margin-left: -1px;
+}
+.add_btn{
+  text-align: right;
+  padding: 10px 10px;
+}
+.proposal_item{
+
+}
+.title_proposal{
+  font-size: 14px;
+  font-weight: bold;
+}
+.proposal_container{
+  padding: 0;
+}
+
+
+.list-group-item {
+  color: #333;
+    position: relative;
+    display: block;
+    padding: .75rem 15px;
+    margin-bottom: -1px;
+    background-color: transparent;
+    border: 1px solid #ddd;
+    cursor: pointer !important;
+}
+.list-group-item:hover {
+  background-color: #eee;
+}
+.progress {
+    margin-top: 10px;
+    display: flex;
+    height: 3px;
+    overflow: hidden;
+    font-size: .75rem;
+    background-color: #e9ecef;
+    border-radius: 1px;
+}
+.proposal_cont{
+  background: #fcfcfc;
+  padding: 15px 35px;
+}
+.title_proposal_big {
+  font-size: 20px;
+  font-weight: normal;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+}
+.progress_big{
+    margin-bottom:20px;
+    height:10px;
+    margin-top:1px;
+}
+.proposal_block{
+    margin-top:20px;
+    margin-bottom:20px;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+.vote_button{
+  margin: 20px 5px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.stake_big_btn{
+  margin:0;
+  float: right;
+}
+.proposal_container .selected{
+  background: #fcfcfc;
+  cursor:default !important;
+}
+.form_block{
+  margin-top: 1rem;
 }

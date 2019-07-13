@@ -1,32 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Col, Container, Row } from 'reactstrap'
 import { connect } from 'react-redux'
-import { getWindowHeight } from '../../actions'
 import OrderDesk from './orderDesk'
 import WorkDesk from './workDesk'
 
 
-
-class Desk extends Component {
-  
-  constructor() {
-    super();
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-  }
-
-  componentDidMount() {
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-
-  updateWindowDimensions() {
-    this.props.dispatch(getWindowHeight());
-  }
-
+class Desk extends PureComponent {
   render () {
     return (  
       <Container className="page" >

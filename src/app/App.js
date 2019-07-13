@@ -30,8 +30,8 @@ class App extends Component {
           <div className="loader"></div>
         </div>}
         {loaded ?<div>
-          <Router/>
           <Web3Provider/>
+          <Router/>
         </div>:null}
       </div>
     )
