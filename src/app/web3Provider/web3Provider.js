@@ -14,7 +14,9 @@ import {
           fetchPosition,
           getBlockNumber,
           mainTokenBalanceOf,
-          rektTokenBalanceOf
+          rektTokenBalanceOf,
+          calcDividends,
+          calcDiscount
         } from '../../actions/web3Actions'
 
 class Web3Provider extends Component {
@@ -66,6 +68,8 @@ class Web3Provider extends Component {
     this.props.fetchPosition();
     this.props.mainTokenBalanceOf();
     this.props.rektTokenBalanceOf();
+    this.props.calcDividends();
+    this.props.calcDiscount();
   }
   render() {
     return null;
@@ -93,7 +97,9 @@ const mapDispatchToProps = dispatch => (
     fetchPosition,
     getBlockNumber,
     mainTokenBalanceOf,
-    rektTokenBalanceOf
+    rektTokenBalanceOf,
+    calcDividends,
+    calcDiscount
   }, dispatch)
 );
 

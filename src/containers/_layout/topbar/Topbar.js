@@ -35,7 +35,7 @@ class Topbar extends PureComponent {
           <Col className="left_side" lg={2} md={3} sm={3} xs={4}>
             <div className="row">
                 <div className="col">
-                  <center><img alt="logotype" className="logo" src="logo1.png" /></center>
+                  <center><img alt="logotype" className="logo" src="/logo1.png" /></center>
                 </div>
             </div>
           </Col>

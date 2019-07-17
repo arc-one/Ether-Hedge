@@ -1,4 +1,6 @@
 import settings  from './contracts/Settings.json'
+import settingsNew  from './contracts/SettingsNew.json'
+
 import depository  from './contracts/Depository.json'
 import token  from './contracts/Token.json'
 import sale  from './contracts/Sale.json'
@@ -15,6 +17,7 @@ export const HISTORY_LIMIT_BLOCKS = 5000000; //blocks
 export const ETH_DECIMALS = 1000000000000000000;
 export const DECIMALS = 1000000000;
 export const LEVERAGE_DECIMALS = 100;
+export const PERCENT_MULTIPLYER = 100;
 export const EXPIRES_IN = 10000;
 export const MAX_ORDER_LIST = 50;
 
@@ -36,6 +39,13 @@ export const smartContracts = {
 		address: '0xe8a5edfc1ff784eddf037cc4f418e3612c452228',
 		abi: settings.abi
 	},
+
+	settingsNew: {
+		address: '0x5e72914535f202659083db3a02c984188fa26e9f',
+		abi: settingsNew.abi
+	},
+
+
 	main_token: {	
 		address: '0x655fb143569db35a161314222bbc2598d9601616',
 		abi: token.abi
@@ -52,6 +62,9 @@ export const smartContracts = {
 		address: '0xd1fdd1b77e994a170f640223038b17fe3a6eb037',
 		abi: sale.abi
 	},
+
+
+	
 /*	redeployer: {
 		address: '0xa2698ebae0054b4925066035bffe769b7b11d861',
 		abi: null
@@ -65,42 +78,4 @@ export const smartContracts = {
 	]
 }
 
-
-
- /*
-
-export const smartContracts = {
-	depository: {
-		address: '0x758782d154e832952cdf6a64d410bd5abfac4680',
-		abi: depository.abi
-	},
-	settings: {
-		address: '0xec4dce8ca27f2fbd8180c2377f43a4ecf651ee21',
-		abi: settings.abi
-	},
-	ehe_token: {	
-		address: '0x8f26e94406b604814fc1e4bbcac6f3d228c66808',
-		abi: token.abi
-	},
-	rekt_token: {
-		address: '0x8f26e94406b604814fc1e4bbcac6f3d228c66808',
-		abi: token.abi
-	},
-	futures:[
-		{
-			address: '0x5b002b84226fe2788ee4ba10554d4bdc0f20c0a3',
-			abi: futureContract_01,
-			ticker: 'ETHUSD'
-		},
-		{
-			address: '0x5b002b84226fe2788ee4ba10554d4bdc0f20c0a3',
-			abi: futureContract_01,
-			ticker: 'BTCUSD'
-		},
-	]
-}
-
-*/
-
- 
 

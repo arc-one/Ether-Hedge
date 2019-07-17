@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import {ETH_DECIMALS} from '../../config'
+import { ETH_DECIMALS, PERCENT_MULTIPLYER } from '../../config'
 import { isEmpty, isNull }  from 'lodash';
 import { toggleModal } from '../../actions/toggleModalActions'
 
@@ -74,19 +74,19 @@ class ModalAddProposal extends PureComponent {
 
         console.log(this.state)
 
-/*        if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
+        if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
             let provider = window.ethereum;
             const web3 = new Web3(provider);
-            if(this.state.amount>0) {
-                this.props.smartContracts.depository.inst.methods.deposit().send({
+            if(this.state.value>0) {
+                this.props.smartContracts.settingsNew.inst.methods.createParamProposal(this.state.param, this.state.value*PERCENT_MULTIPLYER).send({
                     from: this.props.accounts[0],
-                    value:web3.utils.toWei(this.state.amount, 'ether')
+                    value:web3.utils.toWei('0.03', 'ether')
                 }); 
                 this.props.toggleModal(null);
             } else {
                 alert("Please deposit more than 0 ETH");
             }
-        }*/
+        }
     }
 
     render() {
@@ -107,24 +107,19 @@ class ModalAddProposal extends PureComponent {
                        {
                            this.state.type === '0'?
                            <div className="form_block">
-                               
-
-
-
                                 <div className="form-group">
                                   <label htmlFor="amount">ETH Amount</label>
                                     <select value={this.state.param} className="form-control" id="amount" aria-describedby="amount" onChange={this.handleChangeParam}>
-
-                                        <option value="0">Limit order fee</option>
-                                        <option value="1">Market order fee</option>
-                                        <option value="2">Activation Changes Timeout</option>
-                                        <option value="3">Voting Time</option>
-                                        <option value="4">Fee Discount Index</option>
-                                        <option value="5">Proposal Fee</option>
+                                        <option value="0">Voting Time</option>
+                                        <option value="1">Activation Changes Timeout</option>
+                                        <option value="2">Limit order fee</option>
+                                        <option value="3">Market order fee</option>
+                                        <option value="4">Max Leverage</option>
+                                        <option value="5">Liquidation Profit</option>
                                         <option value="6">Min Voting Percent</option>
-                                        <option value="5">Future Contract Proposal Fee</option>
-                       
-
+                                        <option value="7">Parameters Proposal Fee</option>
+                                        <option value="8">Future Contract Proposal Fee</option>
+                                        <option value="9">Fee Discount Index</option>
                                     </select>
                                 </div>
 

@@ -35,6 +35,8 @@ import mainTokenTotalSupplyReducer from './mainTokenTotalSupplyReducer'
 import rektTokenBalanceOfReducer from './rektTokenBalanceOfReducer'
 import rektTokenTotalSupplyReducer from './rektTokenTotalSupplyReducer'
 import mainTokenBalanceOfReducer from './mainTokenBalanceOfReducer'
+import calcDividendsReducer from './calcDividendsReducer';
+import calcDiscountReducer from './calcDiscountReducer';
 
 const rootReducer = combineReducers({
 	theme: themeReducer,
@@ -72,6 +74,8 @@ const rootReducer = combineReducers({
 	rektTokenTotalSupply: rektTokenTotalSupplyReducer,
 	mainTokenBalanceOf: mainTokenBalanceOfReducer,
 	mainTokenTotalSupply: mainTokenTotalSupplyReducer,
+	userDividends: calcDividendsReducer,
+	userDiscount: calcDiscountReducer,
 	voting:[
 		{
 			type: 'changes',

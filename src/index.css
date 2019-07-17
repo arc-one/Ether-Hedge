@@ -46,8 +46,14 @@ label {
 }
 
 .info_row{
-
 	width: 100%;
+}
+.info_row_tools{
+	font-size: 13px;
+	padding:5px 15px;
+}
+.info_row_tools_label{
+	min-width:250px;
 }
 .btn-group{
 	width: 100%;
@@ -117,4 +123,34 @@ label {
 .tools_header{
 	font-size: 16px;
 	padding-top: 8px;
+}
+.no_padding{
+	padding: 0;
+}
+.text_right{
+  text-align: right;
+}
+.form_block{
+  margin-top: 1rem;
+}
+.float_rigth{
+	float: right;
+}.float_left{
+	float: left;
+}
+.wallet_margin_top{
+	margin-top: 10px;
+}
+.wallet_top {
+    padding: 30px;
+}
+.tools_data {
+    padding: 30px 30px 0;
+}
+
+.wallet_row{
+  padding:  15px 30px;
+}
+.usd_bottom{
+	color: #999;
 }

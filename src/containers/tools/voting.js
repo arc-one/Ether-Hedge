@@ -13,7 +13,7 @@ var formatTime = timeFormat("%B %d, %Y");
 
 
 
-class Changes extends Component {
+class Voting extends Component {
 
 	constructor() {
 		super();
@@ -184,10 +184,6 @@ class Changes extends Component {
 	}
 }
 
-/*export default withRouter(connect(state => ({
-	voting: state.voting,
-	enabledMetamask: state.enabledMetamask
-}))(Changes))*/
 
 const mapStateToProps = (state) => ({
 	voting: state.voting,
@@ -198,5 +194,5 @@ const mapDispatchToProps = dispatch => (
   bindActionCreators({ toggleModal }, dispatch)
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Changes)
+export default connect(mapStateToProps, mapDispatchToProps)(Voting)
 

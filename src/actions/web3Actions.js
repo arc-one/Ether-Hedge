@@ -70,6 +70,9 @@ export const REKT_BALANCE_OF = 'REKT_BALANCE_OF'
 export const REKT_BALANCE_OF_ERROR = 'REKT_BALANCE_OF_ERROR'
 export const REKT_TOTAL_SUPPLY = 'REKT_TOTAL_SUPPLY'
 export const REKT_TOTAL_SUPPLY_ERROR = 'REKT_TOTAL_SUPPLY_ERROR'
+export const CALC_DISCOUNT = 'CALC_DISCOUNT'
+export const CALC_DISCOUNT_ERROR = 'CALC_DISCOUNT_ERROR'
+
 
 
 const getWeb3 = () => {
@@ -209,6 +212,47 @@ export const getBalance = () => {
 		});
   	}
 }
+
+
+export const calcDividends = () => {
+	return (dispatch, state) => {
+		let depository = state().smartContracts.depository.inst;
+		let address = state().accounts[0];
+
+		depository.methods.calcAccountProfit().call({from: address}, (err, response) => {
+			if(err) {
+			  dispatch({
+			    type: CALC_DIVIDENDS_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: CALC_DIVIDENDS,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+export const calcDiscount = () => {
+	return (dispatch, state) => {
+		let depository = state().smartContracts.depository.inst;
+		let address = state().accounts[0];
+
+		depository.methods.calcDiscountFeePercent(address, 30).call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: CALC_DISCOUNT_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: CALC_DISCOUNT,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
 
 export const getWalletBalance = () => {
 	return (dispatch, state) => {

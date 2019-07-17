@@ -184,6 +184,9 @@ input[type="radio"]{
 .bottom_border{
   border-bottom: 1px solid #ddd;
 }
+.bottom_border_light{
+  border-bottom: 1px solid #eee;
+}
 
 .workdesk{
   margin-top: -2px;
@@ -313,8 +316,6 @@ input[type="radio"]{
 .left_topbar{
   width:100px;
 }
-
-
 
 /* Day Night Toggle. Created By Joseph Shenton @TeamiHackify */
 
@@ -531,6 +532,10 @@ input[type="radio"]{
   background: #fcfcfc;
   padding: 15px 35px;
 }
+.wallet_cont{
+  background: #fcfcfc;
+}
+
 .title_proposal_big {
   font-size: 20px;
   font-weight: normal;
@@ -563,6 +568,53 @@ input[type="radio"]{
   background: #fcfcfc;
   cursor:default !important;
 }
-.form_block{
-  margin-top: 1rem;
+
+.title_large{
+  font-size: 24px;
+  color: #3a71ff;
+}
+
+.sm_btn_tools {
+    background: #3a71ff;
+    border: 1px solid #3a71ff;
+    color: #fff;
+    padding: 3px 7px 2px;
+    font-size: 12px;
+    min-width: 70px;
+}
+.sm_btn_tools_light {
+    background: transparent;
+    border: 1px solid #3a71ff;
+    color: #3a71ff;
+    padding: 3px 7px 2px;
+    font-size: 12px;
+    min-width: 70px;
+}
+
+.margin_right_btn{
+  margin: 18px 0 0px 10px;
+}
+.wallet_digit_large{
+  color: #3a71ff;
+  font-size: 18px;
+}
+
+.info_row_tools{
+  border-bottom: 1px solid #ddd;
+
+}
+
+.sm_btn_tools_light:disabled,
+.sm_btn_tools_light[disabled]{
+  border: 1px solid #99b6ff;
+  color: #99b6ff;
+}
+.sm_btn_tools:disabled,
+.sm_btn_tools[disabled]{
+  border: 1px solid #99b6ff;
+  background: #99b6ff;
+  color: #fff;
+}
+.tools_addr_user, .tools_addr_user:hover, .tools_addr_user:active  {
+  color: #333;
 }
