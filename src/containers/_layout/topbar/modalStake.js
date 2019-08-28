@@ -1,11 +1,11 @@
-import Web3 from 'web3'
 import React, { PureComponent } from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import {ETH_DECIMALS} from '../../../config'
+import {ETH_DECIMALS} from '../../config'
 import { isEmpty, isNull }  from 'lodash';
-import { toggleModal } from '../../../actions/toggleModalActions'
+import { toggleModal } from '../../actions/toggleModalActions'
+import { listenMainTokenApproval } from '../../actions/web3Actions'
 
 
 class ModalStake extends PureComponent {
@@ -15,6 +15,21 @@ class ModalStake extends PureComponent {
           amount:0,
         };
         this.handleChange= this.handleChange.bind(this);
+        this.sendApproval= this.sendApproval.bind(this);
+    }
+
+    componentDidMount(){
+        this.props.listenMainTokenApproval();
+    }
+    
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.mainTokenApproval !== prevProps.mainTokenApproval){
+            if(isNull(prevProps.mainTokenApproval)){
+                this.sendStake();
+            } else if(!isNull(prevProps.mainTokenApproval) && this.props.mainTokenApproval.returnValues.value !== prevProps.mainTokenApproval.returnValues.value && this.props.mainTokenApproval.returnValues.value!=='0') {
+                this.sendStake();
+            }
+        }
     }
 
     handleChange(event) {
@@ -23,16 +38,26 @@ class ModalStake extends PureComponent {
 
     sendStake = async () => {
         if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
-            let provider = window.ethereum;
-            const web3 = new Web3(provider);
             if(this.state.amount>0) {
-                this.props.smartContracts.depository.inst.methods.deposit().send({
-                    from: this.props.accounts[0],
-                    value:web3.utils.toWei(this.state.amount, 'ether')
+                this.props.smartContracts.depository.inst.methods.stake(this.state.amount*ETH_DECIMALS).send({
+                    from: this.props.accounts[0]
+                }); 
+               // this.props.toggleModal(null);
+            } else {
+                alert("Please stake more than 0 ETH");
+            }
+        }
+    }
+
+    sendApproval = async () => {
+        if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
+            if(this.state.amount>0) {
+                this.props.smartContracts.main_token.inst.methods.approve(this.props.smartContracts.depository.address, this.state.amount*ETH_DECIMALS).send({
+                    from: this.props.accounts[0]
                 }); 
                 this.props.toggleModal(null);
             } else {
-                alert("Please deposit more than 0 ETH");
+                alert("Please stake more than 0 ETH");
             }
         }
     }
@@ -54,7 +79,7 @@ class ModalStake extends PureComponent {
                       </div>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={this.sendStake} >Stake</Button>{' '}
+                        <Button color="primary" onClick={this.sendApproval} >Stake</Button>{' '}
                         <Button color="secondary" onClick={() => this.props.toggleModal(null)}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
@@ -69,11 +94,12 @@ const mapStateToProps = (state) => ({
     accounts:state.accounts,
     enabledMetamask:state.enabledMetamask,
     stakedFunds:state.stakedFunds,
-    smartContracts:state.smartContracts
+    smartContracts:state.smartContracts,
+    mainTokenApproval: state.mainTokenApproval
 })
 
 const mapDispatchToProps = dispatch => (
-  bindActionCreators({ toggleModal }, dispatch)
+  bindActionCreators({ toggleModal, listenMainTokenApproval }, dispatch)
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalStake)

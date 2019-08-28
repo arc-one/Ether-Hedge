@@ -24,7 +24,6 @@ import sizeUpdateReducer from './sizeUpdateReducer'
 import getMaxLeverageReducer from './getMaxLeverageReducer'
 import getFeeLimit from './getFeeLimit'
 import getFeeMarket from './getFeeMarket'
-
 import saleFinalRateReducer from './saleFinalRateReducer'
 import saleInitialRateReducer from './saleInitialRateReducer'
 import saleClosingTimeReducer from './saleClosingTimeReducer'
@@ -35,8 +34,22 @@ import mainTokenTotalSupplyReducer from './mainTokenTotalSupplyReducer'
 import rektTokenBalanceOfReducer from './rektTokenBalanceOfReducer'
 import rektTokenTotalSupplyReducer from './rektTokenTotalSupplyReducer'
 import mainTokenBalanceOfReducer from './mainTokenBalanceOfReducer'
-import calcDividendsReducer from './calcDividendsReducer';
-import calcDiscountReducer from './calcDiscountReducer';
+import calcDividendsReducer from './calcDividendsReducer'
+import calcDiscountReducer from './calcDiscountReducer'
+import totalBalanceReducer from './totalBalanceReducer'
+import getTotalProfitReducer from './getTotalProfitReducer'
+import marginBankReducer from './marginBankReducer'
+import totalStakedReducer from './totalStakedReducer'
+import totalDividendsReducer from './totalDividendsReducer'
+import paramsReducer from './paramsReducer'
+import proposalsReducer from './proposalsReducer'
+import paramProposalResultReducer from './paramProposalResultReducer'
+import userVotingReducer from './userVotingReducer'
+import mainTokenApprovalReducer from './mainTokenApprovalReducer'
+
+
+
+
 
 const rootReducer = combineReducers({
 	theme: themeReducer,
@@ -76,18 +89,17 @@ const rootReducer = combineReducers({
 	mainTokenTotalSupply: mainTokenTotalSupplyReducer,
 	userDividends: calcDividendsReducer,
 	userDiscount: calcDiscountReducer,
-	voting:[
-		{
-			type: 'changes',
-			title: 'Change Fee Limit from 0.3% to 0.5%',
-			description: 'lorem lorem lorem',
-			start: 1234,
-			end: 22333,
-			creator: '23232323232',
-			creator_stake: 2233323
-		},
+	totalBalance: totalBalanceReducer,
+	totalProfit: getTotalProfitReducer,
+	marginBank: marginBankReducer,
+	totalStaked: totalStakedReducer,
+	totalDividends: totalDividendsReducer,
+	params: paramsReducer,
+	proposals: proposalsReducer,
+	paramProposalResults: paramProposalResultReducer,
+	userVoting: userVotingReducer,
+	mainTokenApproval: mainTokenApprovalReducer
 
-	]
 })
 
 export default rootReducer

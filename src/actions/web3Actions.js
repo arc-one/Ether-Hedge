@@ -72,6 +72,19 @@ export const REKT_TOTAL_SUPPLY = 'REKT_TOTAL_SUPPLY'
 export const REKT_TOTAL_SUPPLY_ERROR = 'REKT_TOTAL_SUPPLY_ERROR'
 export const CALC_DISCOUNT = 'CALC_DISCOUNT'
 export const CALC_DISCOUNT_ERROR = 'CALC_DISCOUNT_ERROR'
+export const GET_TOTAL_BALANCE = 'GET_TOTAL_BALANCE'
+export const GET_TOTAL_BALANCE_ERROR = 'GET_TOTAL_BALANCE_ERROR'
+export const GET_TOTAL_STAKED = 'GET_TOTAL_STAKED'
+export const GET_TOTAL_STAKED_ERROR = 'GET_TOTAL_STAKED_ERROR'
+export const GET_TOTAL_DIVIDENDS = 'GET_TOTAL_DIVIDENDS'
+export const GET_TOTAL_DIVIDENDS_ERROR = 'GET_TOTAL_DIVIDENDS_ERROR'
+export const GET_TOTAL_PROFIT = 'GET_TOTAL_PROFIT'
+export const GET_TOTAL_PROFIT_ERROR = 'GET_TOTAL_PROFIT_ERROR'
+export const GET_MARGIN_BANK = 'GET_MARGIN_BANK'
+export const GET_MARGIN_BANK_ERROR = 'GET_MARGIN_BANK_ERROR'
+export const GET_PARAMS_ERROR = 'GET_PARAMS_ERROR'
+export const GET_PARAMS = 'GET_PARAMS'
+export const LISTEN_MAIN_TOKEN_APPROVAL = 'LISTEN_MAIN_TOKEN_APPROVAL'
 
 
 
@@ -118,7 +131,7 @@ export const fetchNetwork = () => {
 	      if (err) {
 	        dispatch({ type: FETCH_NETWORK_FAIL })
 	      } else {
-	      	if(response==='1' || response==='42') {
+	      	if(response==='1' || response==='42' || response==='3') {
 	        	dispatch({
 				    type: FETCH_NETWORK,
 				    payload: response
@@ -184,7 +197,8 @@ export const initSmartContracts = () => {
 			    		address: smartContracts[key].address
 			    	}	
 		    	}
-		    }
+		    }  
+
 			dispatch({
 				type: INIT_SMART_CONTRACTS,
 				payload: smartContractsInst
@@ -213,6 +227,120 @@ export const getBalance = () => {
   	}
 }
 
+
+export const listenDepositedLogs = () => {
+	return (dispatch, state) => {
+		let depository = state().smartContracts.depository.inst;
+		
+
+	    depository.events.Deposited({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+
+			let address = state().accounts[0];
+
+			depository.methods.getBalance(address).call( (err, response) => {
+				if(err) {
+				  dispatch({
+				    type: GET_BALANCE_ERROR
+				  })
+				} else {
+					dispatch({
+					    type: GET_BALANCE,
+					    payload: response
+					});
+				}
+			});
+
+
+		depository.methods.getAvailableBalance(address).call((err, response) => {
+			if(err) {
+			  dispatch({
+			    type: GET_AVAILABLE_BALANCE_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: GET_AVAILABLE_BALANCE,
+				    payload: response
+				});
+			}
+		});
+			
+
+	    });
+  	}
+}
+
+
+export const listenWithdrawLogs = () => {
+	return (dispatch, state) => {
+		let depository = state().smartContracts.depository.inst;
+		
+
+	    depository.events.Withdrawn({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+
+			let address = state().accounts[0];
+
+			depository.methods.getBalance(address).call( (err, response) => {
+				if(err) {
+				  dispatch({
+				    type: GET_BALANCE_ERROR
+				  })
+				} else {
+					dispatch({
+					    type: GET_BALANCE,
+					    payload: response
+					});
+				}
+			});
+
+
+			depository.methods.getAvailableBalance(address).call((err, response) => {
+				if(err) {
+				  dispatch({
+				    type: GET_AVAILABLE_BALANCE_ERROR
+				  })
+				} else {
+					dispatch({
+					    type: GET_AVAILABLE_BALANCE,
+					    payload: response
+					});
+				}
+			});
+				
+
+	    });
+  	}
+}
+
+ 
+export const listenDividendsLog = () => {
+	return (dispatch, state) => {
+		let depository = state().smartContracts.depository.inst;
+	    depository.events.DividendsLog({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+			let address = state().accounts[0];
+			depository.methods.calcAccountProfit().call({from: address}, (err, response) => {
+				if(err) {
+				  dispatch({
+				    type: CALC_DIVIDENDS_ERROR
+				  })
+				} else {
+					dispatch({
+					    type: CALC_DIVIDENDS,
+					    payload: response
+					});
+				}
+			});
+	    });
+  	}
+}
 
 export const calcDividends = () => {
 	return (dispatch, state) => {
@@ -312,6 +440,62 @@ export const getStakedFunds = () => {
   	}
 }
 
+
+
+export const listenStakedLogs = () => {
+	return (dispatch, state) => {
+		let depository = state().smartContracts.depository.inst;
+
+	    depository.events.Staked({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+			let address = state().accounts[0];
+			depository.methods.getStakedFundsOf(address).call((err, response) => {
+				if(err) {
+				  	dispatch({
+				    	type: GET_STAKED_FUNDS_ERROR
+				  	})
+				} else {
+					dispatch({
+					    type: GET_STAKED_FUNDS,
+					    payload: response
+					});
+				}
+			});
+	    });
+  	}
+}
+
+
+export const listenUnstakedLogs = () => {
+	return (dispatch, state) => {
+		let depository = state().smartContracts.depository.inst;
+
+	    depository.events.Unstaked({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+			let address = state().accounts[0];
+			depository.methods.getStakedFundsOf(address).call((err, response) => {
+				if(err) {
+				  	dispatch({
+				    	type: GET_STAKED_FUNDS_ERROR
+				  	})
+				} else {
+					dispatch({
+					    type: GET_STAKED_FUNDS,
+					    payload: response
+					});
+				}
+			});
+	    });
+  	}
+}
+
+
+
+
 export const getAvailableBalance = () => {
 	return (dispatch, state) => {
 		let address = state().accounts[0];
@@ -355,7 +539,7 @@ export const getMaxLeverage = () => {
 export const getFeeLimit = () => {
 	return (dispatch, state) => {
 		let settings = state().smartContracts.settings.inst;
-		settings.methods.getFeeLimitOrder().call((err, response) => {
+		settings.methods.getLimitOrderFee().call((err, response) => {
 			if(err) {
 			  dispatch({
 			    type: GET_FEE_LIMIT_ERROR
@@ -373,7 +557,7 @@ export const getFeeLimit = () => {
 export const getFeeMarket = () => {
 	return (dispatch, state) => {
 		let settings = state().smartContracts.settings.inst;
-		settings.methods.getFeeMarketOrder().call((err, response) => {
+		settings.methods.getMarketOrderFee().call((err, response) => {
 			if(err) {
 			  dispatch({
 			    type: GET_FEE_MARKET_ERROR
@@ -387,6 +571,8 @@ export const getFeeMarket = () => {
 		});
   	}
 }
+
+
 
 export const getLastPrice = () => {
 	return (dispatch, state) => {
@@ -479,8 +665,12 @@ export const fetchPositions = () => {
 
 export const getSpotPrice = () => {
 	return (dispatch, state) => {
+ 
+
+
 		let depository = state().smartContracts.depository.inst;
-		depository.methods.getUSDETHPrice().call((err, response) => {
+
+		depository.methods.getUSDETHPrice().call( (err, response) => {
 			if(err) {
 			  dispatch({
 			    type: GET_SPOT_PRICE_ERROR
@@ -492,8 +682,11 @@ export const getSpotPrice = () => {
 				});
 			}
 		});
+
+
   	}
 }
+
 
 export const changeActiveFuture = (index) => {
 	return (dispatch, state) => {
@@ -540,6 +733,53 @@ export const fetchOrders = (index) => {
   	}
 }
 
+export const listenMarketOrderLog = () => {
+	return (dispatch, state) => {
+		let activeFuture = state().smartContracts.activeFuture;
+		let future = state().smartContracts.futures[activeFuture].inst;
+	    future.events.MarketOrderLog({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+
+			let web3 = getWeb3();
+
+			if(web3 && web3.eth) {
+		    	web3.eth.getBlockNumber().then(fromBlock => {
+					future.getPastEvents('MarketOrderLog', {
+					  fromBlock: fromBlock - HISTORY_LIMIT_BLOCKS,
+					  toBlock: 'latest'
+					}).then(response => {
+						dispatch({
+						    type: FETCH_HISTORY,
+						    payload: response
+						});
+					}).catch(err => {
+						  dispatch({
+						    type: FETCH_HISTORY_ERROR
+						  })
+			    	});
+		    	})
+		    	.catch(err => {
+					dispatch({
+						type: GET_CURRENT_BLOCK_NUMBER_ERROR
+					})
+		    	})
+			}
+/*	    	let trades = [...state().trades];
+	    	let exists = trades.find((obj) => obj.transactionHash === event.transactionHash);
+            if(!isObject(exists)) {
+            	trades.unshift(event);
+			    dispatch(  {
+					type: ADD_TRADE,
+					payload: trades
+				});
+            }*/
+	    });
+  	}
+}
+
+
 export const fetchHistory = (index) => {
 	return (dispatch, state) => {
 		let activeFuture = state().smartContracts.activeFuture;
@@ -571,6 +811,7 @@ export const fetchHistory = (index) => {
 		}
   	}
 }
+
 
 export const setFills = (fills) => {
   	return (dispatch) => {
@@ -605,46 +846,33 @@ export const fetchPosition = () => {
 				    }
 				],
 				function(err, results) {
-					let liquidationPrice = null;
-					if(!isUndefined(results[1])) liquidationPrice = results[1][1]*1;
-					dispatch({
-					    type: FETCH_POSITION,
-					    payload: {
-							ticker:future.ticker,
-							amount:position.amount*1,
-							price:position.price*1,
-							leverage:position.leverage*1,
-							positionType:position.positionType*1,
-							pnl:(results[0].prefix)?results[0].pnl*1:('-'+results[0].pnl)*1,
-							liquidationPrice: liquidationPrice
-						}
-					});
+					if(!isUndefined(results[0])){
+						let liquidationPrice = null;
+						if(!isUndefined(results[1])) liquidationPrice = results[1][1]*1;
+						dispatch({
+						    type: FETCH_POSITION,
+						    payload: {
+								ticker:future.ticker,
+								amount:position.amount*1,
+								price:position.price*1,
+								leverage:position.leverage*1,
+								positionType:position.positionType*1,
+								pnl:(results[0].prefix)?results[0].pnl*1:('-'+results[0].pnl)*1,
+								liquidationPrice: liquidationPrice
+							}
+						});
+					} else {
+						dispatch({
+							type: FETCH_POSITION_ERROR
+						})
+					}
+
 				});
 			}
 		});
 	}
 }
 
-export const listenMarketOrderLog = () => {
-	return (dispatch, state) => {
-		let activeFuture = state().smartContracts.activeFuture;
-		let future = state().smartContracts.futures[activeFuture].inst;
-	    future.events.MarketOrderLog({}, { 
-	      fromBlock: state().currentBlockNumber, 
-	      toBlock: 'latest' 
-	    }).on('data', function(event) {
-	    	let trades = [...state().trades];
-	    	let exists = trades.find((obj) => obj.transactionHash === event.transactionHash);
-            if(!isObject(exists)) {
-            	trades.unshift(event);
-			    dispatch(  {
-					type: ADD_TRADE,
-					payload: trades
-				});
-            }
-	    });
-  	}
-}
 
 
 export const listenLimitOrderLog = () => {
@@ -667,6 +895,20 @@ export const listenLimitOrderLog = () => {
   	}
 }
 
+export const listenMainTokenApproval = () => {
+	return (dispatch, state) => {
+		let main_token = state().smartContracts.main_token.inst;
+	    main_token.events.Approval({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+		    dispatch(  {
+				type: LISTEN_MAIN_TOKEN_APPROVAL,
+				payload: event
+			});
+	    });
+ 	}
+}
 
 export const getBlockNumber = (index) => {
 	return (dispatch, state) => {
@@ -709,6 +951,7 @@ export const getTotalSupplyMainToken = () => {
   	}
 }
 
+
 export const mainTokenBalanceOf = () => {
 	return (dispatch, state) => {
 		let address = state().accounts[0];
@@ -727,6 +970,60 @@ export const mainTokenBalanceOf = () => {
 		});
   	}
 }
+
+ 
+export const listenTokensPurchased = () => {
+	return (dispatch, state) => {
+		
+		let sale = state().smartContracts.sale.inst;
+		let main_token = state().smartContracts.main_token.inst;
+	    sale.events.TokensPurchased({}, { 
+	      fromBlock: state().currentBlockNumber, 
+	      toBlock: 'latest' 
+	    }).on('data', function(event) {
+	    	if(state().accounts[0]){
+				main_token.methods.balanceOf(state().accounts[0]).call((err, response) => {
+					if(err) {
+					  dispatch({
+					    type: MAIN_BALANCE_OF_ERROR
+					  })
+					} else {
+						dispatch({
+						    type: MAIN_BALANCE_OF,
+						    payload: response
+						});
+					}
+				});
+	    	}
+
+			main_token.methods.totalSupply().call((err, response) => {
+				if(err) {
+				  dispatch({
+				    type: MAIN_TOTAL_SUPPLY_ERROR
+				  })
+				} else {
+					dispatch({
+					    type: MAIN_TOTAL_SUPPLY,
+					    payload: response
+					});
+				}
+			});
+			sale.methods.weiRaised().call((err, response) => {
+				if(err) {
+				  dispatch({
+				    type: REISED_ETH_ERROR
+				  })
+				} else {
+					dispatch({
+					    type: REISED_ETH,
+					    payload: response
+					});
+				}
+			});
+	    });
+  	}
+}
+
 
 
 export const getTotalSupplyRektToken = () => {
@@ -875,3 +1172,182 @@ export const getSaleFinalRate = () => {
   	}
 }
 
+
+export const getTotalBalance = () => {
+	return (dispatch, state, getBalance) => {
+  		let web3 = getWeb3();
+	    if(web3 && web3.eth) {
+	    	web3.eth.getBalance(state().smartContracts.depository.address, (err, response) => {
+				if(err) {
+				  dispatch({
+				    type: GET_TOTAL_BALANCE_ERROR
+				  })
+				} else {
+					dispatch({
+					    type: GET_TOTAL_BALANCE,
+					    payload: response
+					});
+				}
+	    	})
+	    }
+  	}
+}
+export const getTotalStaked = () => {
+	return (dispatch, state, getBalance) => {
+		let depository = state().smartContracts.depository.inst;
+
+		depository.methods.getTotalStakedFunds().call( (err, response) => {
+			if(err) {
+			  dispatch({
+			    type: GET_TOTAL_STAKED_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: GET_TOTAL_STAKED,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getTotalDividends = () => {
+	return (dispatch, state, getBalance) => {
+		let depository = state().smartContracts.depository.inst;
+
+		depository.methods.totalDividends().call( (err, response) => {
+			if(err) {
+			  dispatch({
+			    type: GET_TOTAL_DIVIDENDS_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: GET_TOTAL_DIVIDENDS,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getTotalProfit = () => {
+	return (dispatch, state, getBalance) => {
+		let depository = state().smartContracts.depository.inst;
+
+		depository.methods.allTimeProfit().call( (err, response) => {
+			if(err) {
+			  dispatch({
+			    type: GET_TOTAL_PROFIT_ERROR
+			  })
+			} else {
+				dispatch({
+				    type: GET_TOTAL_PROFIT,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getMarginBank = () => {
+	return (dispatch, state, getBalance) => {
+		let depository = state().smartContracts.depository.inst;
+
+		depository.methods.marginBank().call( (err, response) => {
+			if(err) {
+			  dispatch({
+			    type: GET_MARGIN_BANK_ERROR
+			  })
+			} else {	
+				dispatch({
+				    type: GET_MARGIN_BANK,
+				    payload: response
+				});
+			}
+		});
+  	}
+}
+
+export const getParams = () => {
+	return (dispatch, state) => {
+
+		let settings = state().smartContracts.settings.inst;
+
+		async.parallel([
+		    function(callback) {
+				settings.methods.params(0).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(1).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(2).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(3).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(4).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(5).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(6).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(7).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(8).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(9).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(10).call((err, response) => {
+					callback(null, response);
+				});
+		    }
+		],
+		function(err, results) {
+			dispatch({
+			    type: GET_PARAMS,
+			    payload: {
+
+		            votingTime: results[0],
+		            activationTime: results[1],
+		            feeLimit: results[2],
+		            feeMarket: results[3],
+		            maxLeverage: results[4],
+		            liquidationProfit: results[5],
+		            minVotingPercent: results[6],
+		            paramProposalFee: results[7],
+		            contractProposalFee: results[8],
+		            feeDiscountIndex: results[9],
+		            maxMarketLength: results[10],
+			    }
+			});
+		});
+	}
+}

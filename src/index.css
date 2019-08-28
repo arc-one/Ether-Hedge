@@ -142,15 +142,134 @@ label {
 	margin-top: 10px;
 }
 .wallet_top {
-    padding: 30px;
+    padding: 30px 30px 40px;
 }
 .tools_data {
     padding: 30px 30px 0;
 }
 
 .wallet_row{
-  padding:  15px 30px;
+  padding:  30px 30px;
 }
 .usd_bottom{
 	color: #999;
+}
+.proposal_list, .proposal_cont, .sale_chart{
+	height: 100%;
+}
+.href{
+	cursor: pointer;
+}
+.href:hover{
+	text-decoration: underline;
+}
+#parent {display: table; height: 100%; width: 100%;}
+
+#child {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+.text_large{
+ 	font-size: 18px;
+}
+.proposal_container{
+ 	height: calc(100% - 69px);
+ 	overflow-y: auto;
+}
+.nopadding{
+ 	padding: 0;
+}
+.margin_top{
+ 	margin-top: 20px; 
+} 
+.margin_bottom{
+ 	margin-bottom: 20px; 
+}
+.padding_bottom{
+ 	padding-bottom: 20px; 
+}
+.badge{
+ 	border-radius: 0;
+ 	padding: 2px .4em 3px;
+}
+.chart_sale_price{
+ 	margin-top: -190px;
+}
+.tools_changes_proposals, .sale_countdown{
+  height: 100%;
+}
+.chart_sale_price > div > label{
+	display: none;
+}
+.chart_sale_price_top{
+	height: 190px;
+	padding: 40px 30px;
+
+}
+.sale_countdown{
+	padding: 15px 15px 30px;
+}
+
+.token_sale_row{
+  padding:  30px 30px;
+}
+
+.countdown_block{
+	height: calc(100% - 221px) ;
+}
+.countdown_price, .sale_closed{
+	margin-top: 50px;
+	font-size: 20px;
+	margin-bottom: 30px;
+}
+.buy_token_btn{
+	margin-top: 30px;
+	padding: 1rem 2rem;
+	margin-right:2rem;
+}
+.tools_item{
+	padding: 15px 15px;
+	font-size: 13px;
+	cursor: pointer;
+}
+.chart_text{
+	margin-top: 10px;
+}
+.modal_descr{
+		margin: 0px 0px 20px;
+}
+.my-3{
+	clear: both;
+}
+.modal_inp{
+	margin-bottom: 10px;
+}
+.proposal_tabs{
+  width: calc(100% + 1px);
+  margin-top: -1px;
+  margin-left: -1px;
+}
+.add_btn{
+  text-align: right;
+  padding: 10px 10px;
+}
+.title_proposal{
+  font-size: 14px;
+  font-weight: bold;
+}
+.proposal_container{
+  padding: 0;
+}
+
+.title_item{
+
+}
+
+.item_list{
+	height: 100%;
+	padding: 0;
+}
+.about_list{
+  height: 100%;
 }

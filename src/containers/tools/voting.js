@@ -1,182 +1,226 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { Row, Col, Container, ButtonDropdown, Nav, NavItem, NavLink, ListGroup, ListGroupItem, Progress, Button } from 'reactstrap'
+import { Row, Col, Container, Nav, NavItem, NavLink, ListGroup, ListGroupItem, Progress, Badge } from 'reactstrap'
 import {timeFormat} from  "d3-time-format"
-import { ETH_DECIMALS } from '../../config'
+import { ETH_DECIMALS, PERCENT_MULTIPLYER, LEVERAGE_DECIMALS } from '../../config'
 import ModalAddProposal from './addProposalModal'
 import { toggleModal } from '../../actions/toggleModalActions'
+import { 
+	fetchContractProposal, 
+	fetchParamProposal, 
+	fetchProposals, 
+	getUserVoting, 
+	listenCreateParamProposalLog,
+	listenCreateContractProposalLog
+} from '../../actions/web3VotingActions'
+import { getParams, getTotalSupplyMainToken } from '../../actions/web3Actions'
+import ParamProposalContent from './paramProposalContent'
+import ContractProposalContent from './contractProposalContent'
 
-
-var formatTime = timeFormat("%B %d, %Y");
-
-
+var formatTime = timeFormat("%B %d, %Y, %H:%M:%S");
 
 class Voting extends Component {
 
 	constructor() {
 		super();
 		this.state = {
-			active:0,
-		  	voting:[
-				{
-					type: 'changes',
-					title: 'Change Fee Limit from 0.3% to 0.5%',
-					description: 'lorem lorem lorem',
-					start: 1234,
-					end: 22333,
-					yes: 13,
-					no: 26,
-					creator: '23232323232',
-					creator_stake: 223333233333333323,
-					tx:'2323232332323'
-
-				},
-				{
-					type: 'changes',
-					title: 'Change Fee Limit osalfrom 0.3% to 0.5%',
-					description: 'lorem lorem lorem',
-					start: 1234,
-					end: 22333,
-					yes: 34,
-					no: 246,
-					creator: '23232323232',
-					creator_stake: 223333233333333323,
-					tx:'2323222232332323'
-				},
-				{
-					type: 'changes',
-					title: 'Change Fee Limit from 0.3% to 0.5%',
-					description: 'lorem lorem lorem',
-					start: 1234,
-					end: 22333,
-					yes: 345,
-					no: 246,
-					creator: '23232323232',
-					creator_stake: 223333233333333323,
-					tx:'2323222222232332323'
-				},
-
-
-
-			]
+			active:null,
+			activeTab:'voted',
+			activeProposal: null,
 		};
-		this.selectProposal = this.selectProposal.bind(this);
+
+		this.getField = this.getField.bind(this);
+		this.getVotingPercenResult = this.getVotingPercenResult.bind(this);
+		this.tabClick = this.tabClick.bind(this);
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if(this.props.accounts !== prevProps.accounts){
+			if(this.props.accounts[0]){
+				this.getUserVoting();
+			}
+		}
+	}	
+
+	componentDidMount() {
+		this.props.fetchContractProposal();
+		this.props.fetchParamProposal();
+		this.props.getParams();
+		this.props.getTotalSupplyMainToken();
+		this.props.listenCreateParamProposalLog();
+		this.props.listenCreateContractProposalLog();
+		
+	}
+
+	selectProposal(obj, index) {
+		this.setState({active:index});
+		this.setState({activeProposal:obj});
+	}
+
+	getVotingPercenResult(proposal, vote) {
+		if(this.props.paramProposalResults[proposal.hash]){
+			let result = this.props.paramProposalResults[proposal.hash];
+			if(result.yes*1+result.yes*1>0){
+				if(vote === 'yes'){
+					return result.yes*100/(result.yes*1+result.no*1)
+				} else {
+					return result.no*100/(result.yes*1+result.no*1)
+				}
+			} else {
+				return 0;
+			}
+		} else return 0;
+	}
+
+	getUserVoting() {
+		if(this.state.activeProposal && this.props.enabledMetamask) {
+			let proposal = this.state.activeProposal.returnValues;
+			this.props.getUserVoting(proposal.hash);
+
+		} else return null;
+	}
+
+	getValue(param, val){
+        if(param === '2' || param === '3' || param === '4' || param === '5' || param === '6') {
+            val /= PERCENT_MULTIPLYER;
+        }
+        if(param === '4') {
+            val /= LEVERAGE_DECIMALS;
+        }
+        if(param === '7' || param === '8') {
+            val /= ETH_DECIMALS;
+        }
+        return val;
+	}
+
+	getField(obj, field) {
+		
+		if(obj.returnValues){
+			switch (field) {
+				case "title":
+					switch (obj.returnValues.param) {
+						case '0':
+							return 'Change proposal voting time to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +' sec'
+						case '1':
+							return 'Change proposal activation timeout after successfull voting to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +' sec'
+						case '2':
+							return 'Change limit order Fee to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +'%'
+						case '3':
+							return 'Change market order Fee to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +'%'
+						case '4':
+							return 'Change maximum leverage to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +'%'
+						case '5':
+							return 'Change liquidation profit to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +'%'
+						case '6':
+							return 'Change minimum voting threshold to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +'%'
+						case '7':
+							return 'Change parameters proposal fee to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +'%'
+						case '8':
+							return 'Change contracts proposal fee to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +'%'
+						case '9':
+							return 'Change trading fee discount index to '+ this.getValue(obj.returnValues.param, obj.returnValues.value) +'%'
+						default:
+							break;
+					}
+					break;
+				case "start":
+					return 'Started: '+formatTime(obj.returnValues.startDate*1000);
+				case "end":
+					return 'Ends: '+formatTime(obj.returnValues.endDate*1000);
+				default: 
+					break;
+			}
+			
+
+		}
 
 	}
 
-
-
-  selectProposal(obj, index) {
-     //console.log(index)
-     this.setState({active:index})
-  }
-
-
-	tabClick(){
-	//	console.log(33)
+	tabClick(event){
+		let tab = event.target.getAttribute('data-tab');
+		this.setState({activeTab: tab});
+		this.setState({activeProposal: null});
+		this.setState({active: null});
 	}
 
 	render () {
+		let list = (this.props.params)?this.props.proposals.filter(obj => {
+			let _now = new Date().getTime();
+			if(this.state.activeTab === 'pending') {
+				return _now < (obj.returnValues.startDate*1 + this.props.params.activationTime.value*1 + this.props.params.votingTime.value*1)*1000;
+			}
+			if(this.state.activeTab === 'voted') {
+				return _now > (obj.returnValues.startDate*1 + this.props.params.activationTime.value*1 + this.props.params.votingTime.value*1)*1000;
+			}
+		}).sort((a, b) => {
+			return b.returnValues.startDate - a.returnValues.startDate;
+		}).map((obj, index, arr) => 
+			<ListGroupItem className={(this.state.active === index? 'selected':'')} onClick={() => this.selectProposal(obj, index)} data-index={obj.transactionHash}  key={obj.transactionHash}>
+				{obj.returnValues.propType === '2'?
+					<h5 className="title_proposal"> {this.getField(obj, 'title')}</h5>
+				:null}
+				{obj.returnValues.propType === '0'?
+					<h5 className="title_proposal"><Badge color="primary">Contract</Badge> { obj.returnValues.title }</h5>
+				:null}
+				<div>{this.getField(obj, 'start')}</div>
+				<div>{this.getField(obj, 'end')}</div>
+					{
+						this.props.paramProposalResults[obj.returnValues.hash]?
+						<Progress multi>
+							<Progress bar color="primary" value={this.getVotingPercenResult(obj.returnValues, 'yes')} />
+							<Progress bar color="danger" value={this.getVotingPercenResult(obj.returnValues, 'no')} />
+						</Progress>:<Progress></Progress>
+					}
+			</ListGroupItem>
+		):[];
+
 		return (
 			<Row className="tools_changes_proposals ">
-				<Col className='right_border ' md={4} >
-					<Row >
+				<Col className='right_border proposal_list' md={4} >
+					<Row>
 						<Nav tabs className="proposal_tabs">
 				          <NavItem>
-				            <NavLink onClick={this.tabClick} href="#" active>Pending</NavLink>
+				            <NavLink onClick={this.tabClick} data-tab="voted" href="#" active={this.state.activeTab === 'voted'}>Finished </NavLink>
+				          </NavItem>
+				          <NavItem>
+				            <NavLink onClick={this.tabClick} data-tab="pending" href="#" active={this.state.activeTab === 'pending'}>Opened</NavLink>
 				          </NavItem>
 
-				          <NavItem>
-				            <NavLink href="#">Voted</NavLink>
-				          </NavItem>
 				        </Nav>	
 					</Row>
 			        <Row className="bottom_border">
-			        	<Col className="add_btn"><a href="#" onClick={() => this.props.toggleModal('add_proposal') }>Add New Proposal</a></Col>
+			        	<Col className="add_btn"><div className="href" onClick={() => this.props.toggleModal('add_proposal') }>+ Add New Proposal</div></Col>
 			        </Row>
 
-					<Row>
-						<Container className="proposal_container">
-							<ListGroup flush >
-
-								{
-									this.state.voting.map((obj, index) => {
-										return (
-											<ListGroupItem className={(this.state.active == index? 'selected':'')} onClick={() => this.selectProposal(obj, index)} data-index={obj.tx}  key={obj.tx}>
-												<div><h5 className="title_proposal">{obj.title}</h5></div>
-												<div>Voting by {formatTime(obj.end*1000)}</div>
-												<div>Proposal from staker with {(obj.creator_stake/ETH_DECIMALS).toFixed(6)} of EHE</div>
-												<Progress multi>
-													<Progress bar color="primary" value={obj.yes*100/(obj.yes+obj.no)} />
-													<Progress bar color="danger" value={obj.no*100/(obj.yes+obj.no)} />
-												</Progress>
-											</ListGroupItem>
-
-										)
-									})
-								}
-
-							</ListGroup>
+					<Row className="proposal_container">
+						<Container className="nopadding">
+							{
+								list.length?<ListGroup flush >{list}</ListGroup>:
+								 	this.state.activeTab === 'voted'?
+										<div id="parent" className="text_large lightcolor">
+											<div id="child">No Proposals</div>
+										</div>:
+										<div id="parent" className="text_large lightcolor">
+											<div id="child">No Opened Proposals.<br/>Click Add New Proposal.</div>
+										</div>
+							}
 						</Container>
 					</Row>
 				</Col>
-				<Col md={8} className="proposal_cont">
-					
-						<h4 className="title_proposal_big">{this.state.voting[this.state.active].title}</h4>
-						<div className="text-left ">Yes: 25%, EHE 1234</div>
-      					<Progress className="progress_big" color="primary" value={this.state.voting[this.state.active].yes*100/(this.state.voting[this.state.active].yes+this.state.voting[this.state.active].no)} />
-						<div className="text-left">No: 25%, EHE 1234</div>
-      					<Progress className="progress_big"  color="danger" value={this.state.voting[this.state.active].no*100/(this.state.voting[this.state.active].yes+this.state.voting[this.state.active].no)} />
 
-      					<div>
-      						Total Accounts Voted: 34234 (15%), EHE: 232 (25%)
-      					</div>
-      					<div>
-      						Quit Voting Accounts: 232(25%), EHE: 4534545(23%)
-      					</div>
+				{this.state.activeProposal && this.state.activeProposal.returnValues.propType === '2'?
+					<ParamProposalContent proposal={this.state.activeProposal.returnValues} />:null}
+				{this.state.activeProposal &&  this.state.activeProposal.returnValues.propType === '0'?
+					<ContractProposalContent proposal={this.state.activeProposal.returnValues} />:null
+				}
+				{
+					!this.state.activeProposal?
+					<div id="parent" className=" proposal_cont col-md-8 text_large lightcolor">
+					  <div id="child">No Proposal Selected</div>
+					</div>:null
+				}
 
-
-
-      					<div className="proposal_block">
-      						Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-      					</div>
-      					<div className="proposal_block">
-      						{
-
-      							(this.props.enabledMetamask)?
-		      						<Row>
-			      						<Col>
-					      					<div>
-					      						Wallet EHE Balance: 233.8434
-					      					</div>
-					      					<div>
-					      						Staked EHE Amount: 233.8434
-					      					</div>
-				      					</Col>
-				      					<Col>
-				      						<Button className="stake_big_btn " color="default" size="lg">Stake</Button>
-				      					</Col>
-			      					</Row>:
-			      					<div>Please Enable Metamask</div>
-      						}
-
-      					</div>
-
-
-
-      					<center>
-							<Button disabled={!this.props.enabledMetamask} className="vote_button" color="primary" size="lg">Yes</Button>
-							<Button disabled={!this.props.enabledMetamask} className="vote_button" color="danger" size="lg">No</Button>
-
-      					</center>
-						
-				
-
-				
-
-				</Col>
 				<ModalAddProposal/>
 			</Row>
 
@@ -186,12 +230,30 @@ class Voting extends Component {
 
 
 const mapStateToProps = (state) => ({
-	voting: state.voting,
-	enabledMetamask: state.enabledMetamask
+	proposals: state.proposals,
+	enabledMetamask: state.enabledMetamask,
+	params: state.params,
+	stakedFunds: state.stakedFunds,
+	mainTokenBalanceOf: state.mainTokenBalanceOf,
+	mainTokenTotalSupply: state.mainTokenTotalSupply,
+	paramProposalResults: state.paramProposalResults,
+	userVoting: state.userVoting,
+	accounts: state.accounts,
+	smartContracts: state.smartContracts
 })
 
 const mapDispatchToProps = dispatch => (
-  bindActionCreators({ toggleModal }, dispatch)
+  bindActionCreators({ 
+	  	toggleModal, 
+	  	fetchContractProposal, 
+	  	fetchParamProposal, 
+	  	getParams,
+	  	fetchProposals,
+	  	getTotalSupplyMainToken,
+	  	getUserVoting,
+	  	listenCreateContractProposalLog,
+	  	listenCreateParamProposalLog
+  	}, dispatch)
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Voting)

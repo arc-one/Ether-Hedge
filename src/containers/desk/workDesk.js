@@ -23,8 +23,6 @@ import {
           listenLimitOrderLog,
         } from '../../actions/web3Actions'
 
-
-
 const originalLayout = getFromLS("layout") || [
   {i: 'a', x: 0, y: 0, w: 6, h: 30},
   {i: 'b', x: 6, y: 0, w: 18, h: 20},
@@ -32,7 +30,19 @@ const originalLayout = getFromLS("layout") || [
   {i: 'd', x: 6, y: 2, w: 18, h: 10},
 ];
 
+let startedListning = false;
+
 class WorkDesk extends PureComponent {
+
+
+	componentDidMount(){
+		this.props.fetchHistory();
+		this.props.getMaxLeverage();
+		this.props.getFeeLimit();
+		this.props.getFeeMarket();
+		this.props.fetchOrders();
+		this.props.checkIfTrustedFuture();
+	}
 
 	componentDidUpdate(prevProps, prevState){
 		if(this.props.windowSize !== prevProps.windowSize) {
@@ -40,8 +50,13 @@ class WorkDesk extends PureComponent {
 		}
 
 	    if(this.props.currentBlockNumber!==prevProps.currentBlockNumber) {
-	      this.fetchFutureData();
-	      this.startEventsListener();
+	      if (!startedListning) this.startEventsListener();
+	      this.props.getSpotPrice();
+	      startedListning = true;
+	    }
+
+	    if(this.props.trades!==prevProps.trades) {
+			this.props.getLastPrice();
 	    }
 	}
 
@@ -60,7 +75,6 @@ class WorkDesk extends PureComponent {
 	}
 
 	onResizeStop() {
-		var _this = this;
 		setTimeout(function(){
 			let height=document.getElementById('pricechart').offsetHeight;
 			let width=document.getElementById('pricechart').offsetWidth;
@@ -69,22 +83,10 @@ class WorkDesk extends PureComponent {
 		}, 10);
 	}
 
-	fetchFutureData() {
-		this.props.getLastPrice();
-		this.props.getSpotPrice();
-		this.props.fetchHistory();
-		this.props.fetchOrders();
-		this.props.checkIfTrustedFuture();
-		this.props.getMaxLeverage();
-		this.props.getFeeLimit();
-		this.props.getFeeMarket();
-	}
-
 	startEventsListener(){
 		this.props.listenMarketOrderLog();
 		this.props.listenLimitOrderLog();
 	}
-
 
 	render () {
 		return (  
@@ -109,10 +111,10 @@ class WorkDesk extends PureComponent {
 	}
 }
 
-
 const mapStateToProps = (state) => ({
 	windowSize:state.windowSize,
-	currentBlockNumber: state.currentBlockNumber
+	currentBlockNumber: state.currentBlockNumber,
+	trades: state.trades
 })
 
 const mapDispatchToProps = dispatch => (

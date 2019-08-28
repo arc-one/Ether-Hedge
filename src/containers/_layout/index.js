@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Topbar from './topbar/Topbar'
 import TopbarTools from './topbar/TopbarTools'
-import { Route, Switch } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { getWindowHeight } from '../../actions'
 
 class Layout extends Component {

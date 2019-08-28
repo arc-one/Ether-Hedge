@@ -2,12 +2,24 @@ import { Row } from 'reactstrap'
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import Wallet from './wallet'
+import Wallet from './wallet'	
 import Params from './params'
+import { listenDepositedLogs, listenWithdrawLogs, listenStakedLogs, listenUnstakedLogs, listenDividendsLog } from '../../actions/web3Actions'
+
+let startedListning = false;
 
 class Data extends Component {
 
-	componentDidMount(){}
+	componentDidUpdate(prevProps, prevState){
+	    if(this.props.currentBlockNumber!==prevProps.currentBlockNumber && !startedListning) {
+	        this.props.listenDepositedLogs();
+	        this.props.listenWithdrawLogs();
+	        this.props.listenStakedLogs();
+	        this.props.listenUnstakedLogs();
+	        this.props.listenDividendsLog();
+	        startedListning = true;
+	   }
+	}
 
 	render () {
 		return (
@@ -19,9 +31,12 @@ class Data extends Component {
 	}
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+	currentBlockNumber: state.currentBlockNumber
+})
+
 const mapDispatchToProps = dispatch => (
-  bindActionCreators({}, dispatch)
+  bindActionCreators({ listenDepositedLogs, listenWithdrawLogs, listenStakedLogs, listenUnstakedLogs, listenDividendsLog }, dispatch)
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Data)

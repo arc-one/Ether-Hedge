@@ -1,8 +1,7 @@
-import { isEmpty }  from 'lodash';
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { WEB3_POLL_INTERVAL, POLL_BLOCK_NUMBER_INTERVAL } from '../../config'
+import { POLL_BLOCK_NUMBER_INTERVAL } from '../../config'
 import {  
           fetchNetwork, 
           fetchAccounts, 
@@ -34,10 +33,13 @@ class Web3Provider extends Component {
     if(this.props.accounts!==prevProps.accounts) {
       this.fetchUserData();
     }
+
+    if(this.props.trades!==prevProps.trades && this.props.enabledMetamask) {
+      this.props.fetchPosition();
+    }
   }
 
   componentDidMount() {
-    var _this = this;
     this.props.initSmartContracts();
     
     setInterval(() => {

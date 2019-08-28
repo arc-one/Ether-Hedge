@@ -61,7 +61,7 @@ class Positions extends PureComponent {
                    {
 
                  
-                      this.props.userPosition  ?
+                      this.props.userPosition && this.props.userPosition.amount>0 ?
                        <tr key={Math.random()}  >
                          {this.props.userPosition.positionType === 1? 
                          <td width="7%" className="green_text" >Long</td>

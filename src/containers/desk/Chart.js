@@ -8,7 +8,6 @@ import {
 	Modal,
 	Button,
 	FormGroup,
-	ControlLabel,
 	FormControl,
 } from "react-bootstrap";
 
@@ -16,7 +15,6 @@ import { ChartCanvas, Chart } from "react-stockcharts";
 import { CandlestickSeries, BarSeries /*, MACDSeries*/ } from "react-stockcharts/lib/series";
 import { XAxis, YAxis } from "react-stockcharts/lib/axes";
 import {
-	CrossHairCursor,
 	EdgeIndicator,
 	MouseCoordinateY,
 	/*MouseCoordinateXV2,*/
@@ -27,7 +25,7 @@ import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
 import { macd } from "react-stockcharts/lib/indicator";
 
 import { fitWidth } from "react-stockcharts/lib/helper";
-import { InteractiveYCoordinate, DrawingObjectSelector } from "react-stockcharts/lib/interactive";
+import { InteractiveYCoordinate } from "react-stockcharts/lib/interactive";
 import { getMorePropsForChart } from "react-stockcharts/lib/interactive/utils";
 import { head, last, toObject } from "react-stockcharts/lib/utils";
 import {
@@ -312,7 +310,7 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 				});
 				break;
 			}*/
-			default : {break};
+			default: break;
 		}
 	}
 

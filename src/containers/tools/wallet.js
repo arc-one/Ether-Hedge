@@ -1,21 +1,32 @@
-import { Row, Col, Container, ListGroup, ListGroupItem } from 'reactstrap'
+import { Row, Col, Container } from 'reactstrap'
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-//import { Button } from 'reactstrap'
-//import { isEmpty, isNull }  from 'lodash';
-import Web3  from 'web3';
 import { getEtherscanLink } from '../../utils/etherscan'
-import { ETH_DECIMALS, PERCENT_MULTIPLYER } from '../../config'
+import { ETH_DECIMALS, PERCENT_MULTIPLYER, DECIMALS } from '../../config'
+import { getSpotPrice } from '../../actions/web3Actions'
+import ModalStake from '../modals/modalStake'
+import ModalUnstake from '../modals/modalUnstake'
+import ModalWithdraw from '../modals/modalWithdraw'
+import ModalDeposit from '../modals/modalDeposit'
+import ModalSend from '../modals/modalSend'
 
-//var formatTime = timeFormat("%B %d, %Y");
-//var formatTimeCount = timeFormat("%Y-%m-%dT%H:%M:%S");
+import { toggleModal } from '../../actions/toggleModalActions'
 
 class Wallet extends Component {
 
-	componentDidMount(){}
+	componentDidMount(){
+		this.props.getSpotPrice();
+	}
 
+	getDividends(){
+        if(window.ethereum && this.props.enabledMetamask) {
+            this.props.smartContracts.depository.inst.methods.getDividends().send({
+                from: this.props.accounts[0]
+            }); 
+            this.props.toggleModal(null);
+        }
+	}
 
 	render () {
 		return (
@@ -29,7 +40,7 @@ class Wallet extends Component {
 							</Col>
 							<Col  md={4}>
 								<div className="title_large text_right">Ξ {(this.props.userWalletBalance/ETH_DECIMALS).toFixed(6)}</div>
-								<div className="text_right">$3245.23</div>
+								<div className="text_right">${(this.props.userWalletBalance/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}</div>
 							</Col>
 						</Row>
 						<Row className="">
@@ -42,8 +53,8 @@ class Wallet extends Component {
 								</div>
 							</Col>
 							<Col className="">
-								<button className="sm sm_btn_tools margin_right_btn float_rigth" disabled={!this.props.enabledMetamask}  > Receive </button>
-								<button className="sm sm_btn_tools margin_right_btn float_rigth" disabled={!this.props.enabledMetamask}  > Send </button>
+
+								<button className="sm sm_btn_tools margin_right_btn float_rigth" disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('send')} > Send </button>
 							</Col>
 
 						</Row>
@@ -51,7 +62,7 @@ class Wallet extends Component {
 					</Container>
 				</Row>
 				<Row className="bottom_border_light wallet_row ">
-					<Col className=" no_padding">
+					<Col md={4} className=" no_padding">
 						<div>
 							Deposit
 						</div>
@@ -59,16 +70,28 @@ class Wallet extends Component {
 							{this.props.userBalance>0?(this.props.userBalance/ETH_DECIMALS).toFixed(6):0} ETH
 						</div>
 						<div className="usd_bottom">
-							$3245.23
+							${(this.props.userBalance/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
 						</div>
 					</Col>
-					<Col className="no_padding">
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth"  disabled={!this.props.enabledMetamask} > Withdraw </button>
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth"  disabled={!this.props.enabledMetamask} > Deposit</button>
+					<Col md={4} className=" no_padding">
+						<div>
+							Available for trading 
+						</div>
+						<div className="wallet_digit_large">
+							{this.props.availableBalance>0?(this.props.availableBalance/ETH_DECIMALS).toFixed(6):0} ETH
+						</div>
+						<div className="usd_bottom">
+							${(this.props.availableBalance/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
+						</div>
+					</Col>
+					<Col md={4} className="no_padding">
+						<button className="sm sm_btn_tools_light margin_right_btn float_rigth"  disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('withdraw')} > Withdraw </button>
+						<button className="sm sm_btn_tools_light margin_right_btn float_rigth"  disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('deposit')} > Deposit</button>
 					</Col>
 				</Row>
+
 				<Row className="bottom_border_light wallet_row ">
-					<Col className=" no_padding">
+					<Col md={4} className=" no_padding">
 						<div>
 							EHE Tokens
 						</div>
@@ -76,50 +99,27 @@ class Wallet extends Component {
 							{this.props.mainTokenBalanceOf>0?(this.props.mainTokenBalanceOf/ETH_DECIMALS).toFixed(6):0} EHE
 						</div>
 						<div className="usd_bottom">
-							$3245.23
+							$0.00
 						</div>
 					</Col>
-					<Col className="no_padding">
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask}  > Receive </button>
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask} > Send </button>
-					</Col>
-				</Row>
-				<Row className="bottom_border_light wallet_row ">
-					<Col className=" no_padding">
+					<Col md={4} className=" no_padding">
 						<div>
-							EHE Tokens Stake
+							Staked
 						</div>
 						<div className="wallet_digit_large">
 							{this.props.stakedFunds>0?(this.props.stakedFunds/ETH_DECIMALS).toFixed(6):0} EHE
 						</div>
 						<div className="usd_bottom">
-							$3245.23
+							$0.00
 						</div>
 					</Col>
-					<Col className="no_padding">
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask}  > Unstake </button>
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask}  > Stake</button>
-					</Col>
-				</Row>
-				<Row className="bottom_border_light wallet_row ">
-					<Col className=" no_padding">
-						<div>
-							REKT Tokens
-						</div>
-						<div className="wallet_digit_large">
-							{this.props.rektTokenBalanceOf?(this.props.rektTokenBalanceOf/ETH_DECIMALS).toFixed(6):0} REKT
-						</div>
-						<div className="usd_bottom">
-							$3245.23
-						</div>
-					</Col>
-					<Col className="no_padding">
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask}  > Receive </button>
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask}  > Send </button>
+					<Col md={4} className="no_padding">
+						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('unstake')}> Unstake </button>
+						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('stake')} > Stake</button>
 					</Col>
 				</Row>
 				<Row className="bottom_border_light wallet_row ">
-					<Col className=" no_padding">
+					<Col md={4} className=" no_padding">
 						<div>
 							Unreleased Dividends 
 						</div>
@@ -127,25 +127,7 @@ class Wallet extends Component {
 							{this.props.userDividends?(this.props.userDividends/ETH_DECIMALS).toFixed(6):0} ETH
 						</div>
 						<div className="usd_bottom">
-							$3245.23
-						</div>
-					</Col>
-					<Col className="no_padding">
-						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask || !this.props.userDividends>0 } > Get Dividend </button>
-						
-					</Col>
-				</Row>
-
-				<Row className=" wallet_row ">
-					<Col md={4} className=" no_padding">
-						<div>
-							Available for trading 
-						</div>
-						<div className="wallet_digit_large">
-							{(this.props.availableBalance/ETH_DECIMALS).toFixed(6)} ETH
-						</div>
-						<div className="usd_bottom">
-							$3245.23
+							${(this.props.userDividends/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
 						</div>
 					</Col>
 					<Col md={4} className=" no_padding">
@@ -159,6 +141,25 @@ class Wallet extends Component {
 							$3245.23
 						</div>
 					</Col>
+					<Col md={4} className="no_padding">
+						<button className="sm sm_btn_tools_light margin_right_btn float_rigth"  onClick={() => this.getDividends()} disabled={!this.props.enabledMetamask || this.props.userDividends===0 } > Get Dividend </button>
+					</Col>
+				</Row>
+
+
+
+				<Row className="bottom_border_light wallet_row ">
+					<Col md={4} className=" no_padding">
+						<div>
+							REKT Tokens
+						</div>
+						<div className="wallet_digit_large">
+							{this.props.rektTokenBalanceOf>0?(this.props.rektTokenBalanceOf/ETH_DECIMALS).toFixed(6):0} REKT
+						</div>
+						<div className="usd_bottom">
+							${(this.props.rektTokenBalanceOf/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
+						</div>
+					</Col>
 					<Col md={4} className=" no_padding">
 						<div>
 							Trading Discount 
@@ -167,11 +168,16 @@ class Wallet extends Component {
 							{this.props.userDiscount/PERCENT_MULTIPLYER} %
 						</div>
 						<div className="usd_bottom">
-							$3245.23
+							${(this.props.userDiscount/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
 						</div>
 					</Col>
-
 				</Row>
+
+				<ModalStake/>
+				<ModalUnstake/>
+				<ModalWithdraw/>
+				<ModalDeposit/>
+				<ModalSend/>
 			</Col>
 		)
 	}
@@ -189,12 +195,14 @@ const mapStateToProps = (state) => ({
 	stakedFunds:state.stakedFunds,
 	userBalance:state.userBalance,
 	availableBalance:state.availableBalance,
-	userDiscount: state.userDiscount
+	userDiscount: state.userDiscount,
+	spotPrice: state.spotPrice,
+
 
 })
 
 const mapDispatchToProps = dispatch => (
-  bindActionCreators({}, dispatch)
+  bindActionCreators({ getSpotPrice, toggleModal }, dispatch)
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet)

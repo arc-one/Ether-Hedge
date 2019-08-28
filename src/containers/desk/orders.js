@@ -3,13 +3,12 @@ import React, { PureComponent } from 'react'
 //import { Button } from 'reactstrap'
 import { bindActionCreators } from 'redux';  
 import { connect } from 'react-redux'
-import { DECIMALS, ETH_DECIMALS, LEVERAGE_DECIMALS } from '../../config'
+import { DECIMALS, LEVERAGE_DECIMALS } from '../../config'
 import { checkOrderAmount, calcOrdervalue } from '../../utils/calculations'
 
 class Orders extends PureComponent {
 
   render () {
-    let _this = this;
     return (  
       <div className="grid_block"> 
         <div className="grid_table_header">
@@ -49,7 +48,6 @@ class Orders extends PureComponent {
                                : 
                                <td width="7%" className="red_text" >Short</td>
                                }
-                         
                                <td width="9%">{(obj.amount/DECIMALS).toFixed(2)}</td>
                                <td width="12%" >${(obj.price/DECIMALS).toFixed(2)}</td>
                                <td width="10%" >{obj.leverage/LEVERAGE_DECIMALS}</td>
@@ -59,7 +57,6 @@ class Orders extends PureComponent {
                                <td width="13%" >{obj.expires - this.props.currentBlockNumber}</td>
                              </tr>:null)
                       })
-
                   }
                 </tbody>
              </table>

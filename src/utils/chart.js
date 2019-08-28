@@ -1,12 +1,16 @@
 import { ascending, timeFormat, max, min } from  "d3";
+import { isDate, isNumber } from 'lodash';
 
 var decimals = 1000000000;
 
 function convertToOHLC(data) {
+
 	data.sort((a,b)=>ascending(a.returnValues.timestamp*1, b.returnValues.timestamp*1));
 	var result = [];
 	var format = timeFormat("%Y-%m-%dT%H:00:00");
-	data.forEach(d=>d.returnValues.timestamp = format(new Date(d.returnValues.timestamp*1000)));
+	data.forEach(d => {
+		d.returnValues.timestamp = format(new Date(d.returnValues.timestamp*1000));
+	});
 
 	var allDates = [...new Set(data.map(d=>d.returnValues.timestamp))];
    
@@ -27,7 +31,7 @@ function convertToOHLC(data) {
   return result;
 }
 
-export function getChartData(events) {
+export function getChartData(events) { 
 	var chart = convertToOHLC(events);
 	if(chart.length===1){
 		chart.push(chart[0]);

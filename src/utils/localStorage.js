@@ -1,5 +1,3 @@
-import { ascending, timeFormat, max, min } from  "d3";
-
 export const getFromLS = (key) => {
   let ls = {};
   if (global.localStorage) {

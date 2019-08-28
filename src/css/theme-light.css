@@ -73,7 +73,8 @@ input[type="number"]:disabled {
 input[type=number] {
   /*for absolutely positioning spinners*/
   position: relative; 
-  padding: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   padding-right: 30px;
   text-align: right;
 }
@@ -469,7 +470,7 @@ input[type="radio"]{
 }
 
 .countdown{
-  font-size: 26px;
+  font-size: 40px;
   color:#333;
 }
 .countdown_small{
@@ -480,31 +481,8 @@ input[type="radio"]{
 
 .tools_title{
   font-size: 13px;
-  font-weight: bold;
+  color: #3a71ff;
 }
-.tools_changes_proposals{
-  height: 100%;
-}
-.proposal_tabs{
-  width: calc(100% + 1px);
-  margin-top: -1px;
-  margin-left: -1px;
-}
-.add_btn{
-  text-align: right;
-  padding: 10px 10px;
-}
-.proposal_item{
-
-}
-.title_proposal{
-  font-size: 14px;
-  font-weight: bold;
-}
-.proposal_container{
-  padding: 0;
-}
-
 
 .list-group-item {
   color: #333;
@@ -617,4 +595,49 @@ input[type="radio"]{
 }
 .tools_addr_user, .tools_addr_user:hover, .tools_addr_user:active  {
   color: #333;
+}
+.user_vote{
+  font-size: 18px;
+}
+.voting_result{
+  font-size: 16px;
+}
+.href{
+}
+.lightcolor{
+  color:#ccc;
+}
+
+.sale_countdown{
+  background: #fff;
+}
+
+.countdown_price{
+  color: #3a71ff;
+}
+.tools_item:hover{
+  background: #eee;
+
+
+}
+.tools_item{
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  margin-top: -1px;
+}
+
+.sale_closed{
+  color: #F31B69;
+}
+.active_tool, .active_tool:hover{
+  background: #fff;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  cursor: default;
+}
+.buy_token_inp{
+  margin-top: 30px;
+  padding: 1rem 1rem;
+  height: 55px;
+
 }

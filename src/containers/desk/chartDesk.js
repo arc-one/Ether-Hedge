@@ -1,13 +1,12 @@
-import { isUndefined, isEmpty } from 'lodash'
 import React, { PureComponent } from 'react'
-import { Row, Col, Container } from 'reactstrap'
+import { Row, Container } from 'reactstrap'
 import { bindActionCreators } from 'redux';  
 import { connect } from 'react-redux'
 import { DECIMALS } from '../../config'
 import { TypeChooser } from "react-stockcharts/lib/helper"
 import Chart from './Chart';
 import { getChartData } from "../../utils/chart"
-import { getFromLS, saveToLS } from "../../utils/localStorage"
+import { getFromLS } from "../../utils/localStorage"
 import { chartSizeUpdate } from "../../actions/chartSizeActions"
 
 const chartWidth = getFromLS("chartWidth") || window.innerWidth - window.innerWidth*50.5/100;
@@ -27,7 +26,7 @@ class ChartDesk extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-      if(this.props.trades.length !== prevProps.trades.length){
+      if(this.props.trades !== prevProps.trades){
         this.setState({data:getChartData(this.props.trades)})
       }  
   }
@@ -39,10 +38,8 @@ class ChartDesk extends PureComponent {
             <div className="grid_title">Chart</div>
         </div>
         <div className="grid_subtitle_title">
-          
           <Container>
             <Row>
-
               <div className="subtitle_block right_border">
                 Price: ${(this.props.lastPrice / DECIMALS).toFixed(2)}
               </div>

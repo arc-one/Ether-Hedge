@@ -130,14 +130,14 @@
     "absolutePath": "/home/arct/projects/etherhedge/contracts/Oracle/DSThing.sol",
     "exportedSymbols": {
       "DSThing": [
-        3940
+        4187
       ]
     },
-    "id": 3941,
+    "id": 4188,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3930,
+        "id": 4177,
         "literals": [
           "solidity",
           "^",
@@ -150,10 +150,10 @@
       {
         "absolutePath": "/home/arct/projects/etherhedge/contracts/Oracle/DSMath.sol",
         "file": "../Oracle/DSMath.sol",
-        "id": 3931,
+        "id": 4178,
         "nodeType": "ImportDirective",
-        "scope": 3941,
-        "sourceUnit": 3888,
+        "scope": 4188,
+        "sourceUnit": 4135,
         "src": "25:30:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -161,10 +161,10 @@
       {
         "absolutePath": "/home/arct/projects/etherhedge/contracts/Oracle/DSAuth.sol",
         "file": "../Oracle/DSAuth.sol",
-        "id": 3932,
+        "id": 4179,
         "nodeType": "ImportDirective",
-        "scope": 3941,
-        "sourceUnit": 3313,
+        "scope": 4188,
+        "sourceUnit": 3560,
         "src": "56:30:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -172,10 +172,10 @@
       {
         "absolutePath": "/home/arct/projects/etherhedge/contracts/Oracle/DSNote.sol",
         "file": "../Oracle/DSNote.sol",
-        "id": 3933,
+        "id": 4180,
         "nodeType": "ImportDirective",
-        "scope": 3941,
-        "sourceUnit": 3929,
+        "scope": 4188,
+        "sourceUnit": 4176,
         "src": "87:30:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -186,17 +186,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3934,
+              "id": 4181,
               "name": "DSAuth",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3312,
+              "referencedDeclaration": 3559,
               "src": "140:6:8",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_DSAuth_$3312",
+                "typeIdentifier": "t_contract$_DSAuth_$3559",
                 "typeString": "contract DSAuth"
               }
             },
-            "id": 3935,
+            "id": 4182,
             "nodeType": "InheritanceSpecifier",
             "src": "140:6:8"
           },
@@ -204,17 +204,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3936,
+              "id": 4183,
               "name": "DSNote",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3928,
+              "referencedDeclaration": 4175,
               "src": "148:6:8",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_DSNote_$3928",
+                "typeIdentifier": "t_contract$_DSNote_$4175",
                 "typeString": "contract DSNote"
               }
             },
-            "id": 3937,
+            "id": 4184,
             "nodeType": "InheritanceSpecifier",
             "src": "148:6:8"
           },
@@ -222,42 +222,42 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3938,
+              "id": 4185,
               "name": "DSMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3887,
+              "referencedDeclaration": 4134,
               "src": "156:6:8",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_DSMath_$3887",
+                "typeIdentifier": "t_contract$_DSMath_$4134",
                 "typeString": "contract DSMath"
               }
             },
-            "id": 3939,
+            "id": 4186,
             "nodeType": "InheritanceSpecifier",
             "src": "156:6:8"
           }
         ],
         "contractDependencies": [
-          3198,
-          3312,
-          3887,
-          3928
+          3445,
+          3559,
+          4134,
+          4175
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 3940,
+        "id": 4187,
         "linearizedBaseContracts": [
-          3940,
-          3887,
-          3928,
-          3312,
-          3198
+          4187,
+          4134,
+          4175,
+          3559,
+          3445
         ],
         "name": "DSThing",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 3941,
+        "scope": 4188,
         "src": "120:45:8"
       }
     ],
@@ -267,14 +267,14 @@
     "absolutePath": "/home/arct/projects/etherhedge/contracts/Oracle/DSThing.sol",
     "exportedSymbols": {
       "DSThing": [
-        3940
+        4187
       ]
     },
-    "id": 3941,
+    "id": 4188,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3930,
+        "id": 4177,
         "literals": [
           "solidity",
           "^",
@@ -287,10 +287,10 @@
       {
         "absolutePath": "/home/arct/projects/etherhedge/contracts/Oracle/DSMath.sol",
         "file": "../Oracle/DSMath.sol",
-        "id": 3931,
+        "id": 4178,
         "nodeType": "ImportDirective",
-        "scope": 3941,
-        "sourceUnit": 3888,
+        "scope": 4188,
+        "sourceUnit": 4135,
         "src": "25:30:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -298,10 +298,10 @@
       {
         "absolutePath": "/home/arct/projects/etherhedge/contracts/Oracle/DSAuth.sol",
         "file": "../Oracle/DSAuth.sol",
-        "id": 3932,
+        "id": 4179,
         "nodeType": "ImportDirective",
-        "scope": 3941,
-        "sourceUnit": 3313,
+        "scope": 4188,
+        "sourceUnit": 3560,
         "src": "56:30:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -309,10 +309,10 @@
       {
         "absolutePath": "/home/arct/projects/etherhedge/contracts/Oracle/DSNote.sol",
         "file": "../Oracle/DSNote.sol",
-        "id": 3933,
+        "id": 4180,
         "nodeType": "ImportDirective",
-        "scope": 3941,
-        "sourceUnit": 3929,
+        "scope": 4188,
+        "sourceUnit": 4176,
         "src": "87:30:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -323,17 +323,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3934,
+              "id": 4181,
               "name": "DSAuth",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3312,
+              "referencedDeclaration": 3559,
               "src": "140:6:8",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_DSAuth_$3312",
+                "typeIdentifier": "t_contract$_DSAuth_$3559",
                 "typeString": "contract DSAuth"
               }
             },
-            "id": 3935,
+            "id": 4182,
             "nodeType": "InheritanceSpecifier",
             "src": "140:6:8"
           },
@@ -341,17 +341,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3936,
+              "id": 4183,
               "name": "DSNote",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3928,
+              "referencedDeclaration": 4175,
               "src": "148:6:8",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_DSNote_$3928",
+                "typeIdentifier": "t_contract$_DSNote_$4175",
                 "typeString": "contract DSNote"
               }
             },
-            "id": 3937,
+            "id": 4184,
             "nodeType": "InheritanceSpecifier",
             "src": "148:6:8"
           },
@@ -359,42 +359,42 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3938,
+              "id": 4185,
               "name": "DSMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3887,
+              "referencedDeclaration": 4134,
               "src": "156:6:8",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_DSMath_$3887",
+                "typeIdentifier": "t_contract$_DSMath_$4134",
                 "typeString": "contract DSMath"
               }
             },
-            "id": 3939,
+            "id": 4186,
             "nodeType": "InheritanceSpecifier",
             "src": "156:6:8"
           }
         ],
         "contractDependencies": [
-          3198,
-          3312,
-          3887,
-          3928
+          3445,
+          3559,
+          4134,
+          4175
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 3940,
+        "id": 4187,
         "linearizedBaseContracts": [
-          3940,
-          3887,
-          3928,
-          3312,
-          3198
+          4187,
+          4134,
+          4175,
+          3559,
+          3445
         ],
         "name": "DSThing",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 3941,
+        "scope": 4188,
         "src": "120:45:8"
       }
     ],
@@ -406,7 +406,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.9",
-  "updatedAt": "2019-07-04T01:38:47.546Z",
+  "updatedAt": "2019-08-25T02:09:38.458Z",
   "devdoc": {
     "methods": {}
   },

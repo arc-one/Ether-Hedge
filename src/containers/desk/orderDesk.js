@@ -55,10 +55,6 @@ class OrderDesk extends PureComponent {
             <div className="float-left">Wallet:</div>
           </div>
           <div className="info_row">
-            <div className="float-right">Ξ {(this.props.stakedFunds/ETH_DECIMALS).toFixed(6)}</div>
-            <div className="float-left">Stake:</div>
-          </div>
-          <div className="info_row">
             <div className="float-right">Ξ {(this.props.userBalance/ETH_DECIMALS).toFixed(6)}</div>
             <div className="float-left">Deposit:</div>
           </div>

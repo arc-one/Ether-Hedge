@@ -1,11 +1,10 @@
-import Web3 from 'web3'
 import React, { PureComponent } from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import {ETH_DECIMALS} from '../../../config'
+import {ETH_DECIMALS} from '../../config'
 import { isEmpty, isNull }  from 'lodash';
-import { toggleModal } from '../../../actions/toggleModalActions'
+import { toggleModal } from '../../actions/toggleModalActions'
 
 
 class ModalWithdraw extends PureComponent {
@@ -24,16 +23,14 @@ class ModalWithdraw extends PureComponent {
 
     sendWithdraw = async () => {
         if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
-            let provider = window.ethereum;
-                const web3 = new Web3(provider);
-                if(this.state.amount>0) {
-                    this.props.smartContracts.depository.inst.methods.withdraw(this.state.amount*ETH_DECIMALS).send({
-                      from: this.props.accounts[0]
-                      
-                    }); 
-                    this.props.toggleModal(null);
-                } else {
-                    alert("Please deposit more than 0 ETH");
+            if(this.state.amount>0) {
+                this.props.smartContracts.depository.inst.methods.withdraw(this.state.amount*ETH_DECIMALS).send({
+                  from: this.props.accounts[0]
+                  
+                }); 
+                this.props.toggleModal(null);
+            } else {
+                alert("Please deposit more than 0 ETH");
             }
         }
     }

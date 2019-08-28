@@ -7,10 +7,8 @@ import { connect } from 'react-redux'
 import { changeActiveFuture } from '../../../actions/web3Actions'
 import { toggleModal } from '../../../actions/toggleModalActions'
 import { isEmpty, isNull }  from 'lodash';
-import TruncateString  from 'react-truncate-string'
-import ModalStake from './modalStake'
-import ModalWithdraw from './modalWithdraw'
-import ModalDeposit from './modalDeposit'
+import ModalWithdraw from '../../modals/modalWithdraw'
+import ModalDeposit from '../../modals/modalDeposit'
 import Account from './account'
 import { LEVERAGE_DECIMALS } from '../../../config'
 import { Link } from 'react-router-dom'
@@ -52,10 +50,10 @@ class Topbar extends PureComponent {
                 </Col>
                 <Col className=" col-auto" >
                   <div className="top_menu">
-                    <a href="/tools">How it works</a>
+                    <Link to="/tools/about">How it works</Link>
                   </div>
                   <div className="top_menu">
-                    <div>Contracts</div>
+                  <Link to="/tools/about/contracts">Contracts</Link>
                   </div>
                   {(!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))?
                     <span>
@@ -65,9 +63,7 @@ class Topbar extends PureComponent {
                       <div className="top_menu">
                         <div onClick={() => this.props.toggleModal('withdraw')} >Withdraw</div>
                       </div>
-                      <div className="top_menu">
-                        <div onClick={() => this.props.toggleModal('stake')} >Stake</div>
-                      </div>
+
                     </span>:null
                   }
                 </Col>                
@@ -112,7 +108,6 @@ class Topbar extends PureComponent {
           
           </Col>
         </Row>
-        <ModalStake/>
         <ModalWithdraw/>
         <ModalDeposit/>
       </Container>

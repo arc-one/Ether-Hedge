@@ -1,9 +1,8 @@
-import Web3 from 'web3'
 import React, { PureComponent } from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { ETH_DECIMALS, PERCENT_MULTIPLYER } from '../../config'
+import { ETH_DECIMALS, PERCENT_MULTIPLYER, LEVERAGE_DECIMALS } from '../../config'
 import { isEmpty, isNull }  from 'lodash';
 import { toggleModal } from '../../actions/toggleModalActions'
 
@@ -11,6 +10,7 @@ import { toggleModal } from '../../actions/toggleModalActions'
 class ModalAddProposal extends PureComponent {
     constructor() {
         super();
+
         this.state = {
           type: "0",
           param: "0",
@@ -18,20 +18,18 @@ class ModalAddProposal extends PureComponent {
           description: '',
           value:'',
           contract:'',
-          price:'',
+          price:0,
           audit:'',
-
-
-
+          ipfs:'',
+          expiresIn:''
         };
+
         this.handleChangeType= this.handleChangeType.bind(this);
         this.handleChangeValue= this.handleChangeValue.bind(this);
         this.handleChangeParam= this.handleChangeParam.bind(this);
-        this.sendCreate= this.sendCreate.bind(this);
+        this.sendCreateParamProposal= this.sendCreateParamProposal.bind(this);
+        this.sendCreateContractProposal= this.sendCreateContractProposal.bind(this);
         this.handleChangeContract= this.handleChangeContract.bind(this);
-
-
-
     }
 
     handleChangeValue = (event) => {
@@ -60,34 +58,80 @@ class ModalAddProposal extends PureComponent {
             case 'price':
                 this.setState({price: event.target.value});
                 break;
+            case 'expiresIn':
+                this.setState({expiresIn: event.target.value});
+                break;
             case 'contract':
                 this.setState({contract: event.target.value});
                 break;
             case 'audit':
                 this.setState({audit: event.target.value});
                 break;
+            case 'ipfs':
+                this.setState({ipfs: event.target.value});
+                break;
+
+            default: 
+                break;
         }
        
     }
 
-    sendCreate = () => {
-
-        console.log(this.state)
+    sendCreateParamProposal = () => {
 
         if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
-            let provider = window.ethereum;
-            const web3 = new Web3(provider);
-            if(this.state.value>0) {
-                this.props.smartContracts.settingsNew.inst.methods.createParamProposal(this.state.param, this.state.value*PERCENT_MULTIPLYER).send({
-                    from: this.props.accounts[0],
-                    value:web3.utils.toWei('0.03', 'ether')
-                }); 
-                this.props.toggleModal(null);
-            } else {
-                alert("Please deposit more than 0 ETH");
-            }
+          
+          let val = this.state.value;
+
+          if(this.state.param === '0' || this.state.param === '2' || this.state.param === '3' || this.state.param === '4' || this.state.param === '5' || this.state.param === '6') {
+              val *= PERCENT_MULTIPLYER;
+          }
+          if(this.state.param === '4') {
+              val *= LEVERAGE_DECIMALS;
+          }
+          if(this.state.param === '7' || this.state.param === '8') {
+              val *= ETH_DECIMALS;
+              
+          }
+
+          this.props.smartContracts.settings.inst.methods.paramProposal(this.state.param, val.toString(), this.state.description).send({
+              from: this.props.accounts[0],
+              value: this.props.params.paramProposalFee.value
+          });
+
+          this.props.toggleModal(null);
+ 
+        } else {
+          alert("Please Enable Metamask");
         }
     }
+
+    sendCreateContractProposal = () => {
+
+
+        if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
+
+            this.props.smartContracts.settings.inst.methods.addContractProposal(
+              this.state.contract, 
+              this.state.expiresIn, 
+              this.state.title, 
+              this.state.description, 
+              this.state.ipfs,
+              this.state.audit,
+              this.state.price,
+            ).send({
+                from: this.props.accounts[0],
+                value: this.props.params.contractProposalFee.value
+            });
+
+            this.props.toggleModal(null);
+
+        } else {
+            alert("Please Enable Metamask");
+        }
+    }
+
+
 
     render() {
         return (
@@ -147,7 +191,7 @@ class ModalAddProposal extends PureComponent {
 
                                     this.state.param === '2'?
                                         <div className="form-group">
-                                          <label htmlFor="amount">Activation of Changes Timeout</label>
+                                          <label htmlFor="amount">Voting Changes Activation Timeout</label>
                                           <input type="number" min="0" autoComplete="off" className="form-control" id="amount" value={this.state.value} onChange={this.handleChangeValue}  aria-describedby="amount" placeholder="Number"/>
                                           <div id="amountWithdraw" className="form-text">Type time in a seconds. Example: "86400" - 1 day</div>
                                         </div>:null
@@ -182,7 +226,18 @@ class ModalAddProposal extends PureComponent {
                                         <div className="form-group">
                                           <label htmlFor="amount">Proposal Fee</label>
                                           <input type="number" min="0" autoComplete="off" className="form-control" id="amount" value={this.state.value} onChange={this.handleChangeValue}  aria-describedby="amount" placeholder="Number"/>
-                                          <div id="amountWithdraw" className="form-text">Enter a number from 0 to 100. Example: "0.3".</div>
+                                          <div id="amountWithdraw" className="form-text">Enter a number from 0 to 100. Example: "7.5".</div>
+                                        </div>:null
+
+                                }
+
+                                {
+
+                                    this.state.param === '6'?
+                                        <div className="form-group">
+                                          <label htmlFor="amount">Min Voting Percent</label>
+                                          <input type="number" min="0" autoComplete="off" className="form-control" id="amount" value={this.state.value} onChange={this.handleChangeValue}  aria-describedby="amount" placeholder="Number"/>
+                                          <div id="amountWithdraw" className="form-text">Enter a number from 0 to 100. Example: "2.5".</div>
                                         </div>:null
 
                                 }
@@ -198,14 +253,48 @@ class ModalAddProposal extends PureComponent {
 
                                 }
 
+                                {
 
+                                    this.state.param === '7'?
+                                        <div className="form-group">
+                                          <label htmlFor="amount">Parameters Proposals Fee</label>
+                                          <input type="number" min="0" autoComplete="off" className="form-control" id="amount" value={this.state.value} onChange={this.handleChangeValue}  aria-describedby="amount" placeholder="Number"/>
+                                          <div id="amountWithdraw" className="form-text">Enter a number from 0 to 100. Example: "0.3".</div>
+                                        </div>:null
+
+                                }
+
+                                {
+
+                                    this.state.param === '8'?
+                                        <div className="form-group">
+                                          <label htmlFor="amount">Contracts Proposal Fee</label>
+                                          <input type="number" min="0" autoComplete="off" className="form-control" id="amount" value={this.state.value} onChange={this.handleChangeValue}  aria-describedby="amount" placeholder="Number"/>
+                                          <div id="amountWithdraw" className="form-text">Enter a number from 0 to 100. Example: "0.3".</div>
+                                        </div>:null
+
+                                }
+
+                                {
+
+                                    this.state.param === '9'?
+                                        <div className="form-group">
+                                          <label htmlFor="amount">Trading Fee Discont Index </label>
+                                          <input type="number" min="0" autoComplete="off" className="form-control" id="amount" value={this.state.value} onChange={this.handleChangeValue}  aria-describedby="amount" placeholder="Number"/>
+                                          <div id="amountWithdraw" className="form-text">Enter a number from 0 to 100. Example: "0.3".</div>
+                                        </div>:null
+
+                                }
+
+
+                                <div className="form-group">
+                                  <label htmlFor="description">Description</label>
+                                  <textarea type="text"  autoComplete="off" className="form-control" id="description" value={this.state.description} onChange={this.handleChangeContract}  aria-describedby="description" placeholder="Description"/>
+                                  <div id="description" className="form-text">Please type description of the contract.</div>
+                                </div>
 
 
                            </div>:null
-
-
-
-
 
                        }
                        {
@@ -228,14 +317,25 @@ class ModalAddProposal extends PureComponent {
                                   <div id="description" className="form-text">Please type description of the contract.</div>
                                 </div>
                                 <div className="form-group">
+                                  <label htmlFor="expiresIn">Duration</label>
+                                  <input type="text"  autoComplete="off" className="form-control" id="expiresIn" value={this.state.expiresIn} onChange={this.handleChangeContract}  aria-describedby="expiresIn" placeholder="Duration"/>
+                                  <div id="expiresIn" className="form-text">Please type duration in seconds.</div>
+                                </div>
+                                <div className="form-group">
                                   <label htmlFor="price">Price</label>
                                   <input type="number"  autoComplete="off" className="form-control" id="price" value={this.state.price} onChange={this.handleChangeContract}  aria-describedby="price" placeholder="Number"/>
-                                  <div id="price" className="form-text">Enter amount of ETHER. Example: "1".</div>
+                                  <div id="price" className="form-text">Enter amount of EHE Tokens. Example: "1".</div>
                                 </div>
                                 <div className="form-group">
                                   <label htmlFor="audit">Audit</label>
                                   <input type="text" autoComplete="off" className="form-control" id="audit" value={this.state.audit} onChange={this.handleChangeContract}  aria-describedby="audit" placeholder="URL"/>
                                   <div id="audit" className="form-text">Enter the link with audit of the contract.</div>
+                                </div>
+
+                                <div className="form-group">
+                                  <label htmlFor="ipfs">IPFS Address</label>
+                                  <input type="text" autoComplete="off" className="form-control" id="ipfs" value={this.state.ipfs} onChange={this.handleChangeContract}  aria-describedby="ipfs" placeholder="IPFS Address"/>
+                                  <div id="ipfs" className="form-text">Enter the link with ipfs.</div>
                                 </div>
 
 
@@ -246,7 +346,6 @@ class ModalAddProposal extends PureComponent {
                            this.state.type === '2'?
                            <div>
                                Project
-
                            </div>:null
                        }
 
@@ -257,7 +356,8 @@ class ModalAddProposal extends PureComponent {
                       </div>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={this.sendCreate} >Create</Button>{' '}
+                        {this.state.type === "0"?<Button color="primary" onClick={this.sendCreateParamProposal} >Create Proposal</Button>:null} {' '}
+                        {this.state.type === "1"?<Button color="primary" onClick={this.sendCreateContractProposal} >Create Proposal</Button>:null} {' '}
                         <Button color="secondary" onClick={() => this.props.toggleModal(null)}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
@@ -272,7 +372,8 @@ const mapStateToProps = (state) => ({
     accounts:state.accounts,
     enabledMetamask:state.enabledMetamask,
     userWalletBalance:state.userWalletBalance,
-    smartContracts:state.smartContracts
+    smartContracts:state.smartContracts,
+    params: state.params
 })
 
 const mapDispatchToProps = dispatch => (

@@ -1,20 +1,12 @@
 import React, { PureComponent } from 'react'
 import ToggleTheme from '../customizer/ToggleTheme'
-import {timeFormat} from  "d3-time-format";
 import { Col, Container, Row } from 'reactstrap'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { changeActiveFuture } from '../../../actions/web3Actions'
 import { toggleModal } from '../../../actions/toggleModalActions'
-import { isEmpty, isNull }  from 'lodash';
-import TruncateString  from 'react-truncate-string'
-import ModalStake from './modalStake'
-import ModalWithdraw from './modalWithdraw'
-import ModalDeposit from './modalDeposit'
 import Account from './account'
-import { LEVERAGE_DECIMALS } from '../../../config'
 import { Link } from 'react-router-dom'
-import { getEtherscanLink } from '../../../utils/etherscan'
 
 
 
@@ -35,16 +27,7 @@ class TopbarTools extends PureComponent {
             <Row className="topsubbar">
                 <Col className="tools_header">
                   <Row>Tools</Row>
-                  
                 </Col>
-                <Col className=" col-auto" >
-                  <div className="top_menu">
-                    <a href="/tools">How it works</a>
-                  </div>
-                  <div className="top_menu">
-                    <div>Contracts</div>
-                  </div>
-                </Col>                
                 <Col className="left_border col-auto" >
                   <div className="top_menu">
                     <Link to="/">Desk</Link>
@@ -56,20 +39,17 @@ class TopbarTools extends PureComponent {
             </Row>
 
               <Row className="bottomsubbar">
-                
-                <div className="col tools_title">
+                 
+                {!this.props.enabledMetamask?<div className="col tools_title">
+                     Please enable Metamask to interact with the platform.
+                  </div>:null}
 
-                 Sale
-
-                </div>
                 <Account/>
               </Row>
             
           </Col>
         </Row>
-        <ModalStake/>
-        <ModalWithdraw/>
-        <ModalDeposit/>
+
       </Container>
 
     )
@@ -79,7 +59,6 @@ class TopbarTools extends PureComponent {
 const mapStateToProps = (state) => ({
   network:state.network,
   windowSize: state.windowSize,
-  network:state.network,
   accounts:state.accounts,
   enabledMetamask:state.enabledMetamask,
 })

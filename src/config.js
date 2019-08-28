@@ -1,5 +1,5 @@
 import settings  from './contracts/Settings.json'
-import settingsNew  from './contracts/SettingsNew.json'
+
 
 import depository  from './contracts/Depository.json'
 import token  from './contracts/Token.json'
@@ -32,46 +32,33 @@ export const BANCRUPCY_DIFF = 10;
 //Contracts
 export const smartContracts = {
 	depository: {
-		address: '0x79be9687fdc23646141aacd465d10cbfc97cf2b3',
+		address: '0xC0619001c07F59aECe0bDC7378EC9dFA83c26f7D',
 		abi: depository.abi
 	},
 	settings: {
-		address: '0xe8a5edfc1ff784eddf037cc4f418e3612c452228',
+		address: '0x9dcf14AfDe3b2650686d1929B058D55f71Addd38',
 		abi: settings.abi
 	},
-
-	settingsNew: {
-		address: '0x5e72914535f202659083db3a02c984188fa26e9f',
-		abi: settingsNew.abi
-	},
-
-
+	
 	main_token: {	
-		address: '0x655fb143569db35a161314222bbc2598d9601616',
+		address: '0x4D2C408630892fb2896723E7821761B84B70e0E6',
 		abi: token.abi
 	},
 	rekt_token: {
-		address: '0xb420310256b5b83f3bdd10a4d24b1a8527da6b66',
+		address: '0xfce3323856E0f4b02D03e224336C94e61A03f37e',
 		abi: token.abi
 	},
 	payment_splitter: {
-		address: '0x1bcef293f3638d542a0a91bf4e30f0707a183048',
+		address: '0x0b1d16475fDE8198ce031a218887dB9074D77D21',
 		abi: splitter.abi
 	},
 	sale: {
-		address: '0xd1fdd1b77e994a170f640223038b17fe3a6eb037',
+		address: '0x1BAfbe594983273b5505723ed8147c5E44F1B010',
 		abi: sale.abi
 	},
-
-
-	
-/*	redeployer: {
-		address: '0xa2698ebae0054b4925066035bffe769b7b11d861',
-		abi: null
-	},*/
 	futures:[
 		{
-			address: '0xd19a7ba6332ff6b8dbedef75fb0f6f562c6e42bf',
+			address: '0x98E42203b9376Ef58Fe9498a95646927f9Be1760',
 			abi: futureContract_01.abi,
 			ticker: 'ETHUSD_TST'
 		},
