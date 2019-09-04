@@ -10,10 +10,10 @@ class Desk extends PureComponent {
     return (  
       <Container className="page" >
         <Row style={this.props.windowSize}>
-          <Col className="left_side" lg={2} md={3} sm={3} xs={4}>
+          <Col className="left_side d-none d-sm-block left_desk" lg={2} md={3} sm={3} xs={4}>
             <OrderDesk/>
           </Col>
-          <Col className="right_side" lg={10} md={9} sm={9} xs={8}>
+          <Col className="right_side" lg={10} md={9} sm={9} xs={12}>
             <WorkDesk/>
           </Col>
         </Row>

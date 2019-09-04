@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../css/theme-light.css'
+import '../css/theme-dark.css'
 import Router from './Router'
 import Web3Provider from './web3Provider/web3Provider'
 

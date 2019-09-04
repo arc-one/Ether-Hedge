@@ -13,9 +13,11 @@ class Account extends Component {
 		return (
 			<div className="col subheader_right">
 				{
-					(this.props.enabledMetamask===true && this.props.network && this.props.accounts.length>0 )?
-					<span> Account: <a rel="noopener noreferrer" target="_blank" href={getEtherscanLink('address', this.props.accounts[0], null, this.props.network)}>{this.props.accounts[0] }</a> | {this.props.network===1?'Main':'Kovan'}</span>:
-					<button className="sm sm_btn_top"  onClick={this.handleEnableMetamask} > Enable Metamask </button>
+					this.props.enabledMetamask && window.innerWidth > 1000?
+					<span> Account: <a rel="noopener noreferrer" target="_blank" href={getEtherscanLink('address', this.props.accounts[0], null, this.props.network)}>{this.props.accounts[0] }</a> | {this.props.network===1?'Main':'Kovan'}</span>:null}
+
+				{	(!this.props.enabledMetamask)?
+					<button className="sm sm_btn_top"  onClick={this.handleEnableMetamask} > Enable Metamask </button>:null
 				}
 			</div>
 		)
@@ -25,8 +27,7 @@ class Account extends Component {
 const mapStateToProps = (state) => ({
   network:state.network,
   accounts:state.accounts,
-  enabledMetamask:state.enabledMetamask,
-
+  enabledMetamask:state.enabledMetamask
 })
 
 const mapDispatchToProps = dispatch => (

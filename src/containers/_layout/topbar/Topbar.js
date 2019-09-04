@@ -33,11 +33,11 @@ class Topbar extends PureComponent {
           <Col className="left_side" lg={2} md={3} sm={3} xs={4}>
             <div className="row">
                 <div className="col">
-                  <center><img alt="logotype" className="logo" src="/logo1.png" /></center>
+                  <center>{this.props.theme.className==='theme-light'?<img alt="logotype" className="logo" src="/logo_dark.png" />:<img alt="logotype" className="logo" src="/logo_light.png" />}</center>
                 </div>
             </div>
           </Col>
-          <Col className="right_side left_border" lg={10} md={9} sm={9} xs={8}>
+          <Col className="right_side left_border top_right_bar" lg={10} md={9} sm={9} xs={8}>
             <Row className="topsubbar">
                 <Col className="">
                   <ul className="contractsmenu nav nav-tabs">
@@ -48,38 +48,41 @@ class Topbar extends PureComponent {
                     }):null}
                   </ul>                  
                 </Col>
-                <Col className=" col-auto" >
-                  <div className="top_menu">
-                    <Link to="/tools/about">How it works</Link>
-                  </div>
-                  <div className="top_menu">
-                  <Link to="/tools/about/contracts">Contracts</Link>
-                  </div>
-                  {(!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))?
-                    <span>
+                { window.innerWidth > 600?
+                  <Col className=" col-auto" >
+                    {(!this.props.enabledMetamask)?
                       <div className="top_menu">
-                        <div onClick={() => this.props.toggleModal('deposit')}>Deposit</div>
-                      </div>
+                        <Link to="/tools/about">How it works</Link>
+                      </div>:null}
+                    {(!this.props.enabledMetamask)?
                       <div className="top_menu">
-                        <div onClick={() => this.props.toggleModal('withdraw')} >Withdraw</div>
-                      </div>
-
-                    </span>:null
-                  }
-                </Col>                
+                        <Link to="/tools/about/contracts">Contracts</Link>
+                      </div>:null}
+                    {(this.props.enabledMetamask)?
+                      <span>
+                        <div className="top_menu">
+                          <div onClick={() => this.props.toggleModal('deposit')}>Deposit</div>
+                        </div>
+                        <div className="top_menu">
+                          <div onClick={() => this.props.toggleModal('withdraw')} >Withdraw</div>
+                        </div>
+                      </span>:null
+                    }
+                  </Col>:null  
+                }              
                 <Col className="left_border col-auto" >
                   <div className="top_menu">
-                    <Link to="/tools">Tools</Link>
+                     { window.innerWidth > 576?<Link to="/tools">Tools</Link>:<Link to="/tools/about">About</Link>}
                   </div>
                 </Col>
-                <Col className="left_topbar col-auto left_border">
+                { window.innerWidth > 799?<Col className="left_topbar col-auto left_border">
                   <ToggleTheme/>
-                </Col>
+                </Col>:null}
             </Row>
  
             <Row className="bottomsubbar">
 
-                <div className="col">
+                <Col className="">
 
                   {(!isEmpty(this.props.smartContracts) && !isEmpty(this.props.smartContracts.futures))?
                     <a rel="noopener noreferrer" target="_blank" href={getEtherscanLink('address', this.props.smartContracts.futures[this.props.smartContracts.activeFuture].address, 'contracts', this.props.network)} >Contract  </a>:null
@@ -89,23 +92,20 @@ class Topbar extends PureComponent {
                     <span className={!this.props.isTrustedActiveFuture.trusted?"red_text":''}> | Exp: {formatTime(this.props.isTrustedActiveFuture.expirationDate*1000)} </span>:null
                   }
 
-                  {this.props.isTrustedActiveFuture?
+                  {this.props.isTrustedActiveFuture && window.innerWidth > 1100?
                     <span> | Max Margin: {this.props.maxLeverageReducer/LEVERAGE_DECIMALS}</span>:null
                   }
 
-                  {this.props.isTrustedActiveFuture?
+                  {this.props.isTrustedActiveFuture && window.innerWidth > 1100?
                     <span> | Fee Limit: {this.props.feeLimit/LEVERAGE_DECIMALS}</span>:null
                   }
 
-                  {this.props.isTrustedActiveFuture?
+                  {this.props.isTrustedActiveFuture && window.innerWidth > 1100?
                     <span> | Fee Market: {this.props.feeMarket/LEVERAGE_DECIMALS}</span>:null
                   }
-
-                </div>
-                <Account/>
-
+                </Col>
+                { window.innerWidth > 576?<Account/>:null}
             </Row>
-          
           </Col>
         </Row>
         <ModalWithdraw/>
@@ -125,9 +125,9 @@ const mapStateToProps = (state) => ({
   maxLeverageReducer: state.maxLeverageReducer,
   feeLimit: state.feeLimit,
   feeMarket: state.feeMarket,
-  windowSize: state.windowSize
+  windowSize: state.windowSize,
+  theme: state.theme
 })
-
 const mapDispatchToProps = dispatch => (
   bindActionCreators({ changeActiveFuture, toggleModal }, dispatch)
 );

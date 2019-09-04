@@ -43,7 +43,7 @@ class Params extends Component {
 	render () {
 		return (
 			
-			<Col md={5} className="">
+			<Col md={5} className="params_block">
 				<Row className="tools_data">
 					<Container className="no_padding">
 						<Row className="wallet_margin_top">

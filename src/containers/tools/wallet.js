@@ -62,7 +62,7 @@ class Wallet extends Component {
 					</Container>
 				</Row>
 				<Row className="bottom_border_light wallet_row ">
-					<Col md={4} className=" no_padding">
+					<Col md={4} sm={6} className=" no_padding">
 						<div>
 							Deposit
 						</div>
@@ -73,7 +73,7 @@ class Wallet extends Component {
 							${(this.props.userBalance/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
 						</div>
 					</Col>
-					<Col md={4} className=" no_padding">
+					<Col md={4}  sm={6} className=" no_padding">
 						<div>
 							Available for trading 
 						</div>
@@ -84,14 +84,14 @@ class Wallet extends Component {
 							${(this.props.availableBalance/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
 						</div>
 					</Col>
-					<Col md={4} className="no_padding">
+					<Col md={4} sm={12} className="no_padding">
 						<button className="sm sm_btn_tools_light margin_right_btn float_rigth"  disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('withdraw')} > Withdraw </button>
 						<button className="sm sm_btn_tools_light margin_right_btn float_rigth"  disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('deposit')} > Deposit</button>
 					</Col>
 				</Row>
 
 				<Row className="bottom_border_light wallet_row ">
-					<Col md={4} className=" no_padding">
+					<Col md={4} sm={6} className=" no_padding">
 						<div>
 							EHE Tokens
 						</div>
@@ -102,7 +102,7 @@ class Wallet extends Component {
 							$0.00
 						</div>
 					</Col>
-					<Col md={4} className=" no_padding">
+					<Col md={4} sm={6} className=" no_padding">
 						<div>
 							Staked
 						</div>
@@ -113,13 +113,13 @@ class Wallet extends Component {
 							$0.00
 						</div>
 					</Col>
-					<Col md={4} className="no_padding">
+					<Col md={4} sm={12} className="no_padding">
 						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('unstake')}> Unstake </button>
 						<button className="sm sm_btn_tools_light margin_right_btn float_rigth" disabled={!this.props.enabledMetamask} onClick={() => this.props.toggleModal('stake')} > Stake</button>
 					</Col>
 				</Row>
 				<Row className="bottom_border_light wallet_row ">
-					<Col md={4} className=" no_padding">
+					<Col md={4} sm={6} className=" no_padding">
 						<div>
 							Unreleased Dividends 
 						</div>
@@ -130,7 +130,7 @@ class Wallet extends Component {
 							${(this.props.userDividends/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
 						</div>
 					</Col>
-					<Col md={4} className=" no_padding">
+					<Col md={4} sm={6} className=" no_padding">
 						<div>
 							Released Dividends 
 						</div>
@@ -141,7 +141,7 @@ class Wallet extends Component {
 							$3245.23
 						</div>
 					</Col>
-					<Col md={4} className="no_padding">
+					<Col md={4} sm={12} className="no_padding">
 						<button className="sm sm_btn_tools_light margin_right_btn float_rigth"  onClick={() => this.getDividends()} disabled={!this.props.enabledMetamask || this.props.userDividends===0 } > Get Dividend </button>
 					</Col>
 				</Row>
@@ -149,7 +149,7 @@ class Wallet extends Component {
 
 
 				<Row className="bottom_border_light wallet_row ">
-					<Col md={4} className=" no_padding">
+					<Col md={4} sm={6} className=" no_padding">
 						<div>
 							REKT Tokens
 						</div>
@@ -160,7 +160,7 @@ class Wallet extends Component {
 							${(this.props.rektTokenBalanceOf/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2)}
 						</div>
 					</Col>
-					<Col md={4} className=" no_padding">
+					<Col md={4} sm={6} className=" no_padding">
 						<div>
 							Trading Discount 
 						</div>

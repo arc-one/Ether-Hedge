@@ -91,7 +91,7 @@ class Sale extends Component {
 						<h3 className="title_large">Token Sale</h3>
 					</Row>
 					<Row className="token_sale_row bottom_border_light">
-						<Col md={4} className=" no_padding">
+						<Col md={4} sm={6} xs={6} className=" no_padding">
 							<div>
 								Raised 
 							</div>
@@ -102,7 +102,7 @@ class Sale extends Component {
 								${(this.props.reisedETH/ETH_DECIMALS*this.props.spotPrice/DECIMALS).toFixed(2) }
 							</div>
 						</Col>
-						<Col md={4} className=" no_padding">
+						<Col md={4} sm={6} xs={6} className=" no_padding">
 							<div>
 								Total supply 
 							</div>
@@ -113,7 +113,7 @@ class Sale extends Component {
 								
 							</div>
 						</Col>
-						<Col md={4} className=" no_padding">
+						<Col md={4} sm={12}  className="d-none d-sm-block no_padding">
 							<div>
 								You Purchesed
 							</div>

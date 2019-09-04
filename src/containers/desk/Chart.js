@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-
+import { bindActionCreators } from 'redux';  
+import { connect } from 'react-redux'
 import { format } from "d3-format";
 //import { timeFormat } from "d3-time-format";
 import shortid from "shortid";
@@ -136,12 +137,12 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 		let pos = {
 						
 			...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate,
-			stroke: (!pnl[1]?'#F31B69':'#3A71FF'),
-			textFill: (!pnl[1]?'#F31B69':'#3A71FF'),
+			stroke: (!pnl[1]?'#ff3333':'#3A71FF'),
+			textFill: (!pnl[1]?'#ff3333':'#3A71FF'),
 			text: (!pnl[1]?'- '+pnlVal:'+'+pnlVal),
 			edge: {
 				...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate.edge,
-				stroke: (!pnl[1]?'#F31B69':'#3A71FF'),
+				stroke: (!pnl[1]?'#ff3333':'#3A71FF'),
 			},	
 			yValue: position.price/1000000000,
 			id: shortid.generate(),
@@ -366,7 +367,11 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 						padding={{ top: 50, bottom: 20 }}
 					>
 
-						<YAxis axisAt="right" orient="right" ticks={5} {...yGrid} tickStroke="#333333" stroke="#dddddd" fontSize={10}/>
+						<YAxis axisAt="right" orient="right" ticks={5} {...yGrid} 
+							tickStroke={this.props.theme.className==="theme-dark"?"#666666":"#333333"}  
+							stroke={this.props.theme.className==="theme-dark"?"#666666":"#dddddd"}  
+							fontSize={10}
+						/>
 						<XAxis axisAt="top" orient="top" showTicks={false} outerTickSize={0} ticks={0} stroke="#dddddd" />
 						<YAxis axisAt="left" orient="left" outerTickSize={0}  stroke="#ddd" ticks={0}/>
 
@@ -378,14 +383,14 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 							displayFormat={format(".2f")} />
 
 						<CandlestickSeries
-							stroke={d => d.close > d.open ? "#3A71FF" : "#F31B69"}
-							wickStroke={d => d.close > d.open ? "#3A71FF" : "#F31B69"}
-							fill={d => d.close > d.open ? "#3A71FF" : "#F31B69"} 
+							stroke={d => d.close > d.open ? "#3A71FF" : "#ff3333"}
+							wickStroke={d => d.close > d.open ? "#3A71FF" : "#ff3333"}
+							fill={d => d.close > d.open ? "#3A71FF" : "#ff3333"} 
 							opacity={0.8}
 							/>
 
 						<EdgeIndicator itemType="last" orient="right" edgeAt="right"
-							yAccessor={d => d.close} fill={d => d.close > d.open ? "#3A71FF" : "#F31B69"}/>
+							yAccessor={d => d.close} fill={d => d.close > d.open ? "#3A71FF" : "#ff3333"}/>
 
 
 						<InteractiveYCoordinate
@@ -420,7 +425,13 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 						yExtents={macdCalculator.accessor()}
 						origin={(w, h) => [0, h - height]}
 						padding={{ top: 10, bottom: 10 }}>
-						<XAxis axisAt="bottom" orient="bottom" tickStroke="#333333" stroke="#dddddd" ticks={6} fontSize={10} />
+						<XAxis 
+							axisAt="bottom" 
+							orient="bottom"
+							tickStroke={this.props.theme.className==="theme-dark"?"#666666":"#333333"}  
+							stroke={this.props.theme.className==="theme-dark"?"#666666":"#dddddd"}  
+							ticks={6} 
+							fontSize={10} />
 					</Chart>
 
 				</ChartCanvas>
@@ -453,4 +464,17 @@ const CandleStickChart = fitWidth(
 	CandleStickChartWithInteractiveYCoordinate
 );
 
-export default CandleStickChart;
+//export default CandleStickChart;
+
+
+
+
+const mapStateToProps = (state) => ({
+	theme: state.theme
+})
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({}, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(CandleStickChart)

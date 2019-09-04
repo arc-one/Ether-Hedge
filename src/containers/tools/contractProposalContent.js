@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import bs58 from "bs58"
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import { isEmpty, isNull }  from 'lodash';
@@ -11,60 +12,72 @@ import { toggleModal } from '../../actions/toggleModalActions'
 
 var formatTime = timeFormat("%B %d, %Y, %H:%M:%S");
 
+const toIPFSHash = str => {
+    // remove leading 0x
+    const remove0x = str.slice(2, str.length);
+    // add back the multihash id
+    const bytes = Buffer.from(`1220${remove0x}`, "hex");
+    const hash = bs58.encode(bytes);
+    return hash;
+};
+
 class ContractProposalContent extends Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			trusted:null
+		}
 		this.getVotingPercenResult = this.getVotingPercenResult.bind(this);
 		this.sendParamVote= this.sendParamVote.bind(this);
 		this.sendActivateParam= this.sendActivateParam.bind(this);
 		this.getProposalStatus= this.getProposalStatus.bind(this);
 	}
 
+	componentDidMount(){
+		this.checkTrustedFuture();
+	}
+
+
 	getVotingPercenResult(vote) {
-		if(this.props.paramProposalResults[this.props.proposal.hash]){
-			let result = this.props.paramProposalResults[this.props.proposal.hash];
-			if(result.yes*1+result.yes*1>0){
-				if(vote === 'yes'){
-					return result.yes*100/(result.yes*1+result.no*1)
-				} else {
-					return result.no*100/(result.yes*1+result.no*1)
-				}
+		if(this.props.proposal.yes*1+this.props.proposal.no*1>0){
+			if(vote === 'yes'){
+				return (this.props.proposal.yes*100/(this.props.proposal.yes*1+this.props.proposal.no*1)).toFixed(2);
 			} else {
-				return 0;
+				return (this.props.proposal.no*100/(this.props.proposal.yes*1+this.props.proposal.no*1)).toFixed(2);
 			}
-		} else return 0;
+		} else {
+			return 0;
+		}
 	}
 
 	getVotingResult(vote) {
-		if(this.props.paramProposalResults[this.props.proposal.hash]){
-			let result = this.props.paramProposalResults[this.props.proposal.hash];
-			if(vote === 'yes'){
-				return result.yes
-			} else {
-				return result.no
-			}
-		} else return 0;
+		if(vote === 'yes'){
+			return (this.props.proposal.yes/ETH_DECIMALS).toFixed(6)
+		} else {
+			return (this.props.proposal.no/ETH_DECIMALS).toFixed(6)
+		}
 	}
 
 	getTotalVotedAccounts() {
-		if(this.props.paramProposalResults[this.props.proposal.hash]){
-			return this.props.paramProposalResults[this.props.proposal.hash].totalAccounts;
-		} else return 0;
+		return this.props.proposal.totalAccounts;
 	}
 
 	getTotalVoted() {
-		if(this.props.paramProposalResults[this.props.proposal.hash]){
-			let result = this.props.paramProposalResults[this.props.proposal.hash];
-			return result.no*1 + result.yes*1;
-		} else return 0;
+		return this.props.proposal.no*1 + this.props.proposal.yes*1;
+	}
+
+	checkTrustedFuture() {
+		let settings = this.props.smartContracts.settings.inst;
+        settings.methods.trustedContracts(this.props.proposal.futureContract).call( (err, response) => {
+        	this.setState({trusted:response.trusted});
+        });
 	}
 
 	getProposalStatus(){
-
-			/*if(Object.values(this.props.params)[proposal.param*1].proposalHash === proposal._contract) {
+			if(this.state.trusted) {
 				return 'active';
-			} else */if(new Date(this.props.proposal.endDate*1000 + this.props.params.activationTime.value*1000) > new Date()){
+			} else if(new Date(this.props.proposal.endDate*1000 + this.props.params.activationTime.value*1000) > new Date()){
 				return 'opened';
 			} else if(this.getTotalVoted()*100/this.props.mainTokenTotalSupply<=this.props.params.minVotingPercent.value/PERCENT_MULTIPLYER) {
 				return 'threshold';
@@ -85,7 +98,7 @@ class ContractProposalContent extends Component {
         let hash = event.target.getAttribute('data-hash');
 
         if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
-            this.props.smartContracts.settings.inst.methods.voteParamProposal(vote==='true', param, hash).send({
+            this.props.smartContracts.settings.inst.methods.voteProposal(vote==='true', hash).send({
                 from: this.props.accounts[0]
             }); 
         }
@@ -93,17 +106,18 @@ class ContractProposalContent extends Component {
 
     sendActivateParam = (event) => {
 
-        let param = event.target.getAttribute('data-param');
         let hash = event.target.getAttribute('data-hash');
 
         if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
-
-            this.props.smartContracts.settings.inst.methods.activateParamProposal(param, hash).send({
+            this.props.smartContracts.settings.inst.methods.activateProposal(hash).send({
                 from: this.props.accounts[0]
             }); 
 
+        } else {
+        	alert('Please Enable Metamask.')
         }
     }
+
 
 	getValue(param, val){
         if(param === '2' || param === '3' || param === '4' || param === '5' || param === '6') {
@@ -122,26 +136,21 @@ class ContractProposalContent extends Component {
 	render () {
 		return (
 			<Col md={8} className="proposal_cont">
-			
 				<h4 className="title_proposal_big">{ this.props.proposal.title}</h4>
-				
 				<div className="text-left "><strong>Yes:</strong> {this.getVotingPercenResult('yes')}%, {this.getVotingResult('yes')} EHE </div>
 					<Progress className="progress_big" color="primary" value={this.getVotingPercenResult('yes')} />
 					
 					<div className="text-left"><strong>No:</strong> 	{this.getVotingPercenResult('no')}%, {this.getVotingResult('no')} EHE</div>
 					<Progress className="progress_big" color="danger" value={this.getVotingPercenResult('no')} />
-
-
 					<div>
 						<strong>Total Accounts Voted:</strong> {this.getTotalVotedAccounts()}
 					</div>
 					<div>
-						<strong>Total Voted Value:</strong> {this.getTotalVoted()} EHE ({(this.getTotalVoted()*100/this.props.mainTokenTotalSupply || 0).toFixed(2) }% of the supply)
+						<strong>Total Voted Value:</strong> {(this.getTotalVoted()/ETH_DECIMALS).toFixed(6)} EHE ({(this.getTotalVoted()*100/this.props.mainTokenTotalSupply || 0).toFixed(2) }% of the supply)
 					</div>
 					<div className="border_bottom padding_bottom">
 						<strong>Voting Threshold:</strong> {this.props.params.minVotingPercent.value/PERCENT_MULTIPLYER}% of the supply.
 					</div>
-
 					<div className="proposal_block">
 						<div><strong>Contract Address:</strong> <a rel="noopener noreferrer" target="_blank" href={getEtherscanLink('address', this.props.proposal.futureContract, 'contracts', this.props.network)} > {this.props.proposal.futureContract}  </a></div>
 						<div>
@@ -149,15 +158,20 @@ class ContractProposalContent extends Component {
 							<a rel="noopener noreferrer" target="_blank" href={getEtherscanLink('address', this.props.proposal.creator, 'url', this.props.network)} > {this.props.proposal.creator}  </a>
 						</div>
 						<div>
-							<strong>Duration: </strong> {this.props.proposal.expiresIn*1} sec
+							<strong>Duration: </strong> {this.props.proposal.value_2*1} sec
 						</div>
 							{	this.props.proposal.url!==''?
 								<div><strong>Audit:</strong> {this.props.proposal.url}</div>:null
 							}
+						<div>
+							<strong>Payment Required: </strong> {this.props.proposal.value_1*1} EHE
+						</div>
+						<div>
+							<strong>IPFS: </strong> {toIPFSHash(this.props.proposal.ipfs)} 
+						</div>
 						<div className="margin_top">
 							<strong>Description:</strong> {this.props.proposal.description}
 						</div>
-
 					</div>
 					<div className="proposal_block ">
 						<Row>
@@ -169,8 +183,6 @@ class ContractProposalContent extends Component {
 	      					</Col>
   						</Row>
 					</div>	
-
-
 				{this.getProposalStatus()==='active'?
 					<div className="proposal_block voting_result">
 						<span className="green_text">The proposal is active now.</span>
@@ -180,7 +192,6 @@ class ContractProposalContent extends Component {
 					<div className="">
 						
 						{
-
   							(this.props.enabledMetamask )?
 	      						<Row className="proposal_block">
 		      						<Col>
@@ -197,9 +208,7 @@ class ContractProposalContent extends Component {
 		      					</Row>:
 		      					<div className="proposal_block voting_result green_text">Please Enable Metamask</div>
   						}
-
       					{
-
       						this.props.userVoting.amount*1===0?
 		      					<center>
 									<Button 
@@ -226,10 +235,7 @@ class ContractProposalContent extends Component {
 		      					<center className="user_vote">
 		      						You voted: {this.props.userVoting.vote?<span className="green_text">Yes</span>:<span className="red_text">No</span>}
 		      					</center>:null
-			      				
       					}
-	      				
-
 					</div>:null
 				}
 				{this.getProposalStatus()==='threshold'?
@@ -276,7 +282,7 @@ const mapStateToProps = (state) => ({
 	stakedFunds: state.stakedFunds,
 	mainTokenBalanceOf: state.mainTokenBalanceOf,
 	mainTokenTotalSupply: state.mainTokenTotalSupply,
-	paramProposalResults: state.paramProposalResults,
+	proposals: state.proposals,
 	userVoting: state.userVoting,
 	accounts: state.accounts,
 	smartContracts: state.smartContracts,

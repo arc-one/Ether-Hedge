@@ -1328,6 +1328,16 @@ export const getParams = () => {
 				settings.methods.params(10).call((err, response) => {
 					callback(null, response);
 				});
+		    },
+		    function(callback) {
+				settings.methods.params(11).call((err, response) => {
+					callback(null, response);
+				});
+		    },
+		    function(callback) {
+				settings.methods.params(12).call((err, response) => {
+					callback(null, response);
+				});
 		    }
 		],
 		function(err, results) {
@@ -1346,6 +1356,8 @@ export const getParams = () => {
 		            contractProposalFee: results[8],
 		            feeDiscountIndex: results[9],
 		            maxMarketLength: results[10],
+		            blockVotingFee: results[11],
+		            maxServicePayment: results[12]
 			    }
 			});
 		});

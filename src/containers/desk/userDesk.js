@@ -38,12 +38,6 @@ class UserDesk extends PureComponent {
               <li className="nav-item" >
                 <a className={this.state.activeTab==='orders' ?'nav-link active':'nav-link'} href="#orders" data-item="orders" onClick={this.selectTab}>Limit Orders</a>
               </li>
-{          /*    <li className="nav-item" >
-                <a className={this.state.activeTab==='recent_trades' ?'nav-link active':'nav-link'} href="#recent_trades" data-item="recent_trades" onClick={this.selectTab}>Recent Trades</a>
-              </li>
-              <li className="nav-item" >
-                <a className={this.state.activeTab==='order_history' ?'nav-link active':'nav-link'} href="#order_history" data-item="order_history" onClick={this.selectTab}>Order History</a>
-              </li>*/}
             </ul>
         </div>
         {
@@ -55,7 +49,21 @@ class UserDesk extends PureComponent {
 
       </div>:
       <div className="grid_block">
-        <Button color="primary" onClick={this.handleEnableMetamask}  size="xs">Enable Metamask</Button>
+          <div className="grid_header">
+            <div className="grid_title">Instruction</div>
+          </div>
+          <div className="order_book_container order_book_top getstarted grid_content" >
+            <h5 className="getstarted_title blue" >Get Started</h5>
+            <ol className="get_started_list">
+                <li>Install <b>"Metamask"</b> extension in your browser and register new account.</li>
+                <li>Click <b>"Enable Metamask"</b>, then on top of <b>"Metamask"</b> extension choose Kovan Network</li>
+                <li><b>Get some Ether</b> for Kovan test network. Here is <a href="https://gitter.im/kovan-testnet/faucet">Gitter Faucet</a>, sign up and put your public address, then you will get back small amount of ether to your account.</li>
+                <li><b>Deposit your balance.</b> Click <b>"Deposit"</b> on top of the page and send some Ether to the smart contract.</li>
+                <li><b>Do "Long" or "Short" orders</b> by "Limit Price" or "Market" using left menu functionallity.</li>
+                <li>If you want to become an owner, buy some <b>EHE</b> tokens and stake them. Click <b>"Tools"</b> to get all features.</li>
+            </ol>
+            <br/>
+          </div>
       </div>
     )
   }

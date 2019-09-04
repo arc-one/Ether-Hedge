@@ -19,34 +19,30 @@ class TopbarTools extends PureComponent {
           <Col className="left_side" lg={2} md={3} sm={3} xs={4}>
             <div className="row">
                 <div className="col">
-                  <center><img alt="logotype" className="logo" src="/logo1.png" /></center>
+                  <center>{this.props.theme.className==='theme-light'?<img alt="logotype" className="logo" src="/logo_dark.png" />:<img alt="logotype" className="logo" src="/logo_light.png" />}</center>
                 </div>
             </div>
           </Col>
           <Col className="right_side left_border" lg={10} md={9} sm={9} xs={8}>
             <Row className="topsubbar">
                 <Col className="tools_header">
-                  <Row>Tools</Row>
+                  {window.innerWidth > 576?<Row>Tools</Row>:null}
                 </Col>
                 <Col className="left_border col-auto" >
                   <div className="top_menu">
                     <Link to="/">Desk</Link>
                   </div>
                 </Col>
-                <Col className="left_topbar col-auto left_border">
+                {window.innerWidth > 576?<Col className="left_topbar col-auto left_border">
                   <ToggleTheme/>
-                </Col>
+                </Col>:null}
             </Row>
-
-              <Row className="bottomsubbar">
-                 
-                {!this.props.enabledMetamask?<div className="col tools_title">
-                     Please enable Metamask to interact with the platform.
-                  </div>:null}
-
-                <Account/>
-              </Row>
-            
+            {window.innerWidth > 576?<Row className="bottomsubbar">
+              {!this.props.enabledMetamask?<div className="col tools_title">
+                   Please enable Metamask to interact with the platform.
+                </div>:null}
+              <Account/>
+            </Row>:<Row className="bottomsubbar"></Row>}
           </Col>
         </Row>
 
@@ -61,6 +57,7 @@ const mapStateToProps = (state) => ({
   windowSize: state.windowSize,
   accounts:state.accounts,
   enabledMetamask:state.enabledMetamask,
+  theme: state.theme
 })
 
 const mapDispatchToProps = dispatch => (

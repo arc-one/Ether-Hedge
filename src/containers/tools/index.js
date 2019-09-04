@@ -31,12 +31,12 @@ class Tools extends PureComponent {
     return (
       <Container className="page" >
         <Row style={  (this.props.windowSize.width>575)?this.props.windowSize:null}>
-          <Col className="left_side bottom_border" lg={2} md={3} sm={3} xs={12}>
+          {window.innerWidth > 576?<Col className="left_side bottom_border left_desk" lg={2} md={3} sm={3} xs={12} >
             <Row className={window.location.pathname==="/tools/home"?"active_tool tools_item":"tools_item" } onClick={this.handleClick} url="/tools/home">Dashboard</Row>
             <Row className={window.location.pathname==="/tools/voting"?"active_tool tools_item":"tools_item" } onClick={this.handleClick} url="/tools/voting">Governance</Row>
             <Row className={this.getPath(window.location.pathname)==="/tools/about"?"active_tool tools_item":"tools_item" } onClick={this.handleClick} url="/tools/about">About The Project</Row>
             <Row className={window.location.pathname==="/tools/sale"?"active_tool tools_item":"tools_item" } onClick={this.handleClick} url="/tools/sale">Token Sale</Row>
-          </Col>
+          </Col>:null}
           <Col className="right_side left_border" lg={10} md={9} sm={9} xs={12}>
             <Route exact path='/tools/' component={Data}/>    
             <Route exact path='/tools/home' component={Data}/>    

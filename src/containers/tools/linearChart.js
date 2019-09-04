@@ -30,8 +30,8 @@ class AreaChart extends React.Component {
 		const { data, type, width, ratio, currentPrice } = this.props;
 		const sell = {
 			...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate,
-			stroke: "#F31B69",
-			textFill: "#F31B69",
+			stroke: "#ff3333",
+			textFill: "#ff3333",
 			text: "Current Price",
 			textBox: {
 				height: 24,
@@ -44,7 +44,7 @@ class AreaChart extends React.Component {
 			},
 			edge: {
 				...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate.edge,
-				stroke: "#F31B69",
+				stroke: "#ff3333",
 				displayFormat: format("1f"),
 			}
 		};

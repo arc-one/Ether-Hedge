@@ -43,7 +43,6 @@ import totalStakedReducer from './totalStakedReducer'
 import totalDividendsReducer from './totalDividendsReducer'
 import paramsReducer from './paramsReducer'
 import proposalsReducer from './proposalsReducer'
-import paramProposalResultReducer from './paramProposalResultReducer'
 import userVotingReducer from './userVotingReducer'
 import mainTokenApprovalReducer from './mainTokenApprovalReducer'
 
@@ -96,7 +95,6 @@ const rootReducer = combineReducers({
 	totalDividends: totalDividendsReducer,
 	params: paramsReducer,
 	proposals: proposalsReducer,
-	paramProposalResults: paramProposalResultReducer,
 	userVoting: userVotingReducer,
 	mainTokenApproval: mainTokenApprovalReducer
 

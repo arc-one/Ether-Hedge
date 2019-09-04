@@ -16,10 +16,10 @@ export default (state = [], action) => {
 
       const flags = new Set();
       const newProposals = proposals.filter(entry => {
-          if (flags.has(entry.transactionHash)) {
+          if (flags.has(entry.hash)) {
               return false;
           }
-          flags.add(entry.transactionHash);
+          flags.add(entry.hash);
           return true;
       });
 

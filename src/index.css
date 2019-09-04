@@ -1,13 +1,7 @@
 html {
  overflow-x: hidden;
 }
-body {
-	margin: 0;
-	padding: 0;
-	font-family: sans-serif;
-	background: #F5F5F5;
-	font-size: 12px;
-}
+
 label {
     display: inline-block;
     margin-bottom: 5px;
@@ -67,8 +61,8 @@ label {
 	text-align: center;
 }
 .limit_market{
-	margin-left: -15px;
-	margin-right: -15px;
+	margin-left: -16px;
+	margin-right: -16px;
 }
 .nav{
 	margin-bottom: -1px;
@@ -151,11 +145,13 @@ label {
 .wallet_row{
   padding:  30px 30px;
 }
-.usd_bottom{
-	color: #999;
-}
+
 .proposal_list, .proposal_cont, .sale_chart{
 	height: 100%;
+}
+
+#child{
+	padding: 30px;
 }
 .href{
 	cursor: pointer;
@@ -183,6 +179,10 @@ label {
 .margin_top{
  	margin-top: 20px; 
 } 
+.margin_left{
+ 	margin-left: 30px; 
+} 
+
 .margin_bottom{
  	margin-bottom: 20px; 
 }
@@ -254,6 +254,9 @@ label {
   text-align: right;
   padding: 10px 10px;
 }
+.back_btn{
+  padding: 10px 0px 10px 14px;
+}
 .title_proposal{
   font-size: 14px;
   font-weight: bold;
@@ -262,9 +265,6 @@ label {
   padding: 0;
 }
 
-.title_item{
-
-}
 
 .item_list{
 	height: 100%;
@@ -272,4 +272,232 @@ label {
 }
 .about_list{
   height: 100%;
+}
+
+
+.getstarted{
+  height: calc(100% - 27px);
+  font-size: 12px;
+  padding-right: 30px;
+
+}
+
+
+.get_started_list{
+	margin-bottom: 0;
+	line-height: 21px;
+}
+.page-title{
+  font-size:14px;
+}
+.order_desk_cont{
+  padding: 10px 15px;
+}
+
+
+[type=reset], [type=submit], button, html [type=button] {
+    -webkit-appearance: none;
+}
+input[type="radio"]{
+    visibility:hidden;
+    margin-left: -15px;
+}
+.btn_place_order{
+  margin-top: 15px;
+}
+.topsubbar{
+  height: 38.59px;
+  margin:0px 0px 0;
+}
+.topsubbar .contractsmenu{
+  margin-left:-15px;
+}
+.grid_block{
+  padding: 0;
+}
+
+.grid_title{
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.table_list tr{
+  cursor: pointer;
+}
+.order_book_container{
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.order_book_top, .order_book_bottom{
+  height: calc(47%);
+}
+.trade_history{
+  height: calc(100% - 8px);
+}
+.grid_content{
+  height: calc(100% - 57px);
+  overflow: auto;
+}
+.grid_content_order_book, .grid_block{
+  height: calc(100% - 60px);
+  overflow: hidden;
+}
+.grid_content_getstarted{
+  height: calc(100%);
+  overflow: hidden;
+}
+.grid_block{
+  overflow: hidden;
+  height: 100%;
+  box-sizing: border-box;
+}
+.userDeskNav {
+  margin-top: -1px;
+  margin-left: -1px;
+}
+
+.userDeskNav .nav-link {
+    display: block;
+    padding-top: 4px;
+    padding-bottom: 3px;
+    font-weight: bold;
+}
+.table_list{
+  margin-left: 0px;
+  width: calc(100% - 0px);
+  font-size: 11px;
+}
+.table_list th, .table_list td{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.table_list th{
+  padding-top: 7px;
+  padding-bottom: 6px;
+}
+.left_topbar{
+  width:100px;
+}
+
+/* Day Night Toggle. Created By Joseph Shenton @TeamiHackify */
+
+.button-con {
+  cursor: default;
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+}
+
+
+
+
+#dayIcon, #nightIcon {
+  cursor: pointer;
+}
+
+.toggle {
+  display: none;
+}
+
+.toggle, .toggle:after, .toggle:before, .toggle *, .toggle *:after, .toggle *:before, .toggle + .toggle-button {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.toggle::-moz-selection, .toggle:after::-moz-selection, .toggle:before::-moz-selection, .toggle *::-moz-selection, .toggle *:after::-moz-selection, .toggle *:before::-moz-selection, .toggle + .toggle-button::-moz-selection {
+  background: none;
+}
+
+.toggle::selection, .toggle:after::selection, .toggle:before::selection, .toggle *::selection, .toggle *:after::selection, .toggle *:before::selection, .toggle + .toggle-button::selection {
+  background: none;
+}
+
+.toggle + .toggle-button:after, .toggle + .toggle-button:before {
+  position: relative;
+  display: block;
+  content: "";
+  width: 50%;
+  height: 100%;
+}
+
+.toggle + .toggle-button:after {
+  left: 0;
+}
+
+.toggle + .toggle-button:before {
+  display: none;
+}
+
+.toggle:checked + .toggle-button:after {
+  left: 50%;
+}
+.subtitle_block{
+  height: 30px;
+  padding: 6px 10px 0;
+  font-size: 11px;
+  font-weight:bold;
+}
+.table_header th{
+  font-weight:normal;
+}
+.subheader_right{
+  text-align: right;
+}
+.logo{
+  margin-top: 29px;
+  width: 97%;
+  max-width:  190px;
+}
+.top_chart_cont{
+  height: 200px;
+}
+.countdown_small{
+  font-size: 12px;
+  padding-right: 20px;
+  padding-left: 3px;
+}
+.title_proposal_big {
+  font-size: 20px;
+  font-weight: normal;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+}
+
+.progress_big{
+    margin-bottom:20px;
+    height:10px;
+    margin-top:1px;
+}
+.vote_button{
+  margin: 20px 5px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.stake_big_btn{
+  margin:0;
+  float: right;
+}
+.margin_right_btn{
+  margin: 18px 0 0px 10px;
+}
+.user_vote{
+  font-size: 18px;
+}
+.voting_result{
+  font-size: 16px;
+}
+.tools_item{
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  margin-top: -1px;
+}
+.buy_token_inp{
+  margin-top: 30px;
+  padding: 1rem 1rem;
+  height: 55px;
+
+}
+.form-text{
+	font-size: 12px;
 }

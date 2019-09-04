@@ -24,7 +24,7 @@ class Data extends Component {
 	render () {
 		return (
 			<Row className="tools_changes_proposals ">
-				<Wallet/>
+				{window.innerWidth > 576?<Wallet/>:null}
 				<Params/>
 			</Row>
 		)

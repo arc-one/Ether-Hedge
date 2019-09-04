@@ -1,3 +1,4 @@
+import bs58 from 'bs58';
 import React, { PureComponent } from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
@@ -5,7 +6,21 @@ import { connect } from 'react-redux'
 import { ETH_DECIMALS, PERCENT_MULTIPLYER, LEVERAGE_DECIMALS } from '../../config'
 import { isEmpty, isNull }  from 'lodash';
 import { toggleModal } from '../../actions/toggleModalActions'
+import Web3 from 'web3'
+import { INFURA_RPC_URL } from '../../config'
 
+const getWeb3 = () => {
+  let provider = INFURA_RPC_URL;
+  if(window.ethereum) provider = window.ethereum;
+  return new Web3(provider);
+}
+
+const fromIPFSHash = hash => {
+    const bytes = bs58.decode(hash);
+    const multiHashId = 2;
+    // remove the multihash hash id
+    return bytes.slice(multiHashId, bytes.length);
+};
 
 class ModalAddProposal extends PureComponent {
     constructor() {
@@ -83,7 +98,7 @@ class ModalAddProposal extends PureComponent {
           
           let val = this.state.value;
 
-          if(this.state.param === '0' || this.state.param === '2' || this.state.param === '3' || this.state.param === '4' || this.state.param === '5' || this.state.param === '6') {
+          if(this.state.param === '2' || this.state.param === '3' || this.state.param === '4' || this.state.param === '5' || this.state.param === '6') {
               val *= PERCENT_MULTIPLYER;
           }
           if(this.state.param === '4') {
@@ -98,30 +113,30 @@ class ModalAddProposal extends PureComponent {
               from: this.props.accounts[0],
               value: this.props.params.paramProposalFee.value
           });
-
           this.props.toggleModal(null);
- 
-        } else {
+         } else {
           alert("Please Enable Metamask");
         }
     }
 
     sendCreateContractProposal = () => {
 
+        const bytes32 = fromIPFSHash(this.state.ipfs);
+        const ipfsBytes = '0x'+bytes32.toString('hex');
 
         if(window.ethereum && (!(isEmpty(this.props.accounts) || isNull(this.props.network) || !this.props.enabledMetamask))) {
-
+            let web3 = getWeb3();
             this.props.smartContracts.settings.inst.methods.addContractProposal(
               this.state.contract, 
               this.state.expiresIn, 
               this.state.title, 
               this.state.description, 
-              this.state.ipfs,
+              ipfsBytes,
               this.state.audit,
-              this.state.price,
+              this.state.price.toString()
             ).send({
                 from: this.props.accounts[0],
-                value: this.props.params.contractProposalFee.value
+                value: this.props.params.contractProposalFee.value.toString()
             });
 
             this.props.toggleModal(null);
@@ -322,9 +337,9 @@ class ModalAddProposal extends PureComponent {
                                   <div id="expiresIn" className="form-text">Please type duration in seconds.</div>
                                 </div>
                                 <div className="form-group">
-                                  <label htmlFor="price">Price</label>
+                                  <label htmlFor="price">Payment</label>
                                   <input type="number"  autoComplete="off" className="form-control" id="price" value={this.state.price} onChange={this.handleChangeContract}  aria-describedby="price" placeholder="Number"/>
-                                  <div id="price" className="form-text">Enter amount of EHE Tokens. Example: "1".</div>
+                                  <div id="price" className="form-text">Enter amount of EHE Tokens. Example: "1". Max: {this.props.params.maxServicePayment.value && this.props.mainTokenTotalSupply?this.props.params.maxServicePayment.value*1*this.props.mainTokenTotalSupply/10000/ETH_DECIMALS:0}</div>
                                 </div>
                                 <div className="form-group">
                                   <label htmlFor="audit">Audit</label>
@@ -349,10 +364,6 @@ class ModalAddProposal extends PureComponent {
                            </div>:null
                        }
 
-
-
-
-                      
                       </div>
                     </ModalBody>
                     <ModalFooter>
@@ -373,7 +384,8 @@ const mapStateToProps = (state) => ({
     enabledMetamask:state.enabledMetamask,
     userWalletBalance:state.userWalletBalance,
     smartContracts:state.smartContracts,
-    params: state.params
+    params: state.params,
+    mainTokenTotalSupply: state.mainTokenTotalSupply
 })
 
 const mapDispatchToProps = dispatch => (
