@@ -415,7 +415,8 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 
 						<BarSeries 
 							yAccessor={d => d.volume} 
-							fill={d => d.close > d.open ? "#eeeeee" : "#eeeeee"} 
+							//fill={d => d.close > d.open ? "#eeeeee" : "#eeeeee"} 
+							fill={this.props.theme.className==="theme-dark"?"#2e3338":"#eeeeee"} 
 							opacity={0.7}  
 						
 							/>

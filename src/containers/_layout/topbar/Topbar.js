@@ -52,7 +52,7 @@ class Topbar extends PureComponent {
                   <Col className=" col-auto" >
                     {(!this.props.enabledMetamask)?
                       <div className="top_menu">
-                        <Link to="/tools/about">How it works</Link>
+                        <Link to="/tools/about">About</Link>
                       </div>:null}
                     {(!this.props.enabledMetamask)?
                       <div className="top_menu">

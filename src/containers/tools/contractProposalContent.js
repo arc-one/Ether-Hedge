@@ -209,12 +209,13 @@ class ContractProposalContent extends Component {
 		      					<div className="proposal_block voting_result green_text">Please Enable Metamask</div>
   						}
       					{
-      						this.props.userVoting.amount*1===0?
+
+      						this.props.userVoting.amount*1===0 && this.props.enabledMetamask?
 		      					<center>
 									<Button 
 										disabled={!this.props.enabledMetamask} 
 										data-vote = {true}
-										data-param = {this.props.proposal.param}
+										data-param = {this.props.proposal.value_2}
 										data-hash = {this.props.proposal.hash}
 										onClick={this.sendParamVote} 
 										className="vote_button" 
@@ -223,18 +224,18 @@ class ContractProposalContent extends Component {
 									<Button 
 										disabled={!this.props.enabledMetamask} 
 										data-vote = {false}
-										data-param = {this.props.proposal.param}
+										data-param = {this.props.proposal.value_2}
 										data-hash = {this.props.proposal.hash}
 										onClick={this.sendParamVote} 
 										className="vote_button" 
 										color="danger" 
 										size="lg">No</Button>
-									
-		      					</center>:
-		      					this.props.userVoting.vote?
-		      					<center className="user_vote">
-		      						You voted: {this.props.userVoting.vote?<span className="green_text">Yes</span>:<span className="red_text">No</span>}
 		      					</center>:null
+	      				}
+      					{	
+	      					this.props.userVoting.amount*1>0 && this.props.enabledMetamask?<center className="user_vote">
+	      						You voted: {this.props.userVoting.vote?<span className="green_text">Yes</span>:<span className="red_text">No</span>}
+	      					</center>:null
       					}
 					</div>:null
 				}

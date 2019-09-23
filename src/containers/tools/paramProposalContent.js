@@ -208,7 +208,7 @@ class ParamProposalContent extends Component {
 						
 						{
 
-  							(this.props.enabledMetamask )?
+  							this.props.enabledMetamask ?
 	      						<Row className="proposal_block">
 		      						<Col>
 				      					<div>
@@ -227,7 +227,7 @@ class ParamProposalContent extends Component {
 
       					{
 
-      						this.props.userVoting.amount*1===0?
+      						this.props.userVoting.amount*1===0 && this.props.enabledMetamask?
 		      					<center>
 									<Button 
 										disabled={!this.props.enabledMetamask} 
@@ -247,13 +247,12 @@ class ParamProposalContent extends Component {
 										className="vote_button" 
 										color="danger" 
 										size="lg">No</Button>
-									
-		      					</center>:
-		      					
-		      					<center className="user_vote">
-		      						You voted: {this.props.userVoting.vote?<span className="green_text">Yes</span>:<span className="red_text">No</span>}
-		      					</center>
-			      				
+		      					</center>:null
+	      				}
+      					{	
+	      					this.props.userVoting.amount*1>0 && this.props.enabledMetamask?<center className="user_vote">
+	      						You voted: {this.props.userVoting.vote?<span className="green_text">Yes</span>:<span className="red_text">No</span>}
+	      					</center>:null
       					}
 	      				
 

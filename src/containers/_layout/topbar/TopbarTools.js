@@ -30,7 +30,7 @@ class TopbarTools extends PureComponent {
                 </Col>
                 <Col className="left_border col-auto" >
                   <div className="top_menu">
-                    <Link to="/">Desk</Link>
+                    <Link to="/">Trading</Link>
                   </div>
                 </Col>
                 {window.innerWidth > 576?<Col className="left_topbar col-auto left_border">
