@@ -160,7 +160,6 @@ body .theme-dark {
 }
 .theme-dark .btn-default.active{
     color: #eee;
-    cursor:default;
 }
 
 .theme-dark .btn.active{

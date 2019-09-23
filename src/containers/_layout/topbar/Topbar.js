@@ -21,9 +21,7 @@ class Topbar extends PureComponent {
   constructor(){
     super();
     this.state = {
-
     }
-
   }
 
   render () {

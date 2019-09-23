@@ -105,7 +105,7 @@ class OrderDesk extends PureComponent {
                   placeholder="Amount" 
                   onFocus={this.handleFocus} 
                   onChange={event => this.props.dispatch(updateOrderForm({fieldName:'amount', value: event.target.value*1}))}
-                  disabled={this.props.accounts[0]?false:true}
+                  disabled={!this.props.enabledMetamask || this.props.network !== '42'?true:false}
                   value={ this.props.orderForm.amount}
                 />
               </InputGroup>
@@ -128,7 +128,7 @@ class OrderDesk extends PureComponent {
                     onFocus={this.handleFocus} 
                     onChange={event => this.props.dispatch(updateOrderForm({fieldName:'price', value: event.target.value*1}))}
                     value={this.props.orderForm.price}
-                    disabled={this.props.accounts[0]?false:true}
+                    disabled={!this.props.enabledMetamask || this.props.network !== '42'?true:false}
                   />
                 </InputGroup>
               </FormGroup>:null}
@@ -167,7 +167,7 @@ class OrderDesk extends PureComponent {
                   placeholder="Leverage" 
                   onFocus={this.handleFocus} 
                   onChange={event => this.props.dispatch(updateOrderForm({fieldName:'leverage', value: event.target.value*1}))}
-                  disabled={this.props.accounts[0]?false:true}
+                  disabled={!this.props.enabledMetamask || this.props.network !== '42'?true:false}
 
                   value={ this.props.orderForm.leverage}
                 />
@@ -188,7 +188,7 @@ class OrderDesk extends PureComponent {
             <div className="float-left">Liquidation:</div>
           </div>
 
-          <button className={this.props.orderForm.orderType==='1'?"green_bckgr btn btn-default active btn-block":"red_bckgr btn btn-default active btn-block"} disabled={!this.props.enabledMetamask} onClick={this.handlePlaceOrder} >Place Order</button>
+          <button className={this.props.orderForm.orderType==='1'?"green_bckgr btn btn-default active btn-block":"red_bckgr btn btn-default active btn-block"} disabled={!this.props.enabledMetamask || this.props.network !== '42'} onClick={this.handlePlaceOrder} >Place Order</button>
 
         </Row>
       </div>
@@ -199,6 +199,7 @@ class OrderDesk extends PureComponent {
 export default connect(state => {
   return {
     enabledMetamask:state.enabledMetamask,
+    network:state.network,
     orderForm:state.orderForm,
     userBalance:state.userBalance,
     userWalletBalance:state.userWalletBalance,

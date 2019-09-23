@@ -88,9 +88,9 @@ export const LISTEN_MAIN_TOKEN_APPROVAL = 'LISTEN_MAIN_TOKEN_APPROVAL'
 
 
 
-const getWeb3 = () => {
+const getWeb3 = (state) => {
 	let provider = INFURA_RPC_URL;
-	if(window.ethereum) provider = window.ethereum;
+	if(window.ethereum && window.ethereum.networkVersion === '42') provider = window.ethereum;
 	return new Web3(provider);
 }
 
@@ -173,7 +173,7 @@ export const fetchAccounts = () => {
 export const initSmartContracts = () => {
   	return (dispatch, state) => {
 
-  		let web3 = getWeb3();
+  		let web3 = getWeb3(state);
 
 	    let smartContractsInst = {
 	    	activeFuture:null
@@ -211,19 +211,20 @@ export const getBalance = () => {
 	return (dispatch, state, getBalance) => {
 		let depository = state().smartContracts.depository.inst;
 		let address = state().accounts[0];
-
-		depository.methods.getBalance(address).call( (err, response) => {
-			if(err) {
-			  dispatch({
-			    type: GET_BALANCE_ERROR
-			  })
-			} else {
-				dispatch({
-				    type: GET_BALANCE,
-				    payload: response
-				});
-			}
-		});
+		if(address) {
+			depository.methods.getBalance(address).call( (err, response) => {
+				if(err) {
+				  dispatch({
+				    type: GET_BALANCE_ERROR
+				  })
+				} else {
+					dispatch({
+					    type: GET_BALANCE,
+					    payload: response
+					});
+				}
+			});
+		}
   	}
 }
 
@@ -705,7 +706,7 @@ export const fetchOrders = (index) => {
 		let activeFuture = state().smartContracts.activeFuture;
 		let future = state().smartContracts.futures[activeFuture].inst;
 
-		let web3 = getWeb3();
+		let web3 = getWeb3(state);
 
 		if(web3 && web3.eth) {
 	    	web3.eth.getBlockNumber().then(fromBlock => { 
@@ -742,7 +743,7 @@ export const listenMarketOrderLog = () => {
 	      toBlock: 'latest' 
 	    }).on('data', function(event) {
 
-			let web3 = getWeb3();
+			let web3 = getWeb3(state);
 
 			if(web3 && web3.eth) {
 		    	web3.eth.getBlockNumber().then(fromBlock => {
@@ -785,7 +786,7 @@ export const fetchHistory = (index) => {
 		let activeFuture = state().smartContracts.activeFuture;
 		let future = state().smartContracts.futures[activeFuture].inst;
 
-		let web3 = getWeb3();
+		let web3 = getWeb3(state);
 
 		if(web3 && web3.eth) {
 	    	web3.eth.getBlockNumber().then(fromBlock => {
@@ -913,7 +914,7 @@ export const listenMainTokenApproval = () => {
 export const getBlockNumber = (index) => {
 	return (dispatch, state) => {
 
-		let web3 = getWeb3();
+		let web3 = getWeb3(state);
 
 		if(web3 && web3.eth) {
 	    	web3.eth.getBlockNumber().then(response => {
@@ -1175,7 +1176,7 @@ export const getSaleFinalRate = () => {
 
 export const getTotalBalance = () => {
 	return (dispatch, state, getBalance) => {
-  		let web3 = getWeb3();
+  		let web3 = getWeb3(state);
 	    if(web3 && web3.eth) {
 	    	web3.eth.getBalance(state().smartContracts.depository.address, (err, response) => {
 				if(err) {

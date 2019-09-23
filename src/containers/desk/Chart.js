@@ -105,7 +105,7 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.onKeyPress = this.onKeyPress.bind(this);
+		//this.onKeyPress = this.onKeyPress.bind(this);
 		this.onDragComplete = this.onDragComplete.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 		this.handleChoosePosition = this.handleChoosePosition.bind(this);
@@ -246,14 +246,14 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 			};
 		});
 	}
-	componentDidMount() {
+/*	componentDidMount() {
 		document.addEventListener("keyup", this.onKeyPress);
 		
 	}
 	componentWillUnmount() {
 		document.removeEventListener("keyup", this.onKeyPress);
 
-	}
+	}*/
 	onDelete(yCoordinate, moreProps) {
 		this.setState(state => {
 			const chartId = moreProps.chartConfig.id;
@@ -283,7 +283,7 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 			originalAlertList: this.state[key],
 		});
 	}
-	onKeyPress(e) {
+/*	onKeyPress(e) {
 		const keyCode = e.which;
 		//console.log(keyCode);
 		switch (keyCode) {
@@ -304,16 +304,10 @@ class CandleStickChartWithInteractiveYCoordinate extends React.Component {
 				});
 				break;
 			}
-/*			case 68: // D - Draw drawing object
-			case 69: { // E - Enable drawing object
-				this.setState({
-					enableInteractiveObject: true
-				});
-				break;
-			}*/
+
 			default: break;
 		}
-	}
+	}*/
 
 
 	render() {
