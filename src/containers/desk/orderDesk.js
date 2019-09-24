@@ -48,7 +48,7 @@ class OrderDesk extends PureComponent {
 
   render () {
     return (  
-      <div>
+      <div className="order_desk_wrap">
         <Row className="order_desk_cont border_bottom d-flex justify-content-between">
           <div className="info_row">
             <div className="float-right">Ξ {(this.props.userWalletBalance/ETH_DECIMALS).toFixed(6)}</div>
