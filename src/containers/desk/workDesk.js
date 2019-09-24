@@ -33,6 +33,7 @@ const originalLayoutMobile = [
   {i: 'b', x: 0, y: 0, w: 36, h: 18},
   {i: 'a', x: 0, y: 20, w: 18, h: 12},
   {i: 'c', x: 18, y: 20, w: 18, h: 12},
+  {i: 'd', x: 0, y: 0, w: 0, h: 0},
 ];
 const originalLayout = [
   {i: 'a', x: 0, y: 0, w: 6, h: 30},
@@ -106,56 +107,20 @@ class WorkDesk extends PureComponent {
 	render () {
 		return (  
 			<Row className="workdesk" id="workdesk">
-
-				{window.innerWidth >= 993?
-					<GridLayout className="layout" layout={getFromLS("layout") || originalLayout} onLayoutChange={this.onLayoutChange} cols={36} margin={[1, 1]}  rowHeight={this.getHeight()}   height={window.innerHeight}  width={window.innerWidth} draggableCancel=".grid_content, .grid_table_header, .grid_content_order_book, .nav-link, .grid_subtitle_title" onResizeStop={this.onResizeStop.bind(this)}  onResize={this.onResize.bind(this)}>
-						<div className="grid_block" key="a">
-							<OrderBook/>
-						</div>
-						<div className="grid_block" key="b">
-							<ChartDesk/>
-						</div>
-						<div className="grid_block" key="c">
-							<TradeHistory/>
-						</div>
-						<div className="grid_block" key="d">
-							<UserDesk/>
-						</div>
-					</GridLayout>:null
-				}
-
-				{window.innerWidth < 993 && window.innerWidth >= 576?
-					<GridLayout className="layout" layout={originalLayoutSmall} cols={36} margin={[1, 1]}  rowHeight={this.getHeight()}   height={window.innerHeight}  width={window.innerWidth} draggableCancel=".grid_content, .grid_table_header, .grid_content_order_book, .nav-link, .grid_subtitle_title"   onResize={this.onResize.bind(this)}>
-
-						<div className="grid_block" key="a">
-							<OrderBook/>
-						</div>
-						<div className="grid_block" key="b">
-							<ChartDesk/>
-						</div>
-						<div className="grid_block" key="c">
-							<TradeHistory/>
-						</div>
-						<div className="grid_block" key="d">
-							<UserDesk/>
-						</div>
-					</GridLayout>:null
-				}
-
-				{window.innerWidth < 576?
-					<GridLayout className="layout" layout={originalLayoutMobile} cols={36} margin={[1, 1]}  rowHeight={this.getHeight()}   height={window.innerHeight}  width={window.innerWidth} draggableCancel=".grid_content, .grid_table_header, .grid_content_order_book, .nav-link, .grid_subtitle_title"   onResize={this.onResize.bind(this)}>
-
-						<div className="grid_block" key="b">
-							<ChartDesk/>
-						</div>
-						<div className="grid_block" key="a">
-							<OrderBook/>
-						</div>
-						<div className="grid_block" key="c">
-							<TradeHistory/>
-						</div>
-					</GridLayout>:null
-				}
+				<GridLayout className="layout" layout={window.innerWidth > 993?getFromLS("layout") || originalLayout:window.innerWidth < 993 && window.innerWidth >= 576?originalLayoutSmall:originalLayoutMobile} onLayoutChange={this.onLayoutChange} cols={36} margin={[1, 1]}  rowHeight={this.getHeight()}   height={window.innerHeight}  width={window.innerWidth} draggableCancel=".grid_content, .grid_table_header, .grid_content_order_book, .nav-link, .grid_subtitle_title" onResizeStop={this.onResizeStop.bind(this)}  onResize={this.onResize.bind(this)}>
+					<div className="grid_block" key="a">
+						<OrderBook/>
+					</div>
+					<div className="grid_block" key="b">
+						<ChartDesk/>
+					</div>
+					<div className="grid_block" key="c">
+						<TradeHistory/>
+					</div>
+					<div className="grid_block" key="d">
+						<UserDesk/>
+					</div>
+				</GridLayout>:null
 			</Row>
 		)
 	}

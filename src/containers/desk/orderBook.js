@@ -72,16 +72,6 @@ class OrderBook extends PureComponent {
                                     var obj = event.returnValues;
                                     var remaining = checkOrderAmount(event, this.props.orderFills);
 
-                                   // var fromBlockNumber = currentBlockNumber*1 - obj.expires*1 ;
-
-                                    // if(obj.addr === this.state.address && maxExpireOrder>fromBlockNumber && orderFills[obj.hash]>0){
-                                    //     this.state.orderHistory[obj.hash] = event;
-                                    // } 
-
-                                      // if(obj.addr === this.state.address){
-                                      //     this.state.activeOrders[obj.hash] = event;
-                                      // }   
-
                 								    var rowClasses = classNames({
                 								      'odd': index % 2 !== 0,
                 								      'even': index % 2 === 0,
@@ -93,8 +83,6 @@ class OrderBook extends PureComponent {
                 								      'red_text': !( !isUndefined(this.props.accounts[0]) && !isUndefined(obj.addr) && obj.addr.toLowerCase() === this.props.accounts[0].toLowerCase()),
                 								    });
 							    
-
-
                   									return  (
                   										<tr className={rowClasses} key={event.transactionHash} >
                   											<td onClick={this.handleOrderBookClick} data-ordertype="1" data-hash={obj.hash} data-price={obj.price} data-amount={remaining} width="30%" className={priceClasses}>{(obj.price*1/DECIMALS).toFixed(2)}</td>

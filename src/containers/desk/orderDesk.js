@@ -144,7 +144,7 @@ class OrderDesk extends PureComponent {
                     className="order_desk_input" 
                     type="number" 
                     name="limitPrice" 
-                    value={ this.props.orderForm.price.toFixed(2)}
+                    value={ this.props.orderForm.price}
                     disabled
                   />
                 </InputGroup>

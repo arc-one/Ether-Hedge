@@ -262,13 +262,13 @@ body .theme-light {
 .theme-light .toggle:checked + .toggle-button:after {
   left: 50%;
 }
-.theme-light .table_list .theme-light .selected_red {
+.theme-light .table_list .selected_red {
   border-left: 1px solid #ff3333 !important; 
   box-sizing: border-box;
   -webkit-transition: all .5s ease;
   transition: all .5s ease;
 }
-.theme-light .table_list .theme-light .selected_green {
+.theme-light .table_list .selected_green {
   border-left: 1px solid #3A71FF !important; 
   box-sizing: border-box;
   -webkit-transition: all .5s ease;
