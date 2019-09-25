@@ -6,13 +6,12 @@ import splitter  from './contracts/PaymentSplitter.json'
 import futureContract_01  from './contracts/FutureContract.json'
 
 export const POLL_BLOCK_NUMBER_INTERVAL = 15000;
-export const ORDERS_LIMIT_BLOCKS = 500000; //blocks
+export const ORDERS_LIMIT_BLOCKS = 10000; //blocks
 export const HISTORY_LIMIT_BLOCKS = 5000000; //blocks
 export const ETH_DECIMALS = 1000000000000000000;
 export const DECIMALS = 1000000000;
 export const LEVERAGE_DECIMALS = 100;
 export const PERCENT_MULTIPLYER = 100;
-export const EXPIRES_IN = 10000;
 export const MAX_ORDER_LIST = 50;
 export const INFURA_RPC_URL = 'https://kovan.infura.io/v3/28eae19dd0444340b4f9562e6813bad6';
 export const BANCRUPCY_DIFF = 10;

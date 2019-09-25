@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { Row, Form, FormGroup, Input, Label, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap'
 import { connect } from 'react-redux'
 import { updateOrderForm } from '../../actions/orderFormActions'
-import { ETH_DECIMALS, DECIMALS, LEVERAGE_DECIMALS, EXPIRES_IN } from '../../config'
+import { ETH_DECIMALS, DECIMALS, LEVERAGE_DECIMALS, ORDERS_LIMIT_BLOCKS } from '../../config'
 //import { isNumber, isUndefined, isEmpty } from 'lodash'
 
 class OrderDesk extends PureComponent {
@@ -32,7 +32,7 @@ class OrderDesk extends PureComponent {
 
     const activeFuture = this.props.smartContracts.activeFuture;
     this.props.smartContracts.futures[activeFuture].inst.methods
-      .placeLimitOrder(Math.round(price), Math.round(amount), this.props.orderForm.orderType*1, Math.round(leverage), EXPIRES_IN)
+      .placeLimitOrder(Math.round(price), Math.round(amount), this.props.orderForm.orderType*1, Math.round(leverage), ORDERS_LIMIT_BLOCKS)
       .send({from: this.props.accounts[0]}); 
   }
 
