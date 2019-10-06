@@ -31,7 +31,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "pm2 start ./server.sh --name ehe80",
+    "deploy8080": "pm2 start ./server8080.sh --name ehe8080"
   },
   "browserslist": {
     "production": [
