@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 //import { Button } from 'reactstrap'
 import { bindActionCreators } from 'redux';  
 import { connect } from 'react-redux'
-import { DECIMALS, LEVERAGE_DECIMALS } from '../../config'
+import { DECIMALS, LEVERAGE_DECIMALS, ORDERS_LIMIT_BLOCKS } from '../../config'
 import { checkOrderAmount, calcOrdervalue } from '../../utils/calculations'
 
 class Orders extends PureComponent {

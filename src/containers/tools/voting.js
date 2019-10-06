@@ -7,7 +7,6 @@ import { ETH_DECIMALS, PERCENT_MULTIPLYER, LEVERAGE_DECIMALS } from '../../confi
 import ModalAddProposal from './addProposalModal'
 import { toggleModal } from '../../actions/toggleModalActions'
 import { 
-	
 	fetchProposals, 	
 	getUserVoting, 
 	listenProposalLog

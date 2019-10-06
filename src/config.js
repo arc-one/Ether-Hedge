@@ -19,33 +19,33 @@ export const BANCRUPCY_DIFF = 10;
 //Contracts
 export const smartContracts = {
 	depository: {
-		address: '0x5F2E006670953854C428F6489F89de9160184B4c',
+		address: '0xA22c9615a60Ce1aC36e0a49558d118c17AbF4705',
 		abi: depository.abi
 	},
 	settings: {
-		address: '0x040e11589CFc09C645742a49418D46980bEF1C95',
+		address: '0x9237Aa86f1bdE42896eC3e908877419b63ee0520',
 		abi: settings.abi
 	},
 	
 	main_token: {	
-		address: '0x5F3C1d21Bebb7Abc35E2F69307d66Ff5446461b9',
+		address: '0x251659D1484Aa8B3f240208C1250c8B8979C1d80',
 		abi: token.abi
 	},
 	rekt_token: {
-		address: '0xEc40D1270cBb454b14a13Fb2bb66F427650329aE',
+		address: '0x144fC8801E8232755Cb0741C0e9f29BA47e82A8E',
 		abi: token.abi
 	},
 	payment_splitter: {
-		address: '0xB8fBB140e491747F331e6080fa56B169C7344E01',
+		address: '0xe8ebdf0DE1eD20AeA5BEbb2D464c4398c4a79665',
 		abi: splitter.abi
 	},
 	sale: {
-		address: '0x031c29A119bf06AaA865a009cb9A5379BC8e40ac',
+		address: '0x2E8129338Ae26C9dF698220E50f9Fc43d2193770',
 		abi: sale.abi
 	},
 	futures:[
 		{
-			address: '0xFBA6f62bF1B4C877eBed84C843Bb399DB47317C3',
+			address: '0xc7bc12b25c0Ff11EEF509894989e7b44643B78C6',
 			abi: futureContract_01.abi,
 			ticker: 'ETHUSD_TST'
 		},
